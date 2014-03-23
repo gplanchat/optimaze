@@ -24,7 +24,7 @@ class IntegerLiteral
      */
     public function __construct($integerLiteral)
     {
-        $this->integerLiteral = (int) $integerLiteral;
+        $this->integerLiteral = $integerLiteral;
     }
 
     /**

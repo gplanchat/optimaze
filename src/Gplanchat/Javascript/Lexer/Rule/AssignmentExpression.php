@@ -33,7 +33,7 @@ class AssignmentExpression
      */
     public function match(Token $token)
     {
-        return true;
+        return $token->getType() !== TokenizerInterface::OP_LEFT_BRACKET;
     }
 
     /**

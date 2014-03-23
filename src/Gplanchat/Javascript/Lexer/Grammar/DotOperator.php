@@ -9,8 +9,8 @@
 namespace Gplanchat\Javascript\Lexer\Grammar;
 
 
-class ShiftOperator
-    implements OperatorInterface
+class DotOperator
+    implements GrammarInterface
 {
-    use OperatorTrait;
+    use GrammarTrait;
 }

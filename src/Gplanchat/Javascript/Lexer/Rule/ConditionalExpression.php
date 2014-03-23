@@ -57,7 +57,7 @@ class ConditionalExpression
         $orExpressionRule = $this->getRuleServiceManager()->get('OrExpression');
         $orExpressionRule->parse($node, $tokenizer);
 
-        $token = $this->nextToken($tokenizer);
+        $token = $this->currentToken($tokenizer);
         if ($token->getType() !== TokenizerInterface::OP_HOOK) {
             return;
         }
@@ -66,7 +66,7 @@ class ConditionalExpression
         $assignmentExpressionRule = $this->getRuleServiceManager()->get('AssignmentExpression');
         $assignmentExpressionRule->parse($node, $tokenizer);
 
-        $token = $this->nextToken($tokenizer);
+        $token = $this->currentToken($tokenizer);
         if ($token->getType() !== TokenizerInterface::OP_SEMICOLON) {
             return;
         }

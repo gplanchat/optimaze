@@ -9,8 +9,8 @@
 namespace Gplanchat\Javascript\Lexer\Grammar;
 
 
-class ShiftOperator
-    implements OperatorInterface
+class ArgumentList
+    implements RecursiveGrammarInterface
 {
-    use OperatorTrait;
+    use LeftAssociativeGrammarTrait;
 }

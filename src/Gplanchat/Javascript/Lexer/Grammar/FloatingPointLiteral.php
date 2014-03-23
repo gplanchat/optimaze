@@ -24,7 +24,7 @@ class FloatingPointLiteral
      */
     public function __construct($floatingPointLiteral)
     {
-        $this->floatingPointLiteral = (float) $floatingPointLiteral;
+        $this->floatingPointLiteral = $floatingPointLiteral;
     }
 
     /**

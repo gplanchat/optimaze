@@ -23,7 +23,7 @@ class BooleanLiteral
      */
     public function __construct($booleanLiteral)
     {
-        $this->booleanLiteral = (bool) $booleanLiteral;
+        $this->booleanLiteral = $booleanLiteral;
     }
 
     /**

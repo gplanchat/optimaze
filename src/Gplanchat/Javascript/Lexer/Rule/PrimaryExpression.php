@@ -79,7 +79,7 @@ class PrimaryExpression
             $rule = $this->getRuleServiceManager()->get('Expression');
             $rule->parse($node, $tokenizer);
 
-            $token = $this->nextToken($tokenizer);
+            $token = $this->currentToken($tokenizer);
             if ($token->getType() !== TokenizerInterface::OP_RIGHT_BRACKET) {
                 throw new LexicalError('Invalid expression : missing ending bracket',
                     null, $token->getLine(), $token->getStart());
