@@ -1,0 +1,82 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: Greg
+ * Date: 22/03/14
+ * Time: 19:11
+ */
+
+namespace Gplanchat\Javascript\Lexer\Rule;
+
+use Gplanchat\Javascript\Lexer\Exception\LexicalError;
+use Gplanchat\Javascript\Lexer\Grammar\RecursiveGrammarInterface;
+use Gplanchat\Javascript\Tokenizer\TokenizerInterface;
+use Gplanchat\Tokenizer\Token;
+use Gplanchat\Javascript\Lexer\Grammar;
+
+/**
+ * Class Expression
+ * @package Gplanchat\Javascript\Lexer\Rule
+ *
+ * EqualityExpression:
+ *     RelationalExpression
+ *     RelationalExpression EqualityOperator EqualityExpression
+ */
+class EqualityExpression
+    implements RuleInterface
+{
+    use RuleTrait;
+
+    protected $equalityOperators = [
+        TokenizerInterface::OP_STRICT_EQ,
+        TokenizerInterface::OP_EQ,
+        TokenizerInterface::OP_STRICT_NE,
+        TokenizerInterface::OP_NE,
+    ];
+
+    /**
+     * @param Token $token
+     * @return bool
+     */
+    public function match(Token $token)
+    {
+        return true;
+    }
+
+    /**
+     * @param RecursiveGrammarInterface $parent
+     * @param TokenizerInterface $tokenizer
+     * @return void
+     * @throws LexicalError
+     */
+    public function parse(RecursiveGrammarInterface $parent, TokenizerInterface $tokenizer)
+    {
+        $token = $this->currentToken($tokenizer);
+        if (!$this->match($token)) {
+            return;
+        }
+
+        /** @var Grammar\EqualityExpression $node */
+        $node = $this->getGrammarServiceManager()->get('EqualityExpression');
+        $parent->addChild($node);
+
+        /** @var RelationalExpression $relationalExpressionRule */
+        $relationalExpressionRule = $this->getRuleServiceManager()->get('RelationalExpression');
+
+        while (true) {
+            $relationalExpressionRule->parse($node, $tokenizer);
+
+            $token = $this->currentToken($tokenizer);
+            if (in_array($token->getType(), $this->equalityOperators)) {
+                break;
+            }
+
+            /** @var Grammar\EqualityOperator $equalityOperator */
+            $equalityOperator = $this->getGrammarServiceManager()
+                ->get('EqualityOperator', [$token->getAssignOperator()])
+            ;
+            $node->addChild($equalityOperator);
+            $this->nextToken($tokenizer);
+        }
+    }
+}
