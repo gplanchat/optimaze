@@ -50,11 +50,11 @@ class BitwiseAndExpression
         }
 
         /** @var Grammar\BitwiseAndExpression $node */
-        $node = $this->getGrammarServiceManager()->get('BitwiseAndExpression');
+        $node = $this->grammar->get('BitwiseAndExpression');
         $parent->addChild($node);
 
         /** @var EqualityExpression $rule */
-        $rule = $this->getRuleServiceManager()->get('EqualityExpression');
+        $rule = $this->rule->get('EqualityExpression');
         while (true) {
             $rule->parse($node, $tokenizer);
 

@@ -50,11 +50,11 @@ class OrExpression
         }
 
         /** @var Grammar\OrExpression $node */
-        $node = $this->getGrammarServiceManager()->get('OrExpression');
+        $node = $this->grammar->get('OrExpression');
         $parent->addChild($node);
 
         /** @var AndExpression $rule */
-        $rule = $this->getRuleServiceManager()->get('AndExpression');
+        $rule = $this->rule->get('AndExpression');
         while (true) {
             $rule->parse($node, $tokenizer);
 

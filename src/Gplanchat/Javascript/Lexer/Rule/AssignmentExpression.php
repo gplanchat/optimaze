@@ -50,11 +50,11 @@ class AssignmentExpression
         }
 
         /** @var Grammar\Expression $node */
-        $node = $this->getGrammarServiceManager()->get('AssignmentExpression');
+        $node = $this->grammar->get('AssignmentExpression');
         $parent->addChild($node);
 
         /** @var AssignmentExpression $conditionalExpressionRule */
-        $conditionalExpressionRule = $this->getRuleServiceManager()->get('ConditionalExpression');
+        $conditionalExpressionRule = $this->rule->get('ConditionalExpression');
 
         while (true) {
             $conditionalExpressionRule->parse($node, $tokenizer);

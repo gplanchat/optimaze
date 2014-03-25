@@ -56,11 +56,11 @@ class AdditiveExpression
         }
 
         /** @var Grammar\AdditiveExpression $node */
-        $node = $this->getGrammarServiceManager()->get('AdditiveExpression');
+        $node = $this->grammar->get('AdditiveExpression');
         $parent->addChild($node);
 
         /** @var MultiplicativeExpression $multiplicativeExpressionRule */
-        $multiplicativeExpressionRule = $this->getRuleServiceManager()->get('MultiplicativeExpression');
+        $multiplicativeExpressionRule = $this->rule->get('MultiplicativeExpression');
 
         while (true) {
             $multiplicativeExpressionRule->parse($node, $tokenizer);

@@ -51,11 +51,11 @@ class ArgumentList
         }
 
         /** @var Grammar\ArgumentList $node */
-        $node = $this->getGrammarServiceManager()->get('ArgumentList');
+        $node = $this->grammar->get('ArgumentList');
         $parent->addChild($node);
 
         /** @var AssignmentExpression $rule */
-        $rule = $this->getRuleServiceManager()->get('AssignmentExpression');
+        $rule = $this->rule->get('AssignmentExpression');
         while (true) {
             $rule->parse($node, $tokenizer);
 

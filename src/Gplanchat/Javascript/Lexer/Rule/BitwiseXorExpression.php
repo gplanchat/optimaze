@@ -50,11 +50,11 @@ class BitwiseXorExpression
         }
 
         /** @var Grammar\BitwiseXorExpression $node */
-        $node = $this->getGrammarServiceManager()->get('BitwiseXorExpression');
+        $node = $this->grammar->get('BitwiseXorExpression');
         $parent->addChild($node);
 
         /** @var BitwiseAndExpression $rule */
-        $rule = $this->getRuleServiceManager()->get('BitwiseAndExpression');
+        $rule = $this->rule->get('BitwiseAndExpression');
         while (true) {
             $rule->parse($node, $tokenizer);
 

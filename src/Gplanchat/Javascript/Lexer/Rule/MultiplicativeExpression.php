@@ -56,11 +56,11 @@ class MultiplicativeExpression
         }
 
         /** @var Grammar\MultiplicativeExpression $node */
-        $node = $this->getGrammarServiceManager()->get('MultiplicativeExpression');
+        $node = $this->grammar->get('MultiplicativeExpression');
         $parent->addChild($node);
 
         /** @var UnaryExpression $unaryExpressionRule */
-        $unaryExpressionRule = $this->getRuleServiceManager()->get('UnaryExpression');
+        $unaryExpressionRule = $this->rule->get('UnaryExpression');
 
         while (true) {
             $unaryExpressionRule->parse($node, $tokenizer);

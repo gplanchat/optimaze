@@ -11,18 +11,30 @@ namespace Gplanchat\Javascript\Lexer\Rule;
 use Gplanchat\Javascript\Lexer\Exception\LexicalError;
 use Gplanchat\Javascript\Tokenizer\TokenizerInterface;
 use Gplanchat\ServiceManager\ServiceManagerAwareTrait;
+use Gplanchat\ServiceManager\ServiceManagerInterface;
 use Gplanchat\Tokenizer\Token;
 
 trait RuleTrait
 {
-    use ServiceManagerAwareTrait {
-        ServiceManagerAwareTrait::getServiceManager as getRuleServiceManager;
-        ServiceManagerAwareTrait::setServiceManager as setRuleServiceManager;
-    };
-    use ServiceManagerAwareTrait {
-        ServiceManagerAwareTrait::getServiceManager as getGrammarServiceManager;
-        ServiceManagerAwareTrait::setServiceManager as setGrammarServiceManager;
-    };
+    /**
+     * @var ServiceManagerInterface
+     */
+    protected $rule = null;
+
+    /**
+     * @var ServiceManagerInterface
+     */
+    protected $grammar = null;
+
+    /**
+     * @param ServiceManagerInterface $ruleServiceManager
+     * @param ServiceManagerInterface $grammarServiceManager
+     */
+    public function __construct(ServiceManagerInterface $ruleServiceManager, ServiceManagerInterface $grammarServiceManager)
+    {
+        $this->rule = $ruleServiceManager;
+        $this->grammar = $grammarServiceManager;
+    }
 
     /**
      * @param TokenizerInterface $tokenizer

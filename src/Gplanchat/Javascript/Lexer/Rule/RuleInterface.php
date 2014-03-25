@@ -11,11 +11,9 @@ namespace Gplanchat\Javascript\Lexer\Rule;
 
 use Gplanchat\Javascript\Lexer\Grammar\RecursiveGrammarInterface;
 use Gplanchat\Javascript\Tokenizer\TokenizerInterface;
-use Gplanchat\ServiceManager\ServiceManagerAwareInterface;
 use Gplanchat\Tokenizer\Token;
 
 interface RuleInterface
-    extends ServiceManagerAwareInterface
 {
     /**
      * @param Token $token

@@ -52,11 +52,11 @@ class MemberExpression
         }
 
         /** @var Grammar\MemberExpression $node */
-        $node = $this->getGrammarServiceManager()->get('MemberExpression');
+        $node = $this->grammar->get('MemberExpression');
         $parent->addChild($node);
 
         /** @var PrimaryExpression $rule */
-        $rule = $this->getRuleServiceManager()->get('PrimaryExpression');
+        $rule = $this->rule->get('PrimaryExpression');
         while (true) {
             $rule->parse($node, $tokenizer);
 
@@ -65,7 +65,7 @@ class MemberExpression
                 $this->nextToken($tokenizer);
 
                 /** @var Expression $expressionRule */
-                $expressionRule = $this->getRuleServiceManager()->get('Expression');
+                $expressionRule = $this->rule->get('Expression');
                 $expressionRule->parse($node, $tokenizer);
 
                 $token = $this->currentToken($tokenizer);
@@ -79,7 +79,7 @@ class MemberExpression
                 $this->nextToken($tokenizer);
 
                 /** @var ArgumentList $argumentListRule */
-                $argumentListRule = $this->getRuleServiceManager()->get('ArgumentList');
+                $argumentListRule = $this->rule->get('ArgumentList');
                 $argumentListRule->parse($node, $tokenizer);
 
                 $token = $this->currentToken($tokenizer);

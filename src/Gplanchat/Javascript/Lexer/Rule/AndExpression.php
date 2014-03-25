@@ -50,11 +50,11 @@ class AndExpression
         }
 
         /** @var Grammar\AndExpression $node */
-        $node = $this->getGrammarServiceManager()->get('AndExpression');
+        $node = $this->grammar->get('AndExpression');
         $parent->addChild($node);
 
         /** @var BitwiseOrExpression $rule */
-        $rule = $this->getRuleServiceManager()->get('BitwiseOrExpression');
+        $rule = $this->rule->get('BitwiseOrExpression');
         while (true) {
             $rule->parse($node, $tokenizer);
 

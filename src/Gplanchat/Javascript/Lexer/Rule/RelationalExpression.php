@@ -58,11 +58,11 @@ class RelationalExpression
         }
 
         /** @var Grammar\RelationalExpression $node */
-        $node = $this->getGrammarServiceManager()->get('RelationalExpression');
+        $node = $this->grammar->get('RelationalExpression');
         $parent->addChild($node);
 
         /** @var ShiftExpression $shiftExpressionRule */
-        $shiftExpressionRule = $this->getRuleServiceManager()->get('ShiftExpression');
+        $shiftExpressionRule = $this->rule->get('ShiftExpression');
 
         while (true) {
             $shiftExpressionRule->parse($node, $tokenizer);

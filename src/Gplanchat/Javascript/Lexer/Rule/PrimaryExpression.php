@@ -69,14 +69,14 @@ class PrimaryExpression
         }
 
         /** @var Grammar\PrimaryExpression $node */
-        $node = $this->getGrammarServiceManager()->get('PrimaryExpression');
+        $node = $this->grammar->get('PrimaryExpression');
         $parent->addChild($node);
 
         if ($token->getType() === TokenizerInterface::OP_LEFT_BRACKET) {
             $this->nextToken($tokenizer);
 
             /** @var Expression $rule */
-            $rule = $this->getRuleServiceManager()->get('Expression');
+            $rule = $this->rule->get('Expression');
             $rule->parse($node, $tokenizer);
 
             $token = $this->currentToken($tokenizer);

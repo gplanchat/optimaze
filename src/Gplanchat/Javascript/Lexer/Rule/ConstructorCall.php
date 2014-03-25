@@ -51,7 +51,7 @@ class ConstructorCall
         }
 
         /** @var Grammar\ConstructorCall $node */
-        $node = $this->getGrammarServiceManager()->get('ConstructorCall');
+        $node = $this->grammar->get('ConstructorCall');
         $parent->addChild($node);
 
         while (true) {
@@ -66,7 +66,7 @@ class ConstructorCall
                 $this->nextToken($tokenizer);
 
                 /** @var ConstructorCall $rule */
-                $rule = $this->getRuleServiceManager()->get('ConstructorCall');
+                $rule = $this->rule->get('ConstructorCall');
                 $rule->parse($node, $tokenizer);
 
                 $token = $this->currentToken($tokenizer);

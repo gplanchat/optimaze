@@ -68,11 +68,11 @@ class UnaryExpression
         }
 
         /** @var Grammar\UnaryExpression $node */
-        $node = $this->getGrammarServiceManager()->get('UnaryExpression');
+        $node = $this->grammar->get('UnaryExpression');
         $parent->addChild($node);
 
         /** @var MemberExpression $memberExpressionRule */
-        $memberExpressionRule = $this->getRuleServiceManager()->get('MemberExpression');
+        $memberExpressionRule = $this->rule->get('MemberExpression');
 
         while (true) {
             if (!in_array($token->getType(), $this->unaryOperators)) {
@@ -123,7 +123,7 @@ class UnaryExpression
                 $node->addChild($newKeyword);
 
                 /** @var Constructor $constructorRule */
-                $constructorRule = $this->getRuleServiceManager()->get('Constructor');
+                $constructorRule = $this->rule->get('Constructor');
 
                 $this->nextToken($tokenizer);
                 $constructorRule->parse($node, $tokenizer);

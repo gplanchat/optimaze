@@ -57,11 +57,11 @@ class EqualityExpression
         }
 
         /** @var Grammar\EqualityExpression $node */
-        $node = $this->getGrammarServiceManager()->get('EqualityExpression');
+        $node = $this->grammar->get('EqualityExpression');
         $parent->addChild($node);
 
         /** @var RelationalExpression $relationalExpressionRule */
-        $relationalExpressionRule = $this->getRuleServiceManager()->get('RelationalExpression');
+        $relationalExpressionRule = $this->rule->get('RelationalExpression');
 
         while (true) {
             $relationalExpressionRule->parse($node, $tokenizer);
