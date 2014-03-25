@@ -86,49 +86,49 @@ class PrimaryExpression
             }
         } else if ($token->getType() === TokenizerInterface::TOKEN_IDENTIFIER) {
             /** @var Grammar\Identifier $child */
-            $child = $this->getGrammarServiceManager()
+            $child = $this->grammar
                 ->get('Identifier', [$token->getValue()])
             ;
             $node->addChild($child);
         } else if ($token->getType() === TokenizerInterface::TOKEN_NUMBER_INTEGER) {
             /** @var Grammar\IntegerLiteral $child */
-            $child = $this->getGrammarServiceManager()
+            $child = $this->grammar
                 ->get('IntegerLiteral', [$token->getValue()])
             ;
             $node->addChild($child);
         } else if ($token->getType() === TokenizerInterface::TOKEN_NUMBER_FLOATING_POINT) {
             /** @var Grammar\FloatingPointLiteral $child */
-            $child = $this->getGrammarServiceManager()
+            $child = $this->grammar
                 ->get('FloatingPointLiteral', [$token->getValue()])
             ;
             $node->addChild($child);
         } else if ($token->getType() === TokenizerInterface::TOKEN_STRING) {
             /** @var Grammar\StringLiteral $child */
-            $child = $this->getGrammarServiceManager()
+            $child = $this->grammar
                 ->get('StringLiteral', [$token->getValue()])
             ;
             $node->addChild($child);
         } else if ($token->getType() === TokenizerInterface::KEYWORD_FALSE) {
             /** @var Grammar\BooleanLiteral $child */
-            $child = $this->getGrammarServiceManager()
+            $child = $this->grammar
                 ->get('BooleanLiteral', [false])
             ;
             $node->addChild($child);
         } else if ($token->getType() === TokenizerInterface::KEYWORD_TRUE) {
             /** @var Grammar\BooleanLiteral $child */
-            $child = $this->getGrammarServiceManager()
+            $child = $this->grammar
                 ->get('BooleanLiteral', [true])
             ;
             $node->addChild($child);
         } else if ($token->getType() === TokenizerInterface::KEYWORD_THIS) {
             /** @var Grammar\ThisKeyword $child */
-            $child = $this->getGrammarServiceManager()
+            $child = $this->grammar
                 ->get('ThisKeyword')
             ;
             $node->addChild($child);
         } else if ($token->getType() === TokenizerInterface::KEYWORD_NULL) {
             /** @var Grammar\NullKeyword $child */
-            $child = $this->getGrammarServiceManager()
+            $child = $this->grammar
                 ->get('NullKeyword')
             ;
             $node->addChild($child);

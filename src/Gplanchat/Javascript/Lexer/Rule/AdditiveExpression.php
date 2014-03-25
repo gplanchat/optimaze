@@ -71,7 +71,7 @@ class AdditiveExpression
             }
 
             /** @var Grammar\AdditiveOperator $additiveOperator */
-            $additiveOperator = $this->getGrammarServiceManager()
+            $additiveOperator = $this->grammar
                 ->get('AdditiveOperator', [$token->getValue()])
             ;
             $node->addChild($additiveOperator);

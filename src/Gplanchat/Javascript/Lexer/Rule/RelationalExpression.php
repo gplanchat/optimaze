@@ -73,7 +73,7 @@ class RelationalExpression
             }
 
             /** @var Grammar\RelationalOperator $relationalOperator */
-            $relationalOperator = $this->getGrammarServiceManager()
+            $relationalOperator = $this->grammar
                 ->get('RelationalOperator', [$token->getValue()])
             ;
             $node->addChild($relationalOperator);

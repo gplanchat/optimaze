@@ -64,7 +64,7 @@ class ArgumentList
                 $this->nextToken($tokenizer);
             } else if ($token->getType() !== TokenizerInterface::OP_COMMA) {
                 /** @var Grammar\CommaOperator $commaOperator */
-                $commaOperator = $this->getGrammarServiceManager()
+                $commaOperator = $this->grammar
                     ->get('CommaOperator')
                 ;
                 $node->addChild($commaOperator);
@@ -72,7 +72,7 @@ class ArgumentList
                 continue;
             } else {
                 /** @var Grammar\DotOperator $dotOperator */
-                $dotOperator = $this->getGrammarServiceManager()
+                $dotOperator = $this->grammar
                     ->get('DotOperator')
                 ;
                 $node->addChild($dotOperator);

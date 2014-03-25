@@ -15,7 +15,7 @@ use Gplanchat\Tokenizer\Token;
 use Gplanchat\Javascript\Lexer\Grammar;
 
 /**
- * Class Expression
+ * Class Constructor
  * @package Gplanchat\Javascript\Lexer\Rule
  *
  * Constructor:
@@ -55,7 +55,7 @@ class Constructor
 
         if ($token->getType() === TokenizerInterface::KEYWORD_THIS) {
             /** @var Grammar\ThisKeyword $thisKeyword */
-            $thisKeyword = $this->getGrammarServiceManager()
+            $thisKeyword = $this->grammar
                 ->get('ThisKeyword')
             ;
             $node->addChild($thisKeyword);
@@ -67,7 +67,7 @@ class Constructor
             }
 
             /** @var Grammar\DotOperator $dotOperator */
-            $dotOperator = $this->getGrammarServiceManager()
+            $dotOperator = $this->grammar
                 ->get('DotOperator')
             ;
             $node->addChild($dotOperator);

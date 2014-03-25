@@ -77,7 +77,7 @@ class UnaryExpression
         while (true) {
             if (!in_array($token->getType(), $this->unaryOperators)) {
                 /** @var Grammar\UnaryOperator $unaryOperator */
-                $unaryOperator = $this->getGrammarServiceManager()
+                $unaryOperator = $this->grammar
                     ->get('UnaryOperator', [$token->getValue()])
                 ;
                 $node->addChild($unaryOperator);
@@ -89,7 +89,7 @@ class UnaryExpression
                 $token = $this->currentToken($tokenizer);
                 if (in_array($token->getType(), $this->incrementOperators)) {
                     /** @var Grammar\IncrementOperator $incrementOperator */
-                    $incrementOperator = $this->getGrammarServiceManager()
+                    $incrementOperator = $this->grammar
                         ->get('IncrementOperator', [$token->getValue()])
                     ;
                     $node->addChild($incrementOperator);
@@ -97,7 +97,7 @@ class UnaryExpression
                 break;
             } else if (in_array($token->getType(), $this->incrementOperators)) {
                 /** @var Grammar\IncrementOperator $incrementOperator */
-                $incrementOperator = $this->getGrammarServiceManager()
+                $incrementOperator = $this->grammar
                     ->get('IncrementOperator', [$token->getValue()])
                 ;
                 $node->addChild($incrementOperator);
@@ -107,7 +107,7 @@ class UnaryExpression
                 break;
             } else if ($token->getType() === TokenizerInterface::KEYWORD_DELETE) {
                 /** @var Grammar\DeleteKeyword $deleteKeyword */
-                $deleteKeyword = $this->getGrammarServiceManager()
+                $deleteKeyword = $this->grammar
                     ->get('DeleteKeyword', [$token->getValue()])
                 ;
                 $node->addChild($deleteKeyword);
@@ -117,7 +117,7 @@ class UnaryExpression
                 return;
             } else if ($token->getType() === TokenizerInterface::KEYWORD_NEW) {
                 /** @var Grammar\NewKeyword $newKeyword */
-                $newKeyword = $this->getGrammarServiceManager()
+                $newKeyword = $this->grammar
                     ->get('NewKeyword', [$token->getValue()])
                 ;
                 $node->addChild($newKeyword);

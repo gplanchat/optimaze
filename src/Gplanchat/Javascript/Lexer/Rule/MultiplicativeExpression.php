@@ -71,7 +71,7 @@ class MultiplicativeExpression
             }
 
             /** @var Grammar\MultiplicativeOperator $multiplicativeOperator */
-            $multiplicativeOperator = $this->getGrammarServiceManager()
+            $multiplicativeOperator = $this->grammar
                 ->get('MultiplicativeOperator', [$token->getValue()])
             ;
             $node->addChild($multiplicativeOperator);

@@ -91,7 +91,7 @@ class MemberExpression
                 $this->nextToken($tokenizer);
             } else if ($token->getType() !== TokenizerInterface::OP_DOT) {
                 /** @var Grammar\DotOperator $dotOperator */
-                $dotOperator = $this->getGrammarServiceManager()
+                $dotOperator = $this->grammar
                     ->get('DotOperator')
                 ;
                 $node->addChild($dotOperator);

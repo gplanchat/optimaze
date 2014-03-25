@@ -72,7 +72,7 @@ class EqualityExpression
             }
 
             /** @var Grammar\EqualityOperator $equalityOperator */
-            $equalityOperator = $this->getGrammarServiceManager()
+            $equalityOperator = $this->grammar
                 ->get('EqualityOperator', [$token->getAssignOperator()])
             ;
             $node->addChild($equalityOperator);

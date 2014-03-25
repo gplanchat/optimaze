@@ -65,7 +65,7 @@ class AssignmentExpression
             }
 
             /** @var Grammar\AssignmentOperator $assignmentOperator */
-            $assignmentOperator = $this->getGrammarServiceManager()
+            $assignmentOperator = $this->grammar
                 ->get('AssignmentOperator', [$token->getAssignOperator()])
             ;
             $node->addChild($assignmentOperator);

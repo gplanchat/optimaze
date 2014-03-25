@@ -56,9 +56,7 @@ class ConstructorCall
 
         while (true) {
             /** @var Grammar\Identifier $identifier */
-            $identifier = $this->getGrammarServiceManager()
-                ->get('Identifier', [$token->getValue()])
-            ;
+            $identifier = $this->grammar->get('Identifier', [$token->getValue()]);
             $node->addChild($identifier);
 
             $token = $this->nextToken($tokenizer);
@@ -78,9 +76,7 @@ class ConstructorCall
                 $this->nextToken($tokenizer);
             } else if ($token->getType() === TokenizerInterface::OP_DOT) {
                 /** @var Grammar\DotOperator $dotOperator */
-                $dotOperator = $this->getGrammarServiceManager()
-                    ->get('DotOperator')
-                ;
+                $dotOperator = $this->grammar->get('DotOperator');
                 $node->addChild($dotOperator);
                 $this->nextToken($tokenizer);
                 continue;

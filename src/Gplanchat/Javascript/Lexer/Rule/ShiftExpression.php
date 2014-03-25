@@ -71,7 +71,7 @@ class ShiftExpression
             }
 
             /** @var Grammar\ShiftOperator $shiftOperator */
-            $shiftOperator = $this->getGrammarServiceManager()
+            $shiftOperator = $this->grammar
                 ->get('ShiftOperator', [$token->getValue()])
             ;
             $node->addChild($shiftOperator);
