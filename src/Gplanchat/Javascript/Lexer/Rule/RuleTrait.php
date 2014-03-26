@@ -43,8 +43,8 @@ trait RuleTrait
      */
     protected function nextToken(TokenizerInterface $tokenizer)
     {
-        $token = $this->currentToken($tokenizer);
         $tokenizer->next();
+        $token = $this->currentToken($tokenizer);
 
         return $token;
     }
@@ -56,7 +56,7 @@ trait RuleTrait
      */
     protected function currentToken(TokenizerInterface $tokenizer)
     {
-        if (!$tokenizer->valid()) {
+        if (!$valid = $tokenizer->valid()) {
             throw new LexicalError('Invalid $end reached');
         }
         $token = $tokenizer->current();

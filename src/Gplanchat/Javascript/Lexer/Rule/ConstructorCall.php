@@ -64,7 +64,7 @@ class ConstructorCall
                 $this->nextToken($tokenizer);
 
                 /** @var ConstructorCall $rule */
-                $rule = $this->rule->get('ConstructorCall');
+                $rule = $this->rule->get('ConstructorCall', [$this->rule, $this->grammar]);
                 $rule->parse($node, $tokenizer);
 
                 $token = $this->currentToken($tokenizer);

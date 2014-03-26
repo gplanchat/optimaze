@@ -17,7 +17,15 @@ class Token
     private $line;
     private $assignOperator;
 
-    public function __construct($type, $value, $start, $end, $line, $assignOperator)
+    /**
+     * @param string|int $type
+     * @param string $value
+     * @param int $start
+     * @param int $end
+     * @param int $line
+     * @param string|null $assignOperator
+     */
+    public function __construct($type, $value, $start, $end, $line, $assignOperator = null)
     {
         $this->type = $type;
         $this->value = $value;
