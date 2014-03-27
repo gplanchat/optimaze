@@ -34,7 +34,7 @@ class ArgumentList
      */
     public function match(Token $token)
     {
-        return $token->getType() !== TokenizerInterface::OP_LEFT_BRACKET;
+        return true;
     }
 
     /**
@@ -55,30 +55,21 @@ class ArgumentList
         $parent->addChild($node);
 
         /** @var AssignmentExpression $rule */
-        $rule = $this->rule->get('AssignmentExpression');
+        $rule = $this->rule->get('AssignmentExpression', [$this->rule, $this->grammar]);
         while (true) {
             $rule->parse($node, $tokenizer);
 
             $token = $this->currentToken($tokenizer);
-            if ($token->getType() !== TokenizerInterface::OP_RIGHT_BRACKET) {
-                $this->nextToken($tokenizer);
-            } else if ($token->getType() !== TokenizerInterface::OP_COMMA) {
-                /** @var Grammar\CommaOperator $commaOperator */
-                $commaOperator = $this->grammar
-                    ->get('CommaOperator')
-                ;
-                $node->addChild($commaOperator);
-                $this->nextToken($tokenizer);
-                continue;
-            } else {
-                /** @var Grammar\DotOperator $dotOperator */
-                $dotOperator = $this->grammar
-                    ->get('DotOperator')
-                ;
-                $node->addChild($dotOperator);
-                $this->nextToken($tokenizer);
+            if ($token->getType() !== TokenizerInterface::OP_COMMA) {
+                break;
             }
-            break;
+
+            /** @var Grammar\CommaOperator $commaOperator */
+            $commaOperator = $this->grammar
+                ->get('CommaOperator')
+            ;
+            $node->addChild($commaOperator);
+            $this->nextToken($tokenizer);
         }
     }
 }
