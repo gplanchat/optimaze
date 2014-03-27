@@ -8,7 +8,7 @@
 
 namespace Gplanchat\Javascript\Tokenizer;
 
-use Gplanchat\Tokenizer\Source\SourceInterface;
+use Gplanchat\Tokenizer\DataSource\DataSourceInterface;
 use Gplanchat\Tokenizer\Token;
 
 class Tokenizer
@@ -163,14 +163,14 @@ class Tokenizer
     private $cursor = 0;
 
     /**
-     * @var SourceInterface
+     * @var DataSourceInterface
      */
     private $source = null;
 
     /**
-     * @param SourceInterface $source
+     * @param DataSourceInterface $source
      */
-    public function __construct(SourceInterface $source)
+    public function __construct(DataSourceInterface $source)
     {
         $this->source = $source;
         $this->opRegExp = '#^(' . implode('|', array_map('preg_quote', $this->opTypeNames)) . ')#';
@@ -246,6 +246,8 @@ class Tokenizer
 
         // whitespace handling; gobble up \r as well (effectively we don't have support for MAC newlines!)
         $newLineExpression = $this->scanNewLines ? '/^[ \r\t]+/' : '/^\s+/';
+        $input = '';
+        $chunkSize = 0;
         while (true) {
             $input = $this->source->get(null, $this->cursor);
             $chunkSize = strlen($input);
@@ -371,7 +373,7 @@ class Tokenizer
         /** @noinspection PhpMissingBreakStatementInspection */
         case '.':
             if (preg_match('/^\.\d+(?:[eE][-+]?\d+)?/', $input, $match)) {
-                return $this->push(TokenizerInterface::TOKEN_NUMBER, $match[0]);
+                return $this->push(TokenizerInterface::TOKEN_NUMBER_FLOATING_POINT, $match[0]);
             }
 
         case ';':

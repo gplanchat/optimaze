@@ -6,10 +6,10 @@
  * Time: 12:06
  */
 
-namespace Gplanchat\Tokenizer\Source;
+namespace Gplanchat\Tokenizer\DataSource;
 
 class Stream
-    implements SourceInterface
+    implements DataSourceInterface
 {
     /**
      * @var resource
