@@ -8,13 +8,10 @@
 
 namespace Gplanchat\Javascript\Lexer\Rule;
 
+use Gplanchat\Javascript\Lexer\Exception;
 use Gplanchat\Javascript\Lexer\Grammar;
 use Gplanchat\Javascript\Lexer\Rule;
-use Gplanchat\Javascript\Lexer\Grammar\RecursiveGrammarInterface;
 use Gplanchat\Javascript\Tokenizer\TokenizerInterface;
-use Gplanchat\PHPUnit\Constraint\IsToken;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
-use Gplanchat\Tokenizer\Token;
 
 /**
  * ConstructorCall:
@@ -25,6 +22,9 @@ use Gplanchat\Tokenizer\Token;
 class ConstructorCallTest
     extends AbstractRuleTest
 {
+    /**
+     *
+     */
     public function testLoneIdentifier()
     {
         $tokens = [
@@ -51,6 +51,9 @@ class ConstructorCallTest
         $rule->parse($root, $this->getTokenizerMock($tokens));
     }
 
+    /**
+     *
+     */
     public function testMultipleDottedIdentifiers()
     {
         $tokens = [
@@ -81,6 +84,10 @@ class ConstructorCallTest
         $rule->parse($root, $this->getTokenizerMock($tokens));
     }
 
+
+    /**
+     *
+     */
     public function testIdentifierWithOptions()
     {
         $tokens = [
@@ -97,6 +104,36 @@ class ConstructorCallTest
         $grammarServices = [
             ['ConstructorCall', Grammar\ConstructorCall::class],
             ['Identifier',      Grammar\Identifier::class]
+        ];
+
+        $root = $this->getRootGrammarMock();
+        $root->expects($this->at(0))
+            ->method('addChild')
+            ->with($this->isInstanceOf(Grammar\ConstructorCall::class))
+        ;
+
+        $rule = new ConstructorCall($this->getRuleServiceManagerMock($ruleServices),
+            $this->getRuleServiceManagerMock($grammarServices));
+
+        $rule->parse($root, $this->getTokenizerMock($tokens));
+    }
+
+
+    /**
+     *
+     */
+    public function testInvalidToken()
+    {
+        $this->setExpectedException(Exception\LexicalError::class, 'Invalid expression : missing identifier');
+
+        $tokens = [
+            [TokenizerInterface::OP_LEFT_BRACKET,           '(',  0, 1, 1]
+        ];
+
+        $ruleServices = [];
+
+        $grammarServices = [
+            ['ConstructorCall', Grammar\ConstructorCall::class]
         ];
 
         $root = $this->getRootGrammarMock();

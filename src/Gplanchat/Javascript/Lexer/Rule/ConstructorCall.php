@@ -55,6 +55,10 @@ class ConstructorCall
         $parent->addChild($node);
 
         while (true) {
+            if ($token->getType() !== TokenizerInterface::TOKEN_IDENTIFIER) {
+                throw new LexicalError('Invalid expression : missing identifier',
+                    null, $token->getLine(), $token->getStart());
+            }
             /** @var Grammar\Identifier $identifier */
             $identifier = $this->grammar->get('Identifier', [$token->getValue()]);
             $node->addChild($identifier);
@@ -73,12 +77,12 @@ class ConstructorCall
                         null, $token->getLine(), $token->getStart());
                 }
 
-                $this->nextToken($tokenizer);
+                $token = $this->nextToken($tokenizer);
             } else if ($token->getType() === TokenizerInterface::OP_DOT) {
                 /** @var Grammar\DotOperator $dotOperator */
                 $dotOperator = $this->grammar->get('DotOperator');
                 $node->addChild($dotOperator);
-                $this->nextToken($tokenizer);
+                $token = $this->nextToken($tokenizer);
                 continue;
             }
             break;
