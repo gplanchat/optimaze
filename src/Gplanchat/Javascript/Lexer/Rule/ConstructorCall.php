@@ -29,15 +29,6 @@ class ConstructorCall
     use RuleTrait;
 
     /**
-     * @param Token $token
-     * @return bool
-     */
-    public function match(Token $token)
-    {
-        return true;
-    }
-
-    /**
      * @param RecursiveGrammarInterface $parent
      * @param TokenizerInterface $tokenizer
      * @return void
@@ -45,15 +36,11 @@ class ConstructorCall
      */
     public function parse(RecursiveGrammarInterface $parent, TokenizerInterface $tokenizer)
     {
-        $token = $this->currentToken($tokenizer);
-        if (!$this->match($token)) {
-            return;
-        }
-
         /** @var Grammar\ConstructorCall $node */
         $node = $this->grammar->get('ConstructorCall');
         $parent->addChild($node);
 
+        $token = $this->currentToken($tokenizer);
         while (true) {
             if ($token->getType() !== TokenizerInterface::TOKEN_IDENTIFIER) {
                 throw new LexicalError('Invalid expression : missing identifier',

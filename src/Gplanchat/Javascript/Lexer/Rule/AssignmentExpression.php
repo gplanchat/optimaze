@@ -28,15 +28,6 @@ class AssignmentExpression
     use RuleTrait;
 
     /**
-     * @param Token $token
-     * @return bool
-     */
-    public function match(Token $token)
-    {
-        return $token->getType() !== TokenizerInterface::OP_LEFT_BRACKET;
-    }
-
-    /**
      * @param RecursiveGrammarInterface $parent
      * @param TokenizerInterface $tokenizer
      * @return void
@@ -45,7 +36,7 @@ class AssignmentExpression
     public function parse(RecursiveGrammarInterface $parent, TokenizerInterface $tokenizer)
     {
         $token = $this->currentToken($tokenizer);
-        if (!$this->match($token)) {
+        if ($token->getType() === TokenizerInterface::OP_LEFT_BRACKET) {
             return;
         }
 

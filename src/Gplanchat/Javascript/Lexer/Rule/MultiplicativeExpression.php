@@ -34,15 +34,6 @@ class MultiplicativeExpression
     ];
 
     /**
-     * @param Token $token
-     * @return bool
-     */
-    public function match(Token $token)
-    {
-        return true;
-    }
-
-    /**
      * @param RecursiveGrammarInterface $parent
      * @param TokenizerInterface $tokenizer
      * @return void
@@ -50,11 +41,6 @@ class MultiplicativeExpression
      */
     public function parse(RecursiveGrammarInterface $parent, TokenizerInterface $tokenizer)
     {
-        $token = $this->currentToken($tokenizer);
-        if (!$this->match($token)) {
-            return;
-        }
-
         /** @var Grammar\MultiplicativeExpression $node */
         $node = $this->grammar->get('MultiplicativeExpression');
         $parent->addChild($node);

@@ -34,15 +34,6 @@ class ShiftExpression
     ];
 
     /**
-     * @param Token $token
-     * @return bool
-     */
-    public function match(Token $token)
-    {
-        return true;
-    }
-
-    /**
      * @param RecursiveGrammarInterface $parent
      * @param TokenizerInterface $tokenizer
      * @return void
@@ -51,9 +42,6 @@ class ShiftExpression
     public function parse(RecursiveGrammarInterface $parent, TokenizerInterface $tokenizer)
     {
         $token = $this->currentToken($tokenizer);
-        if (!$this->match($token)) {
-            return;
-        }
 
         /** @var Grammar\ShiftExpression $node */
         $node = $this->grammar->get('ShiftExpression');

@@ -47,15 +47,6 @@ class PrimaryExpression
     ];
 
     /**
-     * @param Token $token
-     * @return bool
-     */
-    public function match(Token $token)
-    {
-        return in_array($token->getType(), $this->validTokenTypes);
-    }
-
-    /**
      * @param RecursiveGrammarInterface $parent
      * @param TokenizerInterface $tokenizer
      * @return void
@@ -64,7 +55,7 @@ class PrimaryExpression
     public function parse(RecursiveGrammarInterface $parent, TokenizerInterface $tokenizer)
     {
         $token = $this->currentToken($tokenizer);
-        if (!$this->match($token)) {
+        if (!in_array($token->getType(), $this->validTokenTypes)) {
             return;
         }
 

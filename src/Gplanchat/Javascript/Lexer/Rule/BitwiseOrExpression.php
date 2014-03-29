@@ -28,15 +28,6 @@ class BitwiseOrExpression
     use RuleTrait;
 
     /**
-     * @param Token $token
-     * @return bool
-     */
-    public function match(Token $token)
-    {
-        return true;
-    }
-
-    /**
      * @param RecursiveGrammarInterface $parent
      * @param TokenizerInterface $tokenizer
      * @return void
@@ -44,11 +35,6 @@ class BitwiseOrExpression
      */
     public function parse(RecursiveGrammarInterface $parent, TokenizerInterface $tokenizer)
     {
-        $token = $this->currentToken($tokenizer);
-        if (!$this->match($token)) {
-            return;
-        }
-
         /** @var Grammar\BitwiseOrExpression $node */
         $node = $this->grammar->get('BitwiseOrExpression');
         $parent->addChild($node);

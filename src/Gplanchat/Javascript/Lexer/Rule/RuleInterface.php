@@ -16,12 +16,6 @@ use Gplanchat\Tokenizer\Token;
 interface RuleInterface
 {
     /**
-     * @param Token $token
-     * @return bool
-     */
-    public function match(Token $token);
-
-    /**
      * @param RecursiveGrammarInterface $parent
      * @param TokenizerInterface $tokenizer
      * @return void
