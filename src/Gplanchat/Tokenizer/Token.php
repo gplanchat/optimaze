@@ -71,12 +71,12 @@ class Token
      */
     public function __construct($type, $value, $start, $end, $line, $assignOperator = null)
     {
-        $this->type = $type;
-        $this->value = $value;
-        $this->start = $start;
-        $this->end = $end;
-        $this->line = $line;
-        $this->assignOperator = $assignOperator;
+        $this->setType($type);
+        $this->setValue($value);
+        $this->setStart($start);
+        $this->setEnd($end);
+        $this->setLine($line);
+        $this->setAssignOperator($assignOperator);
     }
 
     /**
