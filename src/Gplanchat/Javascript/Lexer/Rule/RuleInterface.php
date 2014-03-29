@@ -8,10 +8,8 @@
 
 namespace Gplanchat\Javascript\Lexer\Rule;
 
-
 use Gplanchat\Javascript\Lexer\Grammar\RecursiveGrammarInterface;
 use Gplanchat\Javascript\Tokenizer\TokenizerInterface;
-use Gplanchat\Tokenizer\Token;
 
 interface RuleInterface
 {

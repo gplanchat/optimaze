@@ -12,7 +12,6 @@ use Gplanchat\Javascript\Lexer\Grammar;
 use Gplanchat\Javascript\Lexer\Grammar\RecursiveGrammarInterface;
 use Gplanchat\Javascript\Lexer\Exception\LexicalError;
 use Gplanchat\Javascript\Tokenizer\TokenizerInterface;
-use Gplanchat\Tokenizer\Token;
 
 /**
  * Class MemberExpression

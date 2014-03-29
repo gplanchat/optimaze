@@ -12,7 +12,6 @@ use Gplanchat\Javascript\Tokenizer\TokenizerInterface;
 use Gplanchat\Javascript\Lexer\Exception\LexicalError;
 use Gplanchat\Javascript\Lexer\Grammar;
 use Gplanchat\Javascript\Lexer\Grammar\RecursiveGrammarInterface;
-use Gplanchat\Tokenizer\Token;
 
 /**
  * Class PrimaryExpression
@@ -67,7 +66,7 @@ class PrimaryExpression
             $this->nextToken($tokenizer);
 
             /** @var Expression $rule */
-            $rule = $this->rule->get('Expression');
+            $rule = $this->rule->get('Expression', [$this->rule, $this->grammar]);
             $rule->parse($node, $tokenizer);
 
             $token = $this->currentToken($tokenizer);

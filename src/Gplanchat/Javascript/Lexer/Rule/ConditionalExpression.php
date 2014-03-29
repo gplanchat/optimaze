@@ -8,7 +8,6 @@
 
 namespace Gplanchat\Javascript\Lexer\Rule;
 
-use Gplanchat\Tokenizer\Token;
 use Gplanchat\Javascript\Lexer\Grammar;
 use Gplanchat\Javascript\Lexer\Grammar\RecursiveGrammarInterface;
 use Gplanchat\Javascript\Tokenizer\TokenizerInterface;
@@ -40,7 +39,7 @@ class ConditionalExpression
         $parent->addChild($node);
 
         /** @var OrExpression $orExpressionRule */
-        $orExpressionRule = $this->rule->get('OrExpression');
+        $orExpressionRule = $this->rule->get('OrExpression', [$this->rule, $this->grammar]);
         $orExpressionRule->parse($node, $tokenizer);
 
         $token = $this->currentToken($tokenizer);
@@ -49,7 +48,7 @@ class ConditionalExpression
         }
 
         /** @var AssignmentExpression $assignmentExpressionRule */
-        $assignmentExpressionRule = $this->rule->get('AssignmentExpression');
+        $assignmentExpressionRule = $this->rule->get('AssignmentExpression', [$this->rule, $this->grammar]);
         $assignmentExpressionRule->parse($node, $tokenizer);
 
         $token = $this->currentToken($tokenizer);

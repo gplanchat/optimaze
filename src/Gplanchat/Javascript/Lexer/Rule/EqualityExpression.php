@@ -11,7 +11,6 @@ namespace Gplanchat\Javascript\Lexer\Rule;
 use Gplanchat\Javascript\Lexer\Exception\LexicalError;
 use Gplanchat\Javascript\Lexer\Grammar\RecursiveGrammarInterface;
 use Gplanchat\Javascript\Tokenizer\TokenizerInterface;
-use Gplanchat\Tokenizer\Token;
 use Gplanchat\Javascript\Lexer\Grammar;
 
 /**
@@ -47,7 +46,7 @@ class EqualityExpression
         $parent->addChild($node);
 
         /** @var RelationalExpression $relationalExpressionRule */
-        $relationalExpressionRule = $this->rule->get('RelationalExpression');
+        $relationalExpressionRule = $this->rule->get('RelationalExpression', [$this->rule, $this->grammar]);
 
         while (true) {
             $relationalExpressionRule->parse($node, $tokenizer);

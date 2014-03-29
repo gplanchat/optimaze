@@ -11,7 +11,6 @@ namespace Gplanchat\Javascript\Lexer\Rule;
 use Gplanchat\Javascript\Lexer\Exception\LexicalError;
 use Gplanchat\Javascript\Lexer\Grammar\RecursiveGrammarInterface;
 use Gplanchat\Javascript\Tokenizer\TokenizerInterface;
-use Gplanchat\Tokenizer\Token;
 use Gplanchat\Javascript\Lexer\Grammar;
 
 /**
@@ -64,7 +63,7 @@ class Constructor
         }
 
         /** @var ConstructorCall $rule */
-        $rule = $this->rule->get('ConstructorCall');
+        $rule = $this->rule->get('ConstructorCall', [$this->rule, $this->grammar]);
         $rule->parse($node, $tokenizer);
     }
 }

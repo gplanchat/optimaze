@@ -11,7 +11,6 @@ namespace Gplanchat\Javascript\Lexer\Rule;
 use Gplanchat\Javascript\Lexer\Exception\LexicalError;
 use Gplanchat\Javascript\Lexer\Grammar\RecursiveGrammarInterface;
 use Gplanchat\Javascript\Tokenizer\TokenizerInterface;
-use Gplanchat\Tokenizer\Token;
 use Gplanchat\Javascript\Lexer\Grammar;
 
 /**
@@ -48,7 +47,7 @@ class ShiftExpression
         $parent->addChild($node);
 
         /** @var AdditiveExpression $additiveExpressionRule */
-        $additiveExpressionRule = $this->rule->get('AdditiveExpression');
+        $additiveExpressionRule = $this->rule->get('AdditiveExpression', [$this->rule, $this->grammar]);
 
         while (true) {
             $additiveExpressionRule->parse($node, $tokenizer);

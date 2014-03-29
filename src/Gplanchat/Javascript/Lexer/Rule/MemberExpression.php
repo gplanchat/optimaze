@@ -12,7 +12,6 @@ use Gplanchat\Javascript\Lexer\Grammar;
 use Gplanchat\Javascript\Lexer\Grammar\RecursiveGrammarInterface;
 use Gplanchat\Javascript\Lexer\Exception\LexicalError;
 use Gplanchat\Javascript\Tokenizer\TokenizerInterface;
-use Gplanchat\Tokenizer\Token;
 
 /**
  * Class MemberExpression
@@ -42,7 +41,7 @@ class MemberExpression
         $parent->addChild($node);
 
         /** @var PrimaryExpression $rule */
-        $rule = $this->rule->get('PrimaryExpression');
+        $rule = $this->rule->get('PrimaryExpression', [$this->rule, $this->grammar]);
         while (true) {
             $rule->parse($node, $tokenizer);
 
@@ -51,7 +50,7 @@ class MemberExpression
                 $this->nextToken($tokenizer);
 
                 /** @var Expression $expressionRule */
-                $expressionRule = $this->rule->get('Expression');
+                $expressionRule = $this->rule->get('Expression', [$this->rule, $this->grammar]);
                 $expressionRule->parse($node, $tokenizer);
 
                 $token = $this->currentToken($tokenizer);
@@ -65,7 +64,7 @@ class MemberExpression
                 $this->nextToken($tokenizer);
 
                 /** @var ArgumentList $argumentListRule */
-                $argumentListRule = $this->rule->get('ArgumentList');
+                $argumentListRule = $this->rule->get('ArgumentList', [$this->rule, $this->grammar]);
                 $argumentListRule->parse($node, $tokenizer);
 
                 $token = $this->currentToken($tokenizer);

@@ -11,7 +11,6 @@ namespace Gplanchat\Javascript\Lexer\Rule;
 use Gplanchat\Javascript\Lexer\Exception\LexicalError;
 use Gplanchat\Javascript\Lexer\Grammar\RecursiveGrammarInterface;
 use Gplanchat\Javascript\Tokenizer\TokenizerInterface;
-use Gplanchat\Tokenizer\Token;
 use Gplanchat\Javascript\Lexer\Grammar;
 
 /**
@@ -40,7 +39,7 @@ class Expression
         $parent->addChild($node);
 
         /** @var AssignmentExpression $rule */
-        $rule = $this->rule->get('AssignmentExpression');
+        $rule = $this->rule->get('AssignmentExpression', [$this->rule, $this->grammar]);
         while (true) {
             $rule->parse($node, $tokenizer);
 

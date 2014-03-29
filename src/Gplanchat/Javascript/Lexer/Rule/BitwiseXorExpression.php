@@ -11,7 +11,6 @@ namespace Gplanchat\Javascript\Lexer\Rule;
 use Gplanchat\Javascript\Lexer\Exception\LexicalError;
 use Gplanchat\Javascript\Lexer\Grammar\RecursiveGrammarInterface;
 use Gplanchat\Javascript\Tokenizer\TokenizerInterface;
-use Gplanchat\Tokenizer\Token;
 use Gplanchat\Javascript\Lexer\Grammar;
 
 /**
@@ -40,7 +39,7 @@ class BitwiseXorExpression
         $parent->addChild($node);
 
         /** @var BitwiseAndExpression $rule */
-        $rule = $this->rule->get('BitwiseAndExpression');
+        $rule = $this->rule->get('BitwiseAndExpression', [$this->rule, $this->grammar]);
         while (true) {
             $rule->parse($node, $tokenizer);
 

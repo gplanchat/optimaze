@@ -17,11 +17,11 @@ use Gplanchat\Javascript\Lexer\Grammar;
  * Class Expression
  * @package Gplanchat\Javascript\Lexer\Rule
  *
- * Variable:
+ * ParameterList:
  *     Identifier
- *     Identifier = AssignmentExpression
+ *     Identifier , ParameterList
  */
-class VariableList
+class ParameterList
     implements RuleInterface
 {
     use RuleTrait;
@@ -34,34 +34,22 @@ class VariableList
      */
     public function parse(RecursiveGrammarInterface $parent, TokenizerInterface $tokenizer)
     {
-        /** @var Grammar\VariableList $node */
-        $node = $this->grammar->get('VariableList');
+        /** @var Grammar\ParameterList $node */
+        $node = $this->grammar->get('ParameterList');
         $parent->addChild($node);
 
+        $token = $this->currentToken($tokenizer);
         while (true) {
-            /** @var Grammar\Variable $variable */
-            $variable = $this->grammar->get('Variable');
-            $node->addChild($variable);
-
-            $token = $this->currentToken($tokenizer);
             if ($token->getType() !== TokenizerInterface::TOKEN_IDENTIFIER) {
                 throw new LexicalError('Invalid expression : missing identifier',
                     null, $token->getLine(), $token->getStart());
             }
 
             /** @var Grammar\Identifier $identifier */
-            $identifier = $this->grammar->get('Identifier', [$token->getValue()]);
-            $variable->addChild($identifier);
+            $identifier = $this->grammar->get('Identifier');
+            $node->addChild($identifier);
 
             $token = $this->nextToken($tokenizer);
-            if ($token->getType() === TokenizerInterface::OP_EQ) {
-                $this->nextToken($tokenizer);
-
-                /** @var AssignmentExpression $assignmentExpressionRule */
-                $assignmentExpressionRule = $this->rule->get('AssignmentExpression', [$this->rule, $this->grammar]);
-                $assignmentExpressionRule->parse($variable, $tokenizer);
-            }
-
             if ($token->getType() === TokenizerInterface::OP_COMMA) {
                 break;
             }

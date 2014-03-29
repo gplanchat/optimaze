@@ -11,7 +11,6 @@ namespace Gplanchat\Javascript\Lexer\Rule;
 use Gplanchat\Javascript\Lexer\Exception\LexicalError;
 use Gplanchat\Javascript\Lexer\Grammar\RecursiveGrammarInterface;
 use Gplanchat\Javascript\Tokenizer\TokenizerInterface;
-use Gplanchat\Tokenizer\Token;
 use Gplanchat\Javascript\Lexer\Grammar;
 
 /**
@@ -46,7 +45,7 @@ class AdditiveExpression
         $parent->addChild($node);
 
         /** @var MultiplicativeExpression $multiplicativeExpressionRule */
-        $multiplicativeExpressionRule = $this->rule->get('MultiplicativeExpression');
+        $multiplicativeExpressionRule = $this->rule->get('MultiplicativeExpression', [$this->rule, $this->grammar]);
 
         while (true) {
             $multiplicativeExpressionRule->parse($node, $tokenizer);

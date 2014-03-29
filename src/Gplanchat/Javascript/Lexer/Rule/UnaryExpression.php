@@ -11,7 +11,6 @@ namespace Gplanchat\Javascript\Lexer\Rule;
 use Gplanchat\Javascript\Lexer\Exception\LexicalError;
 use Gplanchat\Javascript\Lexer\Grammar\RecursiveGrammarInterface;
 use Gplanchat\Javascript\Tokenizer\TokenizerInterface;
-use Gplanchat\Tokenizer\Token;
 use Gplanchat\Javascript\Lexer\Grammar;
 
 /**
@@ -60,7 +59,7 @@ class UnaryExpression
         $parent->addChild($node);
 
         /** @var MemberExpression $memberExpressionRule */
-        $memberExpressionRule = $this->rule->get('MemberExpression');
+        $memberExpressionRule = $this->rule->get('MemberExpression', [$this->rule, $this->grammar]);
 
         while (true) {
             if (!in_array($token->getType(), $this->unaryOperators)) {
@@ -111,7 +110,7 @@ class UnaryExpression
                 $node->addChild($newKeyword);
 
                 /** @var Constructor $constructorRule */
-                $constructorRule = $this->rule->get('Constructor');
+                $constructorRule = $this->rule->get('Constructor', [$this->rule, $this->grammar]);
 
                 $this->nextToken($tokenizer);
                 $constructorRule->parse($node, $tokenizer);

@@ -40,7 +40,7 @@ class StatementList
         $parent->addChild($node);
 
         /** @var Rule\Statement $statementRule */
-        $statementRule = $this->rule->get('Statement');
+        $statementRule = $this->rule->get('Statement', [$this->rule, $this->grammar]);
 
         while (true) {
             $token = $this->currentToken($tokenizer);

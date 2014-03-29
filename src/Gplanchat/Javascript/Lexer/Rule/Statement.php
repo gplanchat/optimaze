@@ -51,13 +51,13 @@ class Statement
         $parent->addChild($node);
 
         /** @var Rule\Expression $expressionRule */
-        $expressionRule = $this->rule->get('Expression');
+        $expressionRule = $this->rule->get('Expression', [$this->rule, $this->grammar]);
 
         /** @var Rule\VariableListOrExpression $variableListOrExpressionRule */
-        $variableListOrExpressionRule = $this->rule->get('VariableListOrExpression');
+        $variableListOrExpressionRule = $this->rule->get('VariableListOrExpression', [$this->rule, $this->grammar]);
 
         /** @var Rule\Condition $conditionRule */
-        $conditionRule = $this->rule->get('Condition');
+        $conditionRule = $this->rule->get('Condition', [$this->rule, $this->grammar]);
 
         while (true) {
             $token = $this->currentToken($tokenizer);
@@ -307,7 +307,7 @@ class Statement
         $this->nextToken($tokenizer);
 
         /** @var Rule\StatementList $statementListRule */
-        $statementListRule = $this->rule->get('StatementListRule');
+        $statementListRule = $this->rule->get('StatementListRule', [$this->rule, $this->grammar]);
         $statementListRule->parse($compoundStatement, $tokenizer);
 
         $token = $this->currentToken($tokenizer);

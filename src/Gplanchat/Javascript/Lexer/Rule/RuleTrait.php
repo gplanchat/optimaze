@@ -8,14 +8,13 @@
 
 namespace Gplanchat\Javascript\Lexer\Rule;
 
-use Gplanchat\Javascript\Lexer\Exception\LexicalError;
-use Gplanchat\Javascript\Tokenizer\TokenizerInterface;
-use Gplanchat\ServiceManager\ServiceManagerAwareTrait;
+use Gplanchat\Javascript\Lexer\TokenizerNavigationAwareTrait;
 use Gplanchat\ServiceManager\ServiceManagerInterface;
-use Gplanchat\Tokenizer\Token;
 
 trait RuleTrait
 {
+    use TokenizerNavigationAwareTrait;
+
     /**
      * @var ServiceManagerInterface
      */
@@ -34,33 +33,5 @@ trait RuleTrait
     {
         $this->rule = $ruleServiceManager;
         $this->grammar = $grammarServiceManager;
-    }
-
-    /**
-     * @param TokenizerInterface $tokenizer
-     * @return Token
-     * @throws LexicalError
-     */
-    protected function nextToken(TokenizerInterface $tokenizer)
-    {
-        $tokenizer->next();
-        $token = $this->currentToken($tokenizer);
-
-        return $token;
-    }
-
-    /**
-     * @param TokenizerInterface $tokenizer
-     * @return Token
-     * @throws LexicalError
-     */
-    protected function currentToken(TokenizerInterface $tokenizer)
-    {
-        if (!$valid = $tokenizer->valid()) {
-            throw new LexicalError('Invalid $end reached');
-        }
-        $token = $tokenizer->current();
-
-        return $token;
     }
 }
