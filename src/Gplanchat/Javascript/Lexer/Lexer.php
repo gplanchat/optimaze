@@ -27,6 +27,74 @@ class Lexer
     /**
      * @var array
      */
+    protected $defaultRuleServiceList = [
+        'AdditiveExpression'       => Rule\AdditiveExpression::class,
+        'AndExpression'            => Rule\AndExpression::class,
+        'ArgumentList'             => Rule\ArgumentList::class,
+        'AssignmentExpression'     => Rule\AssignmentExpression::class,
+        'BitwiseAndExpression'     => Rule\BitwiseAndExpression::class,
+        'BitwiseOrExpression'      => Rule\BitwiseOrExpression::class,
+        'BitwiseXorExpression'     => Rule\BitwiseXorExpression::class,
+        'ConditionalExpression'    => Rule\ConditionalExpression::class,
+        'Constructor'              => Rule\Constructor::class,
+        'ConstructorCall'          => Rule\ConstructorCall::class,
+        'EqualityExpression'       => Rule\EqualityExpression::class,
+        'Expression'               => Rule\Expression::class,
+        'MemberExpression'         => Rule\MemberExpression::class,
+        'MultiplicativeExpression' => Rule\MultiplicativeExpression::class,
+        'OrExpression'             => Rule\OrExpression::class,
+        'PrimaryExpression'        => Rule\PrimaryExpression::class,
+        'RelationalExpression'     => Rule\RelationalExpression::class,
+        'ShiftExpression'          => Rule\ShiftExpression::class,
+        'UnaryExpression'          => Rule\UnaryExpression::class,
+    ];
+
+    /**
+     * @var array
+     */
+    protected $defaultGrammarServiceList = [
+        'AdditiveExpression'       => Grammar\AdditiveExpression::class,
+        'AdditiveOperator'         => Grammar\AdditiveOperator::class,
+        'AndExpression'            => Grammar\AndExpression::class,
+        'ArgumentList'             => Grammar\ArgumentList::class,
+        'AssignmentOperator'       => Grammar\AssignmentOperator::class,
+        'BitwiseAndExpression'     => Grammar\BitwiseAndExpression::class,
+        'BitwiseOrExpression'      => Grammar\BitwiseOrExpression::class,
+        'BitwiseXorExpression'     => Grammar\BitwiseXorExpression::class,
+        'BooleanLiteral'           => Grammar\BooleanLiteral::class,
+        'CommaOperator'            => Grammar\CommaOperator::class,
+        'ConditionalExpression'    => Grammar\ConditionalExpression::class,
+        'Constructor'              => Grammar\Constructor::class,
+        'ConstructorCall'          => Grammar\ConstructorCall::class,
+        'DeleteKeyword'            => Grammar\DeleteKeyword::class,
+        'DotOperator'              => Grammar\DotOperator::class,
+        'EqualityExpression'       => Grammar\EqualityExpression::class,
+        'EqualityOperator'         => Grammar\EqualityOperator::class,
+        'Expression'               => Grammar\Expression::class,
+        'FloatingPointLiteral'     => Grammar\FloatingPointLiteral::class,
+        'Identifier'               => Grammar\Identifier::class,
+        'IncrementOperator'        => Grammar\IncrementOperator::class,
+        'IntegerLiteral'           => Grammar\IntegerLiteral::class,
+        'MemberExpression'         => Grammar\MemberExpression::class,
+        'MultiplicativeExpression' => Grammar\MultiplicativeExpression::class,
+        'MultiplicativeOperator'   => Grammar\MultiplicativeOperator::class,
+        'NewKeyword'               => Grammar\NewKeyword::class,
+        'NullKeyword'              => Grammar\NullKeyword::class,
+        'OrExpression'             => Grammar\OrExpression::class,
+        'PrimaryExpression'        => Grammar\PrimaryExpression::class,
+        'RelationalExpression'     => Grammar\RelationalExpression::class,
+        'RelationalOperator'       => Grammar\RelationalOperator::class,
+        'ShiftExpression'          => Grammar\ShiftExpression::class,
+        'ShiftOperator'            => Grammar\ShiftOperator::class,
+        'StringLiteral'            => Grammar\StringLiteral::class,
+        'ThisKeyword'              => Grammar\ThisKeyword::class,
+        'UnaryExpression'          => Grammar\UnaryExpression::class,
+        'UnaryOperator'            => Grammar\UnaryOperator::class,
+    ];
+
+    /**
+     * @var array
+     */
     protected $operatorPrecedence = [
         TokenizerInterface::OP_SEMICOLON => 0,
         TokenizerInterface::OP_COMMA => 1,
@@ -130,10 +198,21 @@ class Lexer
      * @param ServiceManagerInterface $ruleServiceManager
      * @param ServiceManagerInterface $grammarServiceManager
      */
-    public function __construct(ServiceManagerInterface $ruleServiceManager, ServiceManagerInterface $grammarServiceManager)
+    public function __construct(
+        ServiceManagerInterface $ruleServiceManager = null,
+        ServiceManagerInterface $grammarServiceManager = null)
     {
-        $this->rule = $ruleServiceManager;
-        $this->grammar = $grammarServiceManager;
+        if ($ruleServiceManager === null) {
+            $this->rule = new Rule\ServiceManager();
+        } else {
+            $this->rule = $ruleServiceManager;
+        }
+
+        if ($grammarServiceManager === null) {
+            $this->grammar = new Grammar\ServiceManager();
+        } else {
+            $this->grammar = $grammarServiceManager;
+        }
     }
 
     /**
