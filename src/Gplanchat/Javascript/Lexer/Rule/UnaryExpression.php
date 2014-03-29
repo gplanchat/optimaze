@@ -44,6 +44,18 @@ class UnaryExpression
         TokenizerInterface::OP_DECREMENT
     ];
 
+    protected $primaryExpressionTokens = [
+        TokenizerInterface::OP_LEFT_BRACKET,
+        TokenizerInterface::TOKEN_IDENTIFIER,
+        TokenizerInterface::TOKEN_NUMBER_INTEGER,
+        TokenizerInterface::TOKEN_NUMBER_FLOATING_POINT,
+        TokenizerInterface::TOKEN_STRING,
+        TokenizerInterface::KEYWORD_TRUE,
+        TokenizerInterface::KEYWORD_FALSE,
+        TokenizerInterface::KEYWORD_NULL,
+        TokenizerInterface::KEYWORD_THIS
+    ];
+
     /**
      * @param RecursiveGrammarInterface $parent
      * @param TokenizerInterface $tokenizer
@@ -70,7 +82,7 @@ class UnaryExpression
                 $node->addChild($unaryOperator);
             }
 
-            if ($memberExpressionRule->match($token)) {
+            if (in_array($token->getType(), $this->primaryExpressionTokens)) {
                 $memberExpressionRule->parse($node, $tokenizer);
 
                 $token = $this->currentToken($tokenizer);

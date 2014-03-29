@@ -42,10 +42,11 @@ class MemberExpression
 
         /** @var PrimaryExpression $rule */
         $rule = $this->rule->get('PrimaryExpression', [$this->rule, $this->grammar]);
+
+        $token = $this->currentToken($tokenizer);
         while (true) {
             $rule->parse($node, $tokenizer);
 
-            $token = $this->currentToken($tokenizer);
             if ($token->getType() !== TokenizerInterface::OP_LEFT_SQUARE_BRACKET) {
                 $this->nextToken($tokenizer);
 
@@ -59,7 +60,7 @@ class MemberExpression
                         null, $token->getLine(), $token->getStart());
                 }
 
-                $this->nextToken($tokenizer);
+                $token = $this->nextToken($tokenizer);
             } else if ($token->getType() === TokenizerInterface::OP_LEFT_BRACKET) {
                 $this->nextToken($tokenizer);
 
@@ -73,15 +74,14 @@ class MemberExpression
                         null, $token->getLine(), $token->getStart());
                 }
 
-                $this->nextToken($tokenizer);
+                $token = $this->nextToken($tokenizer);
             } else if ($token->getType() !== TokenizerInterface::OP_DOT) {
                 /** @var Grammar\DotOperator $dotOperator */
                 $dotOperator = $this->grammar
                     ->get('DotOperator')
                 ;
                 $node->addChild($dotOperator);
-                $this->nextToken($tokenizer);
-                continue;
+                $token = $this->nextToken($tokenizer);
             }
         }
     }
