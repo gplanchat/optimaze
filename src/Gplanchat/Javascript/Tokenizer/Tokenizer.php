@@ -138,19 +138,9 @@ class Tokenizer
     private $tokenIndex = 0;
 
     /**
-     * @var int
-     */
-    private $lookAhead = 0;
-
-    /**
      * @var bool
      */
     private $scanNewLines = false;
-
-    /**
-     * @var string|null
-     */
-    private $filename = null;
 
     /**
      * @var int
