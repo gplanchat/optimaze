@@ -33,6 +33,7 @@ class ServiceManager
             'ContinueKeyword'          => ContinueKeyword::class,
             'DeleteKeyword'            => DeleteKeyword::class,
             'DotOperator'              => DotOperator::class,
+            'Element'                  => Element::class,
             'ElseKeyword'              => ElseKeyword::class,
             'EqualityExpression'       => EqualityExpression::class,
             'EqualityOperator'         => EqualityOperator::class,

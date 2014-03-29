@@ -13,18 +13,7 @@ use Gplanchat\Tokenizer\Token;
 
 trait LeftAssociativeGrammarTrait
 {
-    use GrammarTrait;
-
-    /** @var GrammarInterface[] */
-    protected $children = [];
-
-    /**
-     * @return GrammarInterface[]
-     */
-    public function getChildren()
-    {
-        return $this->children;
-    }
+    use RecursiveGrammarTrait;
 
     /**
      * @param GrammarInterface $node

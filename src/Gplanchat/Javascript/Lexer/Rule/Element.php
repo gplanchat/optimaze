@@ -8,6 +8,7 @@
 
 namespace Gplanchat\Javascript\Lexer\Rule;
 
+use Gplanchat\Javascript\Lexer\Debug;
 use Gplanchat\Javascript\Lexer\Exception\LexicalError;
 use Gplanchat\Javascript\Lexer\Grammar\RecursiveGrammarInterface;
 use Gplanchat\Javascript\Tokenizer\TokenizerInterface;
@@ -36,8 +37,8 @@ class Element
      */
     public function parse(RecursiveGrammarInterface $parent, TokenizerInterface $tokenizer)
     {
-        /** @var Grammar\Statement $node */
-        $node = $this->grammar->get('Statement');
+        /** @var Grammar\Element $node */
+        $node = $this->grammar->get('Element');
         $parent->addChild($node);
 
         $token = $this->currentToken($tokenizer);

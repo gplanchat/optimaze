@@ -34,4 +34,18 @@ trait GrammarTrait
 
         return $this;
     }
+
+    /**
+     * @param int $level
+     * @return string
+     */
+    public function dump($level = 0)
+    {
+        $separatorPosition = strrpos(static::class, '\\');
+        $namespace = substr(static::class, 0, $separatorPosition);
+        $class = substr(static::class, $separatorPosition + 1);
+        $padding = str_pad('', $level * 2, ' ');
+
+        return sprintf("\n%1\$s%2\$s [%3\$s]", $padding, $class, $namespace);
+    }
 }
