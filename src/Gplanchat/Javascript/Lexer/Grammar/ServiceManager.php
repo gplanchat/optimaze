@@ -17,6 +17,7 @@ class ServiceManager
             'AdditiveOperator'         => AdditiveOperator::class,
             'AndExpression'            => AndExpression::class,
             'ArgumentList'             => ArgumentList::class,
+            'AssignmentExpression'     => AssignmentExpression::class,
             'AssignmentOperator'       => AssignmentOperator::class,
             'BitwiseAndExpression'     => BitwiseAndExpression::class,
             'BitwiseOrExpression'      => BitwiseOrExpression::class,

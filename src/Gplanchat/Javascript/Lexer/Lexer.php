@@ -246,7 +246,7 @@ class Lexer
         $program = $this->grammar->get('Program');
 
         /** @var Rule\Element $elementRule */
-        $elementRule = $this->grammar->get('Element');
+        $elementRule = $this->rule->get('Element', [$this->rule, $this->grammar]);
 
         while ($tokenizer->valid()) {
             $elementRule->parse($program, $tokenizer);

@@ -39,7 +39,7 @@ class AssignmentExpression
             return;
         }
 
-        /** @var Grammar\Expression $node */
+        /** @var Grammar\AssignmentExpression $node */
         $node = $this->grammar->get('AssignmentExpression');
         $parent->addChild($node);
 
