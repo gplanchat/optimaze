@@ -10,9 +10,19 @@ class ServiceManager
 {
     use ServiceManagerTrait;
 
-    public function __construct()
+    /**
+     * @var ServiceManagerInterface
+     */
+    protected $grammarServiceManager = null;
+
+    /**
+     * @param ServiceManagerInterface $grammarServiceManager
+     */
+    public function __construct(ServiceManagerInterface $grammarServiceManager)
     {
-        $this->invokables = [
+        $this->setGrammarServiceManager($grammarServiceManager);
+
+        $services = [
             'AdditiveExpression'       => AdditiveExpression::class,
             'AndExpression'            => AndExpression::class,
             'ArgumentList'             => ArgumentList::class,
@@ -40,5 +50,29 @@ class ServiceManager
             'VariableList'             => VariableList::class,
             'VariableListOrExpression' => VariableListOrExpression::class
         ];
+
+        foreach ($services as $serviceName => $className) {
+            $this->registerInvokable($className, $className);
+            $this->registerFactory($serviceName, new RuleFactory($className, $this->getGrammarServiceManager()));
+        }
+    }
+
+    /**
+     * @param ServiceManagerInterface $grammarServiceManager
+     * @return $this
+     */
+    public function setGrammarServiceManager($grammarServiceManager)
+    {
+        $this->grammarServiceManager = $grammarServiceManager;
+
+        return $this;
+    }
+
+    /**
+     * @return ServiceManagerInterface
+     */
+    public function getGrammarServiceManager()
+    {
+        return $this->grammarServiceManager;
     }
 }
