@@ -28,8 +28,8 @@ class ArgumentListTest
     public function testEmptyList()
     {
         $tokens = [
-            [TokenizerInterface::OP_LEFT_BRACKET,  ')', 0, 1, 1],
-            [TokenizerInterface::TOKEN_END,       null, 1, 1, 1]
+            [TokenizerInterface::OP_LEFT_BRACKET,  ')', null],
+            [TokenizerInterface::TOKEN_END,       null, null]
         ];
 
         $ruleServices = [
@@ -47,7 +47,7 @@ class ArgumentListTest
         ;
 
         $rule = new ArgumentList($this->getRuleServiceManagerMock($ruleServices),
-            $this->getRuleServiceManagerMock($grammarServices));
+            $this->getGrammarServiceManagerMock($grammarServices));
 
         $rule->parse($root, $this->getTokenizerMock($tokens));
     }
@@ -59,8 +59,8 @@ class ArgumentListTest
     {
         $tokens = [
             // TokenizerInterface::TOKEN_IDENTIFIER
-            [TokenizerInterface::OP_LEFT_BRACKET,  ')', 1, 2, 1],
-            [TokenizerInterface::TOKEN_END,       null, 2, 2, 1]
+            [TokenizerInterface::OP_LEFT_BRACKET,  ')', null],
+            [TokenizerInterface::TOKEN_END,       null, null]
         ];
 
         $ruleServices = [
@@ -78,7 +78,7 @@ class ArgumentListTest
         ;
 
         $rule = new ArgumentList($this->getRuleServiceManagerMock($ruleServices),
-            $this->getRuleServiceManagerMock($grammarServices));
+            $this->getGrammarServiceManagerMock($grammarServices));
 
         $rule->parse($root, $this->getTokenizerMock($tokens));
     }
@@ -90,10 +90,10 @@ class ArgumentListTest
     {
         $tokens = [
             // TokenizerInterface::TOKEN_IDENTIFIER
-            [TokenizerInterface::OP_COMMA,         ',', 0, 1, 1],
+            [TokenizerInterface::OP_COMMA,         ',', null],
             // TokenizerInterface::TOKEN_IDENTIFIER
-            [TokenizerInterface::OP_LEFT_BRACKET,  ')', 1, 2, 1],
-            [TokenizerInterface::TOKEN_END,       null, 2, 2, 1]
+            [TokenizerInterface::OP_LEFT_BRACKET,  ')', null],
+            [TokenizerInterface::TOKEN_END,       null, null]
         ];
 
         $ruleServices = [
@@ -102,6 +102,7 @@ class ArgumentListTest
 
         $grammarServices = [
             ['ArgumentList',  Grammar\ArgumentList::class],
+            ['AssignmentExpression', Grammar\AssignmentExpression::class],
             ['CommaOperator', Grammar\CommaOperator::class]
         ];
 
@@ -112,7 +113,7 @@ class ArgumentListTest
         ;
 
         $rule = new ArgumentList($this->getRuleServiceManagerMock($ruleServices),
-            $this->getRuleServiceManagerMock($grammarServices));
+            $this->getGrammarServiceManagerMock($grammarServices));
 
         $rule->parse($root, $this->getTokenizerMock($tokens));
     }

@@ -28,8 +28,8 @@ class ConstructorCallTest
     public function testLoneIdentifier()
     {
         $tokens = [
-            [TokenizerInterface::TOKEN_IDENTIFIER, 'identifier',  0, 10, 1],
-            [TokenizerInterface::TOKEN_END,                null, 11, 11, 1]
+            [TokenizerInterface::TOKEN_IDENTIFIER, 'identifier', null],
+            [TokenizerInterface::TOKEN_END,                null, null]
         ];
 
         $ruleServices = [];
@@ -46,7 +46,7 @@ class ConstructorCallTest
         ;
 
         $rule = new ConstructorCall($this->getRuleServiceManagerMock($ruleServices),
-            $this->getRuleServiceManagerMock($grammarServices));
+            $this->getGrammarServiceManagerMock($grammarServices));
 
         $rule->parse($root, $this->getTokenizerMock($tokens));
     }
@@ -57,10 +57,10 @@ class ConstructorCallTest
     public function testMultipleDottedIdentifiers()
     {
         $tokens = [
-            [TokenizerInterface::TOKEN_IDENTIFIER, 'identifier',   0, 10, 1],
-            [TokenizerInterface::OP_DOT,                    '.',  10, 11, 1],
-            [TokenizerInterface::TOKEN_IDENTIFIER, 'identifier2', 11, 22, 1],
-            [TokenizerInterface::TOKEN_END,                null,  22, 22, 1]
+            [TokenizerInterface::TOKEN_IDENTIFIER, 'identifier1', null],
+            [TokenizerInterface::OP_DOT,                     '.', null],
+            [TokenizerInterface::TOKEN_IDENTIFIER, 'identifier2', null],
+            [TokenizerInterface::TOKEN_END,                 null, null]
         ];
 
         $ruleServices = [];
@@ -79,7 +79,7 @@ class ConstructorCallTest
         ;
 
         $rule = new ConstructorCall($this->getRuleServiceManagerMock($ruleServices),
-            $this->getRuleServiceManagerMock($grammarServices));
+            $this->getGrammarServiceManagerMock($grammarServices));
 
         $rule->parse($root, $this->getTokenizerMock($tokens));
     }
@@ -91,10 +91,10 @@ class ConstructorCallTest
     public function testIdentifierWithOptions()
     {
         $tokens = [
-            [TokenizerInterface::TOKEN_IDENTIFIER, 'identifier',   0, 10, 1],
-            [TokenizerInterface::OP_LEFT_BRACKET,           '(',  10, 11, 1],
-            [TokenizerInterface::OP_RIGHT_BRACKET,          ')',  11, 12, 1],
-            [TokenizerInterface::TOKEN_END,                null,  12, 12, 1]
+            [TokenizerInterface::TOKEN_IDENTIFIER, 'identifier', null],
+            [TokenizerInterface::OP_LEFT_BRACKET,           '(', null],
+            [TokenizerInterface::OP_RIGHT_BRACKET,          ')', null],
+            [TokenizerInterface::TOKEN_END,                null, null]
         ];
 
         $ruleServices = [
@@ -113,7 +113,7 @@ class ConstructorCallTest
         ;
 
         $rule = new ConstructorCall($this->getRuleServiceManagerMock($ruleServices),
-            $this->getRuleServiceManagerMock($grammarServices));
+            $this->getGrammarServiceManagerMock($grammarServices));
 
         $rule->parse($root, $this->getTokenizerMock($tokens));
     }
@@ -127,7 +127,7 @@ class ConstructorCallTest
         $this->setExpectedException(Exception\LexicalError::class, 'Invalid expression : missing identifier');
 
         $tokens = [
-            [TokenizerInterface::OP_LEFT_BRACKET,           '(',  0, 1, 1]
+            [TokenizerInterface::OP_LEFT_BRACKET,           '(', null]
         ];
 
         $ruleServices = [];
@@ -143,7 +143,7 @@ class ConstructorCallTest
         ;
 
         $rule = new ConstructorCall($this->getRuleServiceManagerMock($ruleServices),
-            $this->getRuleServiceManagerMock($grammarServices));
+            $this->getGrammarServiceManagerMock($grammarServices));
 
         $rule->parse($root, $this->getTokenizerMock($tokens));
     }
