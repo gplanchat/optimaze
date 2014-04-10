@@ -48,44 +48,66 @@ class Statement
     {
         /** @var Grammar\Statement $node */
         $node = $this->grammar->get('Statement');
-        $parent->addChild($node);
 
         /** @var Rule\Expression $expressionRule */
-        $expressionRule = $this->rule->get('Expression', [$this->rule, $this->grammar]);
+        $expressionRule = $this->rule->get('Expression');;
 
         /** @var Rule\VariableListOrExpression $variableListOrExpressionRule */
-        $variableListOrExpressionRule = $this->rule->get('VariableListOrExpression', [$this->rule, $this->grammar]);
+        $variableListOrExpressionRule = $this->rule->get('VariableListOrExpression');;
 
         /** @var Rule\Condition $conditionRule */
-        $conditionRule = $this->rule->get('Condition', [$this->rule, $this->grammar]);
+        $conditionRule = $this->rule->get('Condition');;
 
         while (true) {
             $token = $this->currentToken($tokenizer);
 
             if ($token->getType() === TokenizerInterface::OP_SEMICOLON) {
+//                echo $token->dump();
                 break;
             } else if ($token->getType() === TokenizerInterface::KEYWORD_IF) {
+//                echo $token->dump();
+//                return;
                 $this->parseIf($node, $tokenizer, $conditionRule);
             } else if ($token->getType() === TokenizerInterface::KEYWORD_WHILE) {
+//                echo $token->dump();
+//                return;
                 $this->parseWhile($node, $tokenizer, $conditionRule);
             } else if ($token->getType() === TokenizerInterface::KEYWORD_FOR) {
+//                echo $token->dump();
+//                return;
                 $this->parseFor($node, $tokenizer, $expressionRule, $variableListOrExpressionRule);
             } else if ($token->getType() === TokenizerInterface::KEYWORD_BREAK) {
+//                echo $token->dump();
+//                return;
                 $this->parseBreak($node, $tokenizer);
                 break;
             } else if ($token->getType() === TokenizerInterface::KEYWORD_CONTINUE) {
+//                echo $token->dump();
+//                return;
                 $this->parseContinue($node, $tokenizer);
                 break;
             } else if ($token->getType() === TokenizerInterface::KEYWORD_WITH) {
+//                echo $token->dump();
+//                return;
                 $this->parseWith($node, $tokenizer, $expressionRule);
             } else if ($token->getType() === TokenizerInterface::KEYWORD_RETURN) {
+//                echo $token->dump();
+//                return;
                 $this->parseReturn($node, $tokenizer, $expressionRule);
                 break;
             } else if ($token->getType() === TokenizerInterface::OP_LEFT_CURLY) {
+//                echo $token->dump();
+//                return;
                 $this->parseCoumpoundStatement($node, $tokenizer);
                 break;
             } else {
                 $variableListOrExpressionRule->parse($node, $tokenizer);
+                $token = $this->nextToken($tokenizer);
+//                echo $token->dump();
+
+                if ($token->getType() === TokenizerInterface::OP_SEMICOLON) {
+                    break;
+                }
             }
         }
     }
@@ -307,7 +329,7 @@ class Statement
         $this->nextToken($tokenizer);
 
         /** @var Rule\StatementList $statementListRule */
-        $statementListRule = $this->rule->get('StatementListRule', [$this->rule, $this->grammar]);
+        $statementListRule = $this->rule->get('StatementListRule');;
         $statementListRule->parse($compoundStatement, $tokenizer);
 
         $token = $this->currentToken($tokenizer);

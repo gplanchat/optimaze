@@ -17,4 +17,9 @@ interface GrammarInterface
      * @return int
      */
     public function getType();
+
+    /**
+     * @return string
+     */
+    public function dump();
 }

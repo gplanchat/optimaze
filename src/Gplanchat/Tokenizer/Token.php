@@ -22,6 +22,8 @@
 
 namespace Gplanchat\Tokenizer;
 
+use Gplanchat\Javascript\Tokenizer as Javascript;
+
 /**
  * Class Token.
  * Data store for token
@@ -190,5 +192,17 @@ class Token
     public function getValue()
     {
         return $this->value;
+    }
+
+    public function dump()
+    {
+        $re = new \ReflectionClass(Javascript\TokenizerInterface::class);
+        $constants = $re->getConstants();
+
+        $key = array_search($this->getType(), $constants);
+        return sprintf("\n%s [%s]",
+            str_pad($key, 25, ' ', STR_PAD_RIGHT),
+            $this->getValue()
+        );
     }
 }

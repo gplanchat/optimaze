@@ -45,9 +45,10 @@ class ShiftExpression
         /** @var Grammar\ShiftExpression $node */
         $node = $this->grammar->get('ShiftExpression');
         $parent->addChild($node);
+//        echo $parent->dump();
 
         /** @var AdditiveExpression $additiveExpressionRule */
-        $additiveExpressionRule = $this->rule->get('AdditiveExpression', [$this->rule, $this->grammar]);
+        $additiveExpressionRule = $this->rule->get('AdditiveExpression');;
 
         while (true) {
             $additiveExpressionRule->parse($node, $tokenizer);

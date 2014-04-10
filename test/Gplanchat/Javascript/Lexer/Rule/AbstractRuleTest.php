@@ -80,9 +80,9 @@ abstract class AbstractRuleTest
      */
     protected function getRuleServiceManagerMock(array $serviceList = [])
     {
-        /** @var \Gplanchat\ServiceManager\ServiceManagerInterface|\PHPUnit_Framework_MockObject_MockObject $serviceManager */
+        /** @var ServiceManagerInterface|MockObject $serviceManager */
         $serviceManager = $this->getMockForAbstractClass('Gplanchat\ServiceManager\ServiceManagerInterface', ['get']);
-        /** @var \Gplanchat\ServiceManager\ServiceManagerInterface|\PHPUnit_Framework_MockObject_MockObject $grammarServiceManager */
+        /** @var ServiceManagerInterface|MockObject $grammarServiceManager */
         $grammarServiceManager = $this->getGrammarServiceManagerMock();
 
         foreach ($serviceList as $callId => list($serviceName, $serviceClass)) {
@@ -103,7 +103,7 @@ abstract class AbstractRuleTest
      */
     protected function getGrammarServiceManagerMock(array $serviceList = [])
     {
-        /** @var \Gplanchat\ServiceManager\ServiceManagerInterface|\PHPUnit_Framework_MockObject_MockObject $serviceManager */
+        /** @var ServiceManagerInterface|MockObject $serviceManager */
         $serviceManager = $this->getMockForAbstractClass('Gplanchat\ServiceManager\ServiceManagerInterface', ['get']);
 
         foreach ($serviceList as $callId => list($serviceName, $serviceClass)) {

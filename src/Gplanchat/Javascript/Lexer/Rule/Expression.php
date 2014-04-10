@@ -39,7 +39,7 @@ class Expression
         $parent->addChild($node);
 
         /** @var AssignmentExpression $rule */
-        $rule = $this->rule->get('AssignmentExpression', [$this->rule, $this->grammar]);
+        $rule = $this->rule->get('AssignmentExpression');;
         while (true) {
             $rule->parse($node, $tokenizer);
 

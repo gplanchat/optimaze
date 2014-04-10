@@ -39,19 +39,20 @@ class MemberExpression
         /** @var Grammar\MemberExpression $node */
         $node = $this->grammar->get('MemberExpression');
         $parent->addChild($node);
+//        echo $parent->dump();
 
         /** @var PrimaryExpression $rule */
-        $rule = $this->rule->get('PrimaryExpression', [$this->rule, $this->grammar]);
+        $rule = $this->rule->get('PrimaryExpression');;
 
         $token = $this->currentToken($tokenizer);
         while (true) {
             $rule->parse($node, $tokenizer);
 
-            if ($token->getType() !== TokenizerInterface::OP_LEFT_SQUARE_BRACKET) {
+            if ($token->getType() === TokenizerInterface::OP_LEFT_SQUARE_BRACKET) {
                 $this->nextToken($tokenizer);
 
                 /** @var Expression $expressionRule */
-                $expressionRule = $this->rule->get('Expression', [$this->rule, $this->grammar]);
+                $expressionRule = $this->rule->get('Expression');;
                 $expressionRule->parse($node, $tokenizer);
 
                 $token = $this->currentToken($tokenizer);
@@ -65,7 +66,7 @@ class MemberExpression
                 $this->nextToken($tokenizer);
 
                 /** @var ArgumentList $argumentListRule */
-                $argumentListRule = $this->rule->get('ArgumentList', [$this->rule, $this->grammar]);
+                $argumentListRule = $this->rule->get('ArgumentList');;
                 $argumentListRule->parse($node, $tokenizer);
 
                 $token = $this->currentToken($tokenizer);

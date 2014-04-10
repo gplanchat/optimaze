@@ -39,6 +39,7 @@ class Constructor
         /** @var Grammar\Constructor $node */
         $node = $this->grammar->get('Constructor');
         $parent->addChild($node);
+//        echo $parent->dump();
 
         if ($token->getType() === TokenizerInterface::KEYWORD_THIS) {
             /** @var Grammar\ThisKeyword $thisKeyword */
@@ -63,7 +64,7 @@ class Constructor
         }
 
         /** @var ConstructorCall $rule */
-        $rule = $this->rule->get('ConstructorCall', [$this->rule, $this->grammar]);
+        $rule = $this->rule->get('ConstructorCall');;
         $rule->parse($node, $tokenizer);
     }
 }

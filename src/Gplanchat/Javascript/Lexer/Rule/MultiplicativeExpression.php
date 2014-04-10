@@ -43,9 +43,10 @@ class MultiplicativeExpression
         /** @var Grammar\MultiplicativeExpression $node */
         $node = $this->grammar->get('MultiplicativeExpression');
         $parent->addChild($node);
+//        echo $parent->dump();
 
         /** @var UnaryExpression $unaryExpressionRule */
-        $unaryExpressionRule = $this->rule->get('UnaryExpression', [$this->rule, $this->grammar]);
+        $unaryExpressionRule = $this->rule->get('UnaryExpression');;
 
         while (true) {
             $unaryExpressionRule->parse($node, $tokenizer);

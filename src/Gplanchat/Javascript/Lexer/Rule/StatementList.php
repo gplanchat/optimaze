@@ -38,9 +38,10 @@ class StatementList
         /** @var Grammar\StatementList $node */
         $node = $this->grammar->get('StatementList');
         $parent->addChild($node);
+//        echo $parent->dump();
 
         /** @var Rule\Statement $statementRule */
-        $statementRule = $this->rule->get('Statement', [$this->rule, $this->grammar]);
+        $statementRule = $this->rule->get('Statement');;
 
         while (true) {
             $token = $this->currentToken($tokenizer);

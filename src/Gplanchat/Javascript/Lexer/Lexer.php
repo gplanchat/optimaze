@@ -8,12 +8,15 @@
 
 namespace Gplanchat\Javascript\Lexer;
 
+use Gplanchat\Javascript\Lexer\TokenizerNavigationAwaretrait;
 use Gplanchat\Javascript\Lexer\Grammar\GrammarInterface;
 use Gplanchat\Javascript\Tokenizer\TokenizerInterface;
 use Gplanchat\ServiceManager\ServiceManagerInterface;
 
 class Lexer
 {
+    use TokenizerNavigationAwaretrait;
+
     /**
      * @var ServiceManagerInterface
      */
@@ -202,16 +205,16 @@ class Lexer
         ServiceManagerInterface $ruleServiceManager = null,
         ServiceManagerInterface $grammarServiceManager = null)
     {
-        if ($ruleServiceManager === null) {
-            $this->rule = new Rule\ServiceManager();
-        } else {
-            $this->rule = $ruleServiceManager;
-        }
-
         if ($grammarServiceManager === null) {
             $this->grammar = new Grammar\ServiceManager();
         } else {
             $this->grammar = $grammarServiceManager;
+        }
+
+        if ($ruleServiceManager === null) {
+            $this->rule = new Rule\ServiceManager($this->grammar);
+        } else {
+            $this->rule = $ruleServiceManager;
         }
     }
 
@@ -248,8 +251,15 @@ class Lexer
         /** @var Rule\Element $elementRule */
         $elementRule = $this->rule->get('Element', [$this->rule, $this->grammar]);
 
+        $token = $this->currentToken($tokenizer);
         while ($tokenizer->valid()) {
+            if ($token->getType() === TokenizerInterface::TOKEN_BLOCK_COMMENT ||
+                $token->getType() === TokenizerInterface::TOKEN_LINE_COMMENT) {
+                $token = $this->nextToken($tokenizer);
+                continue;
+            }
             $elementRule->parse($program, $tokenizer);
+            break;
         }
 
         return $program;

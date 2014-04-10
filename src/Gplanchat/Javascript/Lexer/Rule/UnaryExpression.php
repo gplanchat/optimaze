@@ -18,13 +18,13 @@ use Gplanchat\Javascript\Lexer\Grammar;
  * @package Gplanchat\Javascript\Lexer\Rule
  *
  * UnaryExpression:
- **     MemberExpression
+ *     MemberExpression
  *     UnaryOperator UnaryExpression
  *     - UnaryExpression
- **     IncrementOperator MemberExpression
- **     MemberExpression IncrementOperator
- **     new Constructor
- **     delete MemberExpression
+ *     IncrementOperator MemberExpression
+ *     MemberExpression IncrementOperator
+ *     new Constructor
+ *     delete MemberExpression
  */
 class UnaryExpression
     implements RuleInterface
@@ -69,17 +69,21 @@ class UnaryExpression
         /** @var Grammar\UnaryExpression $node */
         $node = $this->grammar->get('UnaryExpression');
         $parent->addChild($node);
+//        echo $parent->dump();
 
         /** @var MemberExpression $memberExpressionRule */
-        $memberExpressionRule = $this->rule->get('MemberExpression', [$this->rule, $this->grammar]);
+        $memberExpressionRule = $this->rule->get('MemberExpression');;
 
         while (true) {
-            if (!in_array($token->getType(), $this->unaryOperators)) {
+//            var_dump($token->getType(), !in_array($token->getType(), $this->unaryOperators));
+            if (in_array($token->getType(), $this->unaryOperators)) {
                 /** @var Grammar\UnaryOperator $unaryOperator */
                 $unaryOperator = $this->grammar
                     ->get('UnaryOperator', [$token->getValue()])
                 ;
                 $node->addChild($unaryOperator);
+                $token = $this->nextToken($tokenizer);
+                continue;
             }
 
             if (in_array($token->getType(), $this->primaryExpressionTokens)) {
@@ -122,7 +126,7 @@ class UnaryExpression
                 $node->addChild($newKeyword);
 
                 /** @var Constructor $constructorRule */
-                $constructorRule = $this->rule->get('Constructor', [$this->rule, $this->grammar]);
+                $constructorRule = $this->rule->get('Constructor');;
 
                 $this->nextToken($tokenizer);
                 $constructorRule->parse($node, $tokenizer);

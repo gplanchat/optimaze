@@ -61,12 +61,13 @@ class PrimaryExpression
         /** @var Grammar\PrimaryExpression $node */
         $node = $this->grammar->get('PrimaryExpression');
         $parent->addChild($node);
+//        echo $parent->dump();
 
         if ($token->getType() === TokenizerInterface::OP_LEFT_BRACKET) {
             $this->nextToken($tokenizer);
 
             /** @var Expression $rule */
-            $rule = $this->rule->get('Expression', [$this->rule, $this->grammar]);
+            $rule = $this->rule->get('Expression');;
             $rule->parse($node, $tokenizer);
 
             $token = $this->currentToken($tokenizer);

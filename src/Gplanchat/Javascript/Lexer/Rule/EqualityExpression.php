@@ -44,9 +44,10 @@ class EqualityExpression
         /** @var Grammar\EqualityExpression $node */
         $node = $this->grammar->get('EqualityExpression');
         $parent->addChild($node);
+//        echo $parent->dump();
 
         /** @var RelationalExpression $relationalExpressionRule */
-        $relationalExpressionRule = $this->rule->get('RelationalExpression', [$this->rule, $this->grammar]);
+        $relationalExpressionRule = $this->rule->get('RelationalExpression');;
 
         while (true) {
             $relationalExpressionRule->parse($node, $tokenizer);

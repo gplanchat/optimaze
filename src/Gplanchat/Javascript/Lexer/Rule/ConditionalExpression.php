@@ -37,9 +37,10 @@ class ConditionalExpression
         /** @var Grammar\Expression $node */
         $node = $this->grammar->get('ConditionalExpression');
         $parent->addChild($node);
+//        echo $parent->dump();
 
         /** @var OrExpression $orExpressionRule */
-        $orExpressionRule = $this->rule->get('OrExpression', [$this->rule, $this->grammar]);
+        $orExpressionRule = $this->rule->get('OrExpression');;
         $orExpressionRule->parse($node, $tokenizer);
 
         $token = $this->currentToken($tokenizer);
@@ -48,7 +49,7 @@ class ConditionalExpression
         }
 
         /** @var AssignmentExpression $assignmentExpressionRule */
-        $assignmentExpressionRule = $this->rule->get('AssignmentExpression', [$this->rule, $this->grammar]);
+        $assignmentExpressionRule = $this->rule->get('AssignmentExpression');;
         $assignmentExpressionRule->parse($node, $tokenizer);
 
         $token = $this->currentToken($tokenizer);

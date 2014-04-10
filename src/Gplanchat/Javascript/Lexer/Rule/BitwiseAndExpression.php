@@ -37,9 +37,10 @@ class BitwiseAndExpression
         /** @var Grammar\BitwiseAndExpression $node */
         $node = $this->grammar->get('BitwiseAndExpression');
         $parent->addChild($node);
+//        echo $parent->dump();
 
         /** @var EqualityExpression $rule */
-        $rule = $this->rule->get('EqualityExpression', [$this->rule, $this->grammar]);
+        $rule = $this->rule->get('EqualityExpression');;
         while (true) {
             $rule->parse($node, $tokenizer);
 

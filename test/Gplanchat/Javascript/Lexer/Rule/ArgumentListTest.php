@@ -102,7 +102,6 @@ class ArgumentListTest
 
         $grammarServices = [
             ['ArgumentList',  Grammar\ArgumentList::class],
-            ['AssignmentExpression', Grammar\AssignmentExpression::class],
             ['CommaOperator', Grammar\CommaOperator::class]
         ];
 

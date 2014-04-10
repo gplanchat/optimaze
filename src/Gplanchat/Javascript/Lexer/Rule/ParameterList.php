@@ -37,21 +37,21 @@ class ParameterList
         /** @var Grammar\ParameterList $node */
         $node = $this->grammar->get('ParameterList');
         $parent->addChild($node);
+//        echo $parent->dump();
 
         $token = $this->currentToken($tokenizer);
         while (true) {
             if ($token->getType() !== TokenizerInterface::TOKEN_IDENTIFIER) {
-                throw new LexicalError('Invalid expression : missing identifier',
-                    null, $token->getLine(), $token->getStart());
+                break;
             }
 
             /** @var Grammar\Identifier $identifier */
-            $identifier = $this->grammar->get('Identifier');
+            $identifier = $this->grammar->get('Identifier', [$token->getValue()]);
             $node->addChild($identifier);
 
             $token = $this->nextToken($tokenizer);
             if ($token->getType() === TokenizerInterface::OP_COMMA) {
-                break;
+                continue;
             }
         }
     }

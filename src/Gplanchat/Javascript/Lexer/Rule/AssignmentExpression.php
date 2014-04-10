@@ -42,9 +42,11 @@ class AssignmentExpression
         /** @var Grammar\AssignmentExpression $node */
         $node = $this->grammar->get('AssignmentExpression');
         $parent->addChild($node);
+//        echo $token->dump();
+//        return;
 
         /** @var AssignmentExpression $conditionalExpressionRule */
-        $conditionalExpressionRule = $this->rule->get('ConditionalExpression', [$this->rule, $this->grammar]);
+        $conditionalExpressionRule = $this->rule->get('ConditionalExpression');
 
         while (true) {
             $conditionalExpressionRule->parse($node, $tokenizer);

@@ -37,6 +37,7 @@ class VariableList
         /** @var Grammar\VariableList $node */
         $node = $this->grammar->get('VariableList');
         $parent->addChild($node);
+//        echo $parent->dump();
 
         while (true) {
             /** @var Grammar\Variable $variable */
@@ -58,7 +59,7 @@ class VariableList
                 $this->nextToken($tokenizer);
 
                 /** @var AssignmentExpression $assignmentExpressionRule */
-                $assignmentExpressionRule = $this->rule->get('AssignmentExpression', [$this->rule, $this->grammar]);
+                $assignmentExpressionRule = $this->rule->get('AssignmentExpression');;
                 $assignmentExpressionRule->parse($variable, $tokenizer);
             }
 

@@ -8,7 +8,9 @@ use Gplanchat\ServiceManager\ServiceManagerTrait;
 class ServiceManager
     implements ServiceManagerInterface
 {
-    use ServiceManagerTrait;
+    use ServiceManagerTrait {
+        ServiceManagerTrait::get as realGet;
+    }
 
     /**
      * @var ServiceManagerInterface
@@ -53,8 +55,18 @@ class ServiceManager
 
         foreach ($services as $serviceName => $className) {
             $this->registerInvokable($className, $className);
-            $this->registerFactory($serviceName, new RuleFactory($className, $this->getGrammarServiceManager()));
+            $this->registerFactory($serviceName, $this->buildFactory($className, $this->getGrammarServiceManager()));
         }
+    }
+
+    /**
+     * @param $className
+     * @param ServiceManagerInterface $serviceManager
+     * @return callable
+     */
+    protected function buildFactory($className, ServiceManagerInterface $serviceManager)
+    {
+        return new RuleFactory($className, $serviceManager);
     }
 
     /**
@@ -74,5 +86,12 @@ class ServiceManager
     public function getGrammarServiceManager()
     {
         return $this->grammarServiceManager;
+    }
+
+    public function get($serviceName, array $constructorParams = [], $ignoreInexistent = false, $ignorePeering = false)
+    {
+//        var_dump(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2));
+//        var_dump($serviceName);
+        return $this->realGet($serviceName, $constructorParams, $ignoreInexistent, $ignorePeering);
     }
 }

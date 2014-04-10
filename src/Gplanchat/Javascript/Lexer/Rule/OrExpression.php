@@ -37,9 +37,10 @@ class OrExpression
         /** @var Grammar\OrExpression $node */
         $node = $this->grammar->get('OrExpression');
         $parent->addChild($node);
+//        echo $parent->dump();
 
         /** @var AndExpression $rule */
-        $rule = $this->rule->get('AndExpression', [$this->rule, $this->grammar]);
+        $rule = $this->rule->get('AndExpression');;
         while (true) {
             $rule->parse($node, $tokenizer);
 

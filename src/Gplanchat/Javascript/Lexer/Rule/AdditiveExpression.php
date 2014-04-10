@@ -43,9 +43,10 @@ class AdditiveExpression
         /** @var Grammar\AdditiveExpression $node */
         $node = $this->grammar->get('AdditiveExpression');
         $parent->addChild($node);
+//        echo $parent->dump();
 
         /** @var MultiplicativeExpression $multiplicativeExpressionRule */
-        $multiplicativeExpressionRule = $this->rule->get('MultiplicativeExpression', [$this->rule, $this->grammar]);
+        $multiplicativeExpressionRule = $this->rule->get('MultiplicativeExpression');;
 
         while (true) {
             $multiplicativeExpressionRule->parse($node, $tokenizer);

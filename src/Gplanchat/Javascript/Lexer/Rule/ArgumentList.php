@@ -38,9 +38,10 @@ class ArgumentList
         /** @var Grammar\ArgumentList $node */
         $node = $this->grammar->get('ArgumentList');
         $parent->addChild($node);
+//        echo $parent->dump();
 
         /** @var AssignmentExpression $rule */
-        $rule = $this->rule->get('AssignmentExpression', [$this->rule, $this->grammar]);
+        $rule = $this->rule->get('AssignmentExpression');;
         while (true) {
             $rule->parse($node, $tokenizer);
 

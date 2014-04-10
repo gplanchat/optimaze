@@ -12,6 +12,7 @@ use Gplanchat\Javascript\Lexer\Exception\LexicalError;
 use Gplanchat\Javascript\Lexer\Grammar\RecursiveGrammarInterface;
 use Gplanchat\Javascript\Tokenizer\TokenizerInterface;
 use Gplanchat\Javascript\Lexer\Grammar;
+use Gplanchat\Javascript\Lexer\Rule;
 
 /**
  * Class Expression
@@ -38,6 +39,7 @@ class ConstructorCall
         /** @var Grammar\ConstructorCall $node */
         $node = $this->grammar->get('ConstructorCall');
         $parent->addChild($node);
+        echo $parent->dump();
 
         $token = $this->currentToken($tokenizer);
         while (true) {
@@ -53,9 +55,9 @@ class ConstructorCall
             if ($token->getType() === TokenizerInterface::OP_LEFT_BRACKET) {
                 $this->nextToken($tokenizer);
 
-                /** @var ConstructorCall $rule */
-                $rule = $this->rule->get('ConstructorCall', [$this->rule, $this->grammar]);
-                $rule->parse($node, $tokenizer);
+                /** @var Rule\ArgumentList $argumentListRule */
+                $argumentListRule = $this->rule->get('ArgumentList');
+                $argumentListRule->parse($node, $tokenizer);
 
                 $token = $this->currentToken($tokenizer);
                 if ($token->getType() !== TokenizerInterface::OP_RIGHT_BRACKET) {
@@ -63,7 +65,7 @@ class ConstructorCall
                         null, $token->getLine(), $token->getStart());
                 }
 
-                $token = $this->nextToken($tokenizer);
+                $this->nextToken($tokenizer);
             } else if ($token->getType() === TokenizerInterface::OP_DOT) {
                 /** @var Grammar\DotOperator $dotOperator */
                 $dotOperator = $this->grammar->get('DotOperator');

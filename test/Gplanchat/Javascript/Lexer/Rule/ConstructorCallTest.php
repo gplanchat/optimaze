@@ -98,7 +98,7 @@ class ConstructorCallTest
         ];
 
         $ruleServices = [
-            ['ConstructorCall', Rule\ConstructorCall::class]
+            ['ArgumentList',    Rule\ArgumentList::class]
         ];
 
         $grammarServices = [

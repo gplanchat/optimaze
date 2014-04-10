@@ -37,14 +37,17 @@ class VariableListOrExpression
         $token = $this->currentToken($tokenizer);
 
         if ($token->getType() === TokenizerInterface::KEYWORD_VAR) {
+//            echo $token->dump();
+//            return;
+
             /** @var VariableList $variableListRule */
-            $variableListRule = $this->rule->get('VariableList', [$this->rule, $this->grammar]);
+            $variableListRule = $this->rule->get('VariableList');;
             $variableListRule->parse($parent, $tokenizer);
             return;
         }
 
         /** @var Expression $expressionRule */
-        $expressionRule = $this->rule->get('Expression', [$this->rule, $this->grammar]);
+        $expressionRule = $this->rule->get('Expression');;
         $expressionRule->parse($parent, $tokenizer);
     }
 }
