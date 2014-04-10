@@ -118,22 +118,56 @@ class ConstructorCallTest
         $rule->parse($root, $this->getTokenizerMock($tokens));
     }
 
-
     /**
      *
      */
-    public function testInvalidToken()
+    public function testInvalidTokenMissingIdentifier()
     {
         $this->setExpectedException(Exception\LexicalError::class, 'Invalid expression : missing identifier');
 
         $tokens = [
-            [TokenizerInterface::OP_LEFT_BRACKET,           '(', null]
+            [TokenizerInterface::OP_LEFT_BRACKET,  '(', null],
+            [TokenizerInterface::OP_RIGHT_BRACKET, ')', null]
         ];
 
         $ruleServices = [];
 
         $grammarServices = [
             ['ConstructorCall', Grammar\ConstructorCall::class]
+        ];
+
+        $root = $this->getRootGrammarMock();
+        $root->expects($this->at(0))
+            ->method('addChild')
+            ->with($this->isInstanceOf(Grammar\ConstructorCall::class))
+        ;
+
+        $rule = new ConstructorCall($this->getRuleServiceManagerMock($ruleServices),
+            $this->getGrammarServiceManagerMock($grammarServices));
+
+        $rule->parse($root, $this->getTokenizerMock($tokens));
+    }
+
+    /**
+     *
+     */
+    public function testInvalidTokenMissingRightBracket()
+    {
+        $this->setExpectedException(Exception\LexicalError::class, 'Invalid expression : missing right bracket');
+
+        $tokens = [
+            [TokenizerInterface::TOKEN_IDENTIFIER, 'identifier', null],
+            [TokenizerInterface::OP_LEFT_BRACKET,           '(', null],
+            [TokenizerInterface::TOKEN_END,                null, null]
+        ];
+
+        $ruleServices = [
+            ['ArgumentList',    Rule\ArgumentList::class]
+        ];
+
+        $grammarServices = [
+            ['ConstructorCall', Grammar\ConstructorCall::class],
+            ['Identifier',      Grammar\Identifier::class]
         ];
 
         $root = $this->getRootGrammarMock();
