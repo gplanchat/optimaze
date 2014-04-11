@@ -22,6 +22,8 @@
 
 namespace Gplanchat\Lexer;
 
+use Gplanchat\Tokenizer\TokenizerInterface;
+
 /**
  * Interface LexerInterface
  * Defines the way a lexer should react.
