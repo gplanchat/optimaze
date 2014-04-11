@@ -24,7 +24,7 @@
 namespace Gplanchat\Javascript\Tokenizer\Exception;
 
 /**
- * Syntax error exception type. Thrown when an invalid syntax is found syntax
+ * Syntax error exception type. Thrown when an invalid syntax is found
  *
  * @package Gplanchat\Javascript\Tokenizer
  */
