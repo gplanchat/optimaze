@@ -63,5 +63,7 @@ class MultiplicativeExpression
             $node->addChild($multiplicativeOperator);
             $this->nextToken($tokenizer);
         }
+
+        $node->flatten();
     }
 }

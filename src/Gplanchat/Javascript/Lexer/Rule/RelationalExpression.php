@@ -65,5 +65,7 @@ class RelationalExpression
             $node->addChild($relationalOperator);
             $this->nextToken($tokenizer);
         }
+
+        $node->flatten();
     }
 }

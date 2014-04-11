@@ -49,5 +49,7 @@ class OrExpression
                 break;
             }
         }
+
+        $node->flatten();
     }
 }

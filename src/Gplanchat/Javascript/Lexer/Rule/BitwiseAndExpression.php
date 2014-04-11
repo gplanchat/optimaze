@@ -49,5 +49,7 @@ class BitwiseAndExpression
                 break;
             }
         }
+
+        $node->flatten();
     }
 }

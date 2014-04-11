@@ -45,6 +45,7 @@ class ConditionalExpression
 
         $token = $this->currentToken($tokenizer);
         if ($token->getType() !== TokenizerInterface::OP_HOOK) {
+            $node->flatten();
             return;
         }
 
@@ -54,7 +55,8 @@ class ConditionalExpression
 
         $token = $this->currentToken($tokenizer);
         if ($token->getType() !== TokenizerInterface::OP_SEMICOLON) {
-            return;
+            throw new LexicalError('Invalid conditional expression : missing semicolon',
+                null, $token->getLine(), $token->getStart());
         }
 
         $assignmentExpressionRule->parse($node, $tokenizer);

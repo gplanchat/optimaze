@@ -133,5 +133,7 @@ class UnaryExpression
                 break;
             }
         }
+
+        $node->flatten();
     }
 }

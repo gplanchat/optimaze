@@ -49,5 +49,7 @@ class AndExpression
                 break;
             }
         }
+
+        $node->flatten();
     }
 }

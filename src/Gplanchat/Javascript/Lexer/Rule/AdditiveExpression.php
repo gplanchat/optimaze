@@ -63,5 +63,7 @@ class AdditiveExpression
             $node->addChild($additiveOperator);
             $this->nextToken($tokenizer);
         }
+
+        $node->flatten();
     }
 }

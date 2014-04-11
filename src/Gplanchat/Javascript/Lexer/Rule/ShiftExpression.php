@@ -65,5 +65,7 @@ class ShiftExpression
             $node->addChild($shiftOperator);
             $this->nextToken($tokenizer);
         }
+
+        $node->flatten();
     }
 }

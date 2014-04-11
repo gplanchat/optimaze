@@ -49,5 +49,7 @@ class BitwiseXorExpression
                 break;
             }
         }
+
+        $node->flatten();
     }
 }

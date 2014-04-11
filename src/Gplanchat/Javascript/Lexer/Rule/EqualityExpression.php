@@ -53,7 +53,7 @@ class EqualityExpression
             $relationalExpressionRule->parse($node, $tokenizer);
 
             $token = $this->currentToken($tokenizer);
-            if (in_array($token->getType(), $this->equalityOperators)) {
+            if (!in_array($token->getType(), $this->equalityOperators)) {
                 break;
             }
 
@@ -64,5 +64,7 @@ class EqualityExpression
             $node->addChild($equalityOperator);
             $this->nextToken($tokenizer);
         }
+
+        $node->flatten();
     }
 }
