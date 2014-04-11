@@ -72,7 +72,7 @@ trait RecursiveGrammarTrait
     public function flatten()
     {
         $count = count($children = $this->getChildren());
-        if ($count <= 0) {
+        if ($count <= 1) {
             $parent = $this->getParent();
             if ($parent !== null) {
                 $parent->removeChild($this);
