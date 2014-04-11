@@ -76,11 +76,6 @@ trait RecursiveGrammarTrait
             $parent = $this->getParent();
             if ($parent !== null) {
                 $parent->removeChild($this);
-            }
-        } else if ($count <= 1) {
-            $parent = $this->getParent();
-            if ($parent !== null) {
-                $parent->removeChild($this);
 
                 foreach ($children as $child) {
                     $parent->addChild($child);
