@@ -85,13 +85,22 @@ abstract class AbstractRuleTest
         /** @var ServiceManagerInterface|MockObject $grammarServiceManager */
         $grammarServiceManager = $this->getGrammarServiceManagerMock();
 
-        foreach ($serviceList as $callId => list($serviceName, $serviceClass)) {
-            $factory = new RuleFactoryMock($this, $serviceClass, $serviceManager, $grammarServiceManager);
-            $serviceManager->expects($this->at($callId))
-                ->method('get')
-                ->with($serviceName)
-                ->will($this->returnCallback($factory))
-            ;
+        foreach ($serviceList as $callId => list($serviceName, $service)) {
+            if (is_string($service)) {
+                $factory = new RuleFactoryMock($this, $service, $serviceManager, $grammarServiceManager);
+
+                $serviceManager->expects($this->at($callId))
+                    ->method('get')
+                    ->with($serviceName)
+                    ->will($this->returnCallback($factory))
+                ;
+            } else {
+                $serviceManager->expects($this->at($callId))
+                    ->method('get')
+                    ->with($serviceName)
+                    ->will($this->returnValue($service))
+                ;
+            }
         }
 
         return $serviceManager;
@@ -106,13 +115,22 @@ abstract class AbstractRuleTest
         /** @var ServiceManagerInterface|MockObject $serviceManager */
         $serviceManager = $this->getMockForAbstractClass('Gplanchat\ServiceManager\ServiceManagerInterface', ['get']);
 
-        foreach ($serviceList as $callId => list($serviceName, $serviceClass)) {
-            $factory = new GrammarFactoryMock($this, $serviceClass);
-            $serviceManager->expects($this->at($callId))
-                ->method('get')
-                ->with($serviceName)
-                ->will($this->returnCallback($factory))
-            ;
+        foreach ($serviceList as $callId => list($serviceName, $service)) {
+            if (is_string($service)) {
+                $factory = new GrammarFactoryMock($this, $service);
+
+                $serviceManager->expects($this->at($callId))
+                    ->method('get')
+                    ->with($serviceName)
+                    ->will($this->returnCallback($factory))
+                ;
+            } else {
+                $serviceManager->expects($this->at($callId))
+                    ->method('get')
+                    ->with($serviceName)
+                    ->will($this->returnValue($service))
+                ;
+            }
         }
 
         return $serviceManager;
