@@ -18,6 +18,7 @@ use Gplanchat\Javascript\Lexer\Grammar;
  * @package Gplanchat\Javascript\Lexer\Rule
  *
  * ParameterList:
+ *     empty
  *     Identifier
  *     Identifier , ParameterList
  */
@@ -37,7 +38,6 @@ class ParameterList
         /** @var Grammar\ParameterList $node */
         $node = $this->grammar->get('ParameterList');
         $parent->addChild($node);
-//        echo $parent->dump();
 
         $token = $this->currentToken($tokenizer);
         while (true) {
