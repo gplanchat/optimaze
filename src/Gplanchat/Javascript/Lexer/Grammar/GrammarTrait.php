@@ -8,12 +8,32 @@
 
 namespace Gplanchat\Javascript\Lexer\Grammar;
 
-use Gplanchat\Tokenizer\Token;
-
 trait GrammarTrait
 {
     /** @var int */
     protected $type = null;
+
+    /** @var GrammarInterface */
+    protected $parent = null;
+
+    /**
+     * @param RecursiveGrammarInterface $parent
+     * @return $this
+     */
+    public function setParent(RecursiveGrammarInterface $parent)
+    {
+        $this->parent = $parent;
+
+        return $this;
+    }
+
+    /**
+     * @return RecursiveGrammarInterface|null
+     */
+    public function getParent()
+    {
+        return $this->parent;
+    }
 
     /**
      * @return int

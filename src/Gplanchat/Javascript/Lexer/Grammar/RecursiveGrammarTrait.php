@@ -28,6 +28,18 @@ trait RecursiveGrammarTrait
     }
 
     /**
+     * @param GrammarInterface $node
+     * @return $this
+     */
+    public function removeChild(GrammarInterface $node)
+    {
+        $key = array_search($node, $this->children);
+        unset($this->children[$key]);
+
+        return $this;
+    }
+
+    /**
      * @param int $level
      * @return string
      */
@@ -40,5 +52,30 @@ trait RecursiveGrammarTrait
         }
 
         return $output;
+    }
+
+    /**
+     * @return $this
+     */
+    public function flatten()
+    {
+        $count = count($children = $this->getChildren());
+        if ($count <= 0) {
+            $parent = $this->getParent();
+            if ($parent !== null) {
+                $parent->removeChild($this);
+            }
+        } else if ($count <= 1) {
+            $parent = $this->getParent();
+            if ($parent !== null) {
+                $parent->removeChild($this);
+
+                foreach ($children as $child) {
+                    $parent->addChild($child);
+                }
+            }
+        }
+
+        return $this;
     }
 }

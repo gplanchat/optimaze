@@ -8,8 +8,6 @@
 
 namespace Gplanchat\Javascript\Lexer\Grammar;
 
-use Gplanchat\Tokenizer\Token;
-
 trait LeftAssociativeGrammarTrait
 {
     use RecursiveGrammarTrait;
@@ -20,6 +18,8 @@ trait LeftAssociativeGrammarTrait
      */
     public function addChild(GrammarInterface $node)
     {
+        $node->setParent($this);
+
         $this->children[] = $node;
 
         return $this;

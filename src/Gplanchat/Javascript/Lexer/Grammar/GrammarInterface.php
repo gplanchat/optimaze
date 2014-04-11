@@ -8,14 +8,23 @@
 
 namespace Gplanchat\Javascript\Lexer\Grammar;
 
-use Gplanchat\Tokenizer\Token;
-
 interface GrammarInterface
 {
     /**
      * @return int
      */
     public function getType();
+
+    /**
+     * @return GrammarInterface|null
+     */
+    public function getParent();
+
+    /**
+     * @param RecursiveGrammarInterface $parent
+     * @return $this
+     */
+    public function setParent(RecursiveGrammarInterface $parent);
 
     /**
      * @return string
