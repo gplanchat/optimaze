@@ -20,7 +20,6 @@
  * @package Gplanchat\Tokenizer
  */
 
-
 namespace Gplanchat\Javascript\Tokenizer;
 
 use Gplanchat\Tokenizer\DataSource\DataSourceInterface;
