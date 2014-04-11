@@ -25,7 +25,7 @@ class ElementTest
     /**
      *
      */
-    public function testFunctionWithEmptyParameterList()
+    public function testAnonymousFunctionWithEmptyParameterListWithEmptyBody()
     {
         $tokens = [
             [TokenizerInterface::KEYWORD_FUNCTION, 'function', null],
@@ -61,7 +61,45 @@ class ElementTest
     /**
      *
      */
-    public function testFunctionWithParameterList()
+    public function testNamedFunctionWithEmptyParameterListWithEmptyBody()
+    {
+        $tokens = [
+            [TokenizerInterface::KEYWORD_FUNCTION, 'function', null],
+            [TokenizerInterface::TOKEN_IDENTIFIER,    'hello', null],
+            [TokenizerInterface::OP_LEFT_BRACKET,         '(', null],
+            [TokenizerInterface::OP_RIGHT_BRACKET,        ')', null],
+            [TokenizerInterface::OP_LEFT_CURLY,           '{', null],
+            [TokenizerInterface::OP_RIGHT_CURLY,          '}', null],
+            [TokenizerInterface::TOKEN_END,              null, null]
+        ];
+
+        $ruleServices = [
+            ['ParameterList', Rule\ParameterList::class],
+            ['StatementList', Rule\StatementList::class],
+        ];
+
+        $grammarServices = [
+            ['Element', Grammar\Element::class],
+            ['FunctionKeyword', Grammar\FunctionKeyword::class],
+            ['Identifier', Grammar\Identifier::class]
+        ];
+
+        $root = $this->getRootGrammarMock();
+        $root->expects($this->at(0))
+            ->method('addChild')
+            ->with($this->isInstanceOf(Grammar\Element::class))
+        ;
+
+        $rule = new Element($this->getRuleServiceManagerMock($ruleServices),
+            $this->getGrammarServiceManagerMock($grammarServices));
+
+        $rule->parse($root, $this->getTokenizerMock($tokens));
+    }
+
+    /**
+     *
+     */
+    public function testAnonymousFunctionWithParameterListWithEmptyBody()
     {
         $tokens = [
             [TokenizerInterface::KEYWORD_FUNCTION, 'function', null],
@@ -76,20 +114,63 @@ class ElementTest
         ];
 
         $ruleServices = [
-            ['AssignmentExpression', Rule\AssignmentExpression::class]
+            ['ParameterList', Rule\ParameterList::class],
+            ['StatementList', Rule\StatementList::class],
         ];
 
         $grammarServices = [
-            ['ArgumentList', Grammar\ArgumentList::class]
+            ['Element', Grammar\Element::class],
+            ['FunctionKeyword', Grammar\FunctionKeyword::class]
         ];
 
         $root = $this->getRootGrammarMock();
         $root->expects($this->at(0))
             ->method('addChild')
-            ->with($this->isInstanceOf(Grammar\ArgumentList::class))
+            ->with($this->isInstanceOf(Grammar\Element::class))
         ;
 
-        $rule = new ArgumentList($this->getRuleServiceManagerMock($ruleServices),
+        $rule = new Element($this->getRuleServiceManagerMock($ruleServices),
+            $this->getGrammarServiceManagerMock($grammarServices));
+
+        $rule->parse($root, $this->getTokenizerMock($tokens));
+    }
+
+    /**
+     *
+     */
+    public function testNamedFunctionWithParameterListWithEmptyBody()
+    {
+        $tokens = [
+            [TokenizerInterface::KEYWORD_FUNCTION, 'function', null],
+            [TokenizerInterface::TOKEN_IDENTIFIER,    'hello', null],
+            [TokenizerInterface::OP_LEFT_BRACKET,         '(', null],
+            [TokenizerInterface::TOKEN_IDENTIFIER,        'a', null],
+            [TokenizerInterface::TOKEN_IDENTIFIER,        ',', null],
+            [TokenizerInterface::TOKEN_IDENTIFIER,        'b', null],
+            [TokenizerInterface::OP_RIGHT_BRACKET,        ')', null],
+            [TokenizerInterface::OP_LEFT_CURLY,           '{', null],
+            [TokenizerInterface::OP_RIGHT_CURLY,          '}', null],
+            [TokenizerInterface::TOKEN_END,              null, null]
+        ];
+
+        $ruleServices = [
+            ['ParameterList', Rule\ParameterList::class],
+            ['StatementList', Rule\StatementList::class],
+        ];
+
+        $grammarServices = [
+            ['Element', Grammar\Element::class],
+            ['FunctionKeyword', Grammar\FunctionKeyword::class],
+            ['Identifier', Grammar\Identifier::class]
+        ];
+
+        $root = $this->getRootGrammarMock();
+        $root->expects($this->at(0))
+            ->method('addChild')
+            ->with($this->isInstanceOf(Grammar\Element::class))
+        ;
+
+        $rule = new Element($this->getRuleServiceManagerMock($ruleServices),
             $this->getGrammarServiceManagerMock($grammarServices));
 
         $rule->parse($root, $this->getTokenizerMock($tokens));
@@ -101,32 +182,25 @@ class ElementTest
     public function testStatement()
     {
         $tokens = [
-            [TokenizerInterface::KEYWORD_FUNCTION, 'function', null],
-            [TokenizerInterface::OP_LEFT_BRACKET,         '(', null],
-            [TokenizerInterface::TOKEN_IDENTIFIER,        'a', null],
-            [TokenizerInterface::TOKEN_IDENTIFIER,        ',', null],
-            [TokenizerInterface::TOKEN_IDENTIFIER,        'b', null],
-            [TokenizerInterface::OP_RIGHT_BRACKET,        ')', null],
-            [TokenizerInterface::OP_LEFT_CURLY,           '{', null],
-            [TokenizerInterface::OP_RIGHT_CURLY,          '}', null],
-            [TokenizerInterface::TOKEN_END,              null, null]
+            [TokenizerInterface::OP_SEMICOLON,  ';', null],
+            [TokenizerInterface::TOKEN_END,    null, null]
         ];
 
         $ruleServices = [
-            ['AssignmentExpression', Rule\AssignmentExpression::class]
+            ['Statement', Rule\Statement::class]
         ];
 
         $grammarServices = [
-            ['ArgumentList', Grammar\ArgumentList::class]
+            ['Element', Grammar\Element::class]
         ];
 
         $root = $this->getRootGrammarMock();
         $root->expects($this->at(0))
             ->method('addChild')
-            ->with($this->isInstanceOf(Grammar\ArgumentList::class))
+            ->with($this->isInstanceOf(Grammar\Element::class))
         ;
 
-        $rule = new ArgumentList($this->getRuleServiceManagerMock($ruleServices),
+        $rule = new Element($this->getRuleServiceManagerMock($ruleServices),
             $this->getGrammarServiceManagerMock($grammarServices));
 
         $rule->parse($root, $this->getTokenizerMock($tokens));
