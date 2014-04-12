@@ -78,6 +78,6 @@ class AdditiveExpression
             $this->nextToken($tokenizer);
         }
 
-        $node->flatten();
+        $node->optimize();
     }
 }

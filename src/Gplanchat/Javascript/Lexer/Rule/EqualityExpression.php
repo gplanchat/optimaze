@@ -79,6 +79,6 @@ class EqualityExpression
             $this->nextToken($tokenizer);
         }
 
-        $node->flatten();
+        $node->optimize();
     }
 }

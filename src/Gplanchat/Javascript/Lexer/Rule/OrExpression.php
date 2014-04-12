@@ -64,6 +64,6 @@ class OrExpression
             }
         }
 
-        $node->flatten();
+        $node->optimize();
     }
 }

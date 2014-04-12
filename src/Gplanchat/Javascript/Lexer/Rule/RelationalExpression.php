@@ -80,6 +80,6 @@ class RelationalExpression
             $this->nextToken($tokenizer);
         }
 
-        $node->flatten();
+        $node->optimize();
     }
 }

@@ -64,6 +64,6 @@ class BitwiseAndExpression
             }
         }
 
-        $node->flatten();
+        $node->optimize();
     }
 }

@@ -59,7 +59,7 @@ class ConditionalExpression
 
         $token = $this->currentToken($tokenizer);
         if ($token->getType() !== TokenizerInterface::OP_HOOK) {
-            $node->flatten();
+            $node->optimize();
             return;
         }
 

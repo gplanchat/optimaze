@@ -64,6 +64,6 @@ class AndExpression
             }
         }
 
-        $node->flatten();
+        $node->optimize();
     }
 }

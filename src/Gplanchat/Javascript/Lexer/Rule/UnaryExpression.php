@@ -148,6 +148,6 @@ class UnaryExpression
             }
         }
 
-        $node->flatten();
+        $node->optimize();
     }
 }

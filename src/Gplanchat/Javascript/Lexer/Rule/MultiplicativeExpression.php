@@ -78,6 +78,6 @@ class MultiplicativeExpression
             $this->nextToken($tokenizer);
         }
 
-        $node->flatten();
+        $node->optimize();
     }
 }

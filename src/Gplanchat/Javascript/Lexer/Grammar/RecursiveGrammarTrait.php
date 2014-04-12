@@ -25,6 +25,7 @@ namespace Gplanchat\Javascript\Lexer\Grammar;
 trait RecursiveGrammarTrait
 {
     use GrammarTrait {
+        GrammarTrait::optimize as protected grammarTraitOptimize;
         GrammarTrait::dump as protected grammarTraitDump;
     }
 
@@ -52,6 +53,27 @@ trait RecursiveGrammarTrait
     }
 
     /**
+     * @return $this
+     */
+    public function optimize()
+    {
+        $this->grammarTraitOptimize();
+
+        if (count($children = $this->getChildren()) <= 1) {
+            $parent = $this->getParent();
+            if ($parent !== null) {
+                $parent->removeChild($this);
+
+                foreach ($children as $child) {
+                    $parent->addChild($child);
+                }
+            }
+        }
+
+        return $this;
+    }
+
+    /**
      * @param int $level
      * @return string
      */
@@ -64,25 +86,5 @@ trait RecursiveGrammarTrait
         }
 
         return $output;
-    }
-
-    /**
-     * @return $this
-     */
-    public function flatten()
-    {
-        $count = count($children = $this->getChildren());
-        if ($count <= 1) {
-            $parent = $this->getParent();
-            if ($parent !== null) {
-                $parent->removeChild($this);
-
-                foreach ($children as $child) {
-                    $parent->addChild($child);
-                }
-            }
-        }
-
-        return $this;
     }
 }

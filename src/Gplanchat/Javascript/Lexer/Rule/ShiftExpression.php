@@ -80,6 +80,6 @@ class ShiftExpression
             $this->nextToken($tokenizer);
         }
 
-        $node->flatten();
+        $node->optimize();
     }
 }

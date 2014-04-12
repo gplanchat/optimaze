@@ -41,9 +41,4 @@ interface RecursiveGrammarInterface
      * @return $this
      */
     public function removeChild(GrammarInterface $node);
-
-    /**
-     * @return $this
-     */
-    public function flatten();
 }
