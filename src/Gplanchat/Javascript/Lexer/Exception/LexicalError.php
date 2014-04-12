@@ -22,6 +22,8 @@
 
 namespace Gplanchat\Javascript\Lexer\Exception;
 
+use Gplanchat\Javascript\ExceptionTrait;
+
 /**
  * Lexical error exception type. Thrown when an invalid lexical form is found
  *
@@ -31,14 +33,7 @@ class LexicalError
     extends \RuntimeException
     implements Exception
 {
-    /** @var string */
-    private $sourceFile = null;
-
-    /** @var int */
-    private $sourceLine = null;
-
-    /** @var int */
-    private $sourceOffset = null;
+    use ExceptionTrait;
 
     /**
      * @param string $message
@@ -51,37 +46,7 @@ class LexicalError
         parent::__construct($message);
 
         $this->sourceFile = $file;
-        $this->sourceLine = $line;
+        $this->sourceLine = $line ?: -1;
         $this->sourceOffset = $offset;
-    }
-
-    /**
-     * @return string
-     */
-    public function getSourceFile()
-    {
-        return $this->file;
-    }
-
-    /**
-     * @return int
-     */
-    public function getSourceLine()
-    {
-        return $this->line;
-    }
-
-    /**
-     * @return int
-     */
-    public function getSourceOffset()
-    {
-        return $this->offset;
-    }
-
-    public function __toString()
-    {
-        return sprintf('Parse error: %s in file "%s" on line %d', $this->getMessage(), $this->getSourceFile(), $this->getSourceLine())
-            . PHP_EOL . $this->getTraceAsString();
     }
 }
