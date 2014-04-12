@@ -27,6 +27,7 @@ use Gplanchat\Javascript\Lexer\Grammar\GrammarInterface;
 use Gplanchat\Javascript\Tokenizer\TokenizerInterface;
 use Gplanchat\Lexer\LexerInterface;
 use Gplanchat\ServiceManager\ServiceManagerInterface;
+use Gplanchat\Tokenizer\TokenizerInterface as BaseTokenizerInterface;
 
 /**
  * Javascript lexer
@@ -256,7 +257,7 @@ class Lexer
     }
 
     /**
-     * @param TokenizerInterface $tokenizer
+     * @param BaseTokenizerInterface $tokenizer
      * @return GrammarInterface
      * @throws
      *
@@ -264,7 +265,7 @@ class Lexer
      *     empty
      *     Element Program
      */
-    public function parse(TokenizerInterface $tokenizer)
+    public function parse(BaseTokenizerInterface $tokenizer)
     {
         /** @var Grammar\Program $program */
         $program = $this->grammar->get('Program');
