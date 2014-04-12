@@ -17,7 +17,7 @@
  *
  * @author Grégory Planchat <g.planchat@gmail.com>
  * @licence GNU General Public Licence
- * @package Gplanchat\Tokenizer
+ * @package Gplanchat\Javascript\Tokenizer
  */
 
 
