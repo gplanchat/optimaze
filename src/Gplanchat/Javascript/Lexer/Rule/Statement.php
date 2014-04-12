@@ -63,6 +63,7 @@ class Statement
     {
         /** @var Grammar\Statement $node */
         $node = $this->grammar->get('Statement');
+        $parent->addChild($node);
 
         /** @var Rule\Expression $expressionRule */
         $expressionRule = $this->rule->get('Expression');;
@@ -317,7 +318,7 @@ class Statement
         $returnKeyword = $this->grammar->get('ReturnKeyword');
         $parent->addChild($returnKeyword);
 
-        $this->nextToken($tokenizer);
+        $token = $this->nextToken($tokenizer);
         $expressionRule->parse($returnKeyword, $tokenizer);
 
         $token = $this->currentToken($tokenizer);
