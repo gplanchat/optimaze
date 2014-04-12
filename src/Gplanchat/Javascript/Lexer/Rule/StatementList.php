@@ -55,7 +55,7 @@ class StatementList
 //        echo $parent->dump();
 
         /** @var Rule\Statement $statementRule */
-        $statementRule = $this->rule->get('Statement');;
+        $statementRule = $this->rule->get('Statement');
 
         while (true) {
             $token = $this->currentToken($tokenizer);
