@@ -69,6 +69,14 @@ trait GrammarTrait
     }
 
     /**
+     * @return $this
+     */
+    public function optimize()
+    {
+        return $this;
+    }
+
+    /**
      * @param int $level
      * @return string
      */

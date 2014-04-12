@@ -42,6 +42,11 @@ interface GrammarInterface
     public function setParent(RecursiveGrammarInterface $parent);
 
     /**
+     * @return $this
+     */
+    public function optimize();
+
+    /**
      * @return string
      */
     public function dump();
