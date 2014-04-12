@@ -53,7 +53,6 @@ class MemberExpression
         /** @var Grammar\MemberExpression $node */
         $node = $this->grammar->get('MemberExpression');
         $parent->addChild($node);
-//        echo $parent->dump();
 
         /** @var PrimaryExpression $rule */
         $rule = $this->rule->get('PrimaryExpression');;
@@ -90,13 +89,15 @@ class MemberExpression
                 }
 
                 $token = $this->nextToken($tokenizer);
-            } else if ($token->getType() !== TokenizerInterface::OP_DOT) {
+            } else if ($token->getType() === TokenizerInterface::OP_DOT) {
                 /** @var Grammar\DotOperator $dotOperator */
                 $dotOperator = $this->grammar
                     ->get('DotOperator')
                 ;
                 $node->addChild($dotOperator);
                 $token = $this->nextToken($tokenizer);
+            } else {
+                break;
             }
         }
     }
