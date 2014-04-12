@@ -64,9 +64,11 @@ class ParameterList
             $node->addChild($identifier);
 
             $token = $this->nextToken($tokenizer);
-            if ($token->getType() === TokenizerInterface::OP_COMMA) {
-                continue;
+            if ($token->getType() !== TokenizerInterface::OP_COMMA) {
+                break;
             }
+
+            $token = $this->nextToken($tokenizer);
         }
     }
 }

@@ -42,7 +42,8 @@ class ParameterListTest
     public function testEmptyParameterList()
     {
         $tokens = [
-            [TokenizerInterface::OP_RIGHT_BRACKET, ')', null]
+            [TokenizerInterface::OP_RIGHT_BRACKET,  ')', null],
+            [TokenizerInterface::TOKEN_END,        null, null]
         ];
 
         $ruleServices = [
@@ -70,8 +71,9 @@ class ParameterListTest
     public function testParameterListWithOneParameter()
     {
         $tokens = [
-            [TokenizerInterface::TOKEN_IDENTIFIER, 'a', null],
-            [TokenizerInterface::OP_RIGHT_BRACKET, ')', null]
+            [TokenizerInterface::TOKEN_IDENTIFIER,  'a', null],
+            [TokenizerInterface::OP_RIGHT_BRACKET,  ')', null],
+            [TokenizerInterface::TOKEN_END,        null, null]
         ];
 
         $ruleServices = [
@@ -100,10 +102,11 @@ class ParameterListTest
     public function testParameterListWithMultipleParameters()
     {
         $tokens = [
-            [TokenizerInterface::TOKEN_IDENTIFIER, 'a', null],
-            [TokenizerInterface::OP_COMMA,         ',', null],
-            [TokenizerInterface::TOKEN_IDENTIFIER, 'b', null],
-            [TokenizerInterface::OP_RIGHT_BRACKET, ')', null]
+            [TokenizerInterface::TOKEN_IDENTIFIER,  'a', null],
+            [TokenizerInterface::OP_COMMA,          ',', null],
+            [TokenizerInterface::TOKEN_IDENTIFIER,  'b', null],
+            [TokenizerInterface::OP_RIGHT_BRACKET,  ')', null],
+            [TokenizerInterface::TOKEN_END,        null, null]
         ];
 
         $ruleServices = [
