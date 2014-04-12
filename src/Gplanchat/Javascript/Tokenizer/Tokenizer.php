@@ -177,6 +177,11 @@ class Tokenizer
     private $source = null;
 
     /**
+     * @var bool
+     */
+    private $isSourceConsumed = false;
+
+    /**
      * @param DataSourceInterface $source
      */
     public function __construct(DataSourceInterface $source)
@@ -229,7 +234,7 @@ class Tokenizer
     {
         /** @var Token $token */
         $token = $this->get();
-        if ($token->getType() !== TokenizerInterface::TOKEN_END) {
+        if ($token !== null) {
             return true;
         }
 
@@ -293,7 +298,12 @@ class Tokenizer
         }
 
         if ($input == '') {
-            return $this->push(TokenizerInterface::TOKEN_END, '');
+            if ($this->isSourceConsumed === true) {
+                return null;
+            }
+
+            $this->isSourceConsumed = true;
+            return $this->push(TokenizerInterface::TOKEN_END, null);
         }
 
         switch ($input[0]) {
