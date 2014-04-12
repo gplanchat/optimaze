@@ -76,5 +76,7 @@ class AssignmentExpression
             ;
             $node->addChild($assignmentOperator);
         }
+
+        $node->optimize();
     }
 }

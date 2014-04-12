@@ -100,5 +100,7 @@ class MemberExpression
                 break;
             }
         }
+
+        $node->optimize();
     }
 }

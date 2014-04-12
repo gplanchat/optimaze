@@ -62,5 +62,7 @@ class Expression
                 break;
             }
         }
+
+        $node->optimize();
     }
 }

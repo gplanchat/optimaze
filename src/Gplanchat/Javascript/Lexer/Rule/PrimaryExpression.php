@@ -143,5 +143,7 @@ class PrimaryExpression
         }
 
         $this->nextToken($tokenizer);
+
+        $node->optimize();
     }
 }
