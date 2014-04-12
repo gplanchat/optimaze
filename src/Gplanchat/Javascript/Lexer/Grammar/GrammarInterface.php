@@ -44,6 +44,11 @@ interface GrammarInterface
     /**
      * @return $this
      */
+    public function unsetParent();
+
+    /**
+     * @return $this
+     */
     public function optimize();
 
     /**

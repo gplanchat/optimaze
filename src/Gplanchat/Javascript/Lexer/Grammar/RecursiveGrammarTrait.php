@@ -47,6 +47,7 @@ trait RecursiveGrammarTrait
     public function removeChild(GrammarInterface $node)
     {
         $key = array_search($node, $this->children);
+        $this->children[$key]->unsetParent();
         unset($this->children[$key]);
 
         return $this;

@@ -42,6 +42,16 @@ trait GrammarTrait
     }
 
     /**
+     * @return $this
+     */
+    public function unsetParent()
+    {
+        $this->parent = null;
+
+        return $this;
+    }
+
+    /**
      * @return RecursiveGrammarInterface|null
      */
     public function getParent()
