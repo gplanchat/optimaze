@@ -153,20 +153,20 @@ class Statement
             $this->nextToken($tokenizer);
             $this->getConditionRule()->parse($ifKeyword, $tokenizer);
 
-            $this->parse($parent, $tokenizer);
+            $this->parse($ifKeyword, $tokenizer);
 
             $token = $this->currentToken($tokenizer);
             if ($token->getType() !== TokenizerInterface::KEYWORD_ELSE) {
                 break;
             }
 
-            /** @var Grammar\ElseKeyword $elseKeyword */
-            $elseKeyword = $this->grammar->get('ElseKeyword');
-            $ifKeyword->addChild($elseKeyword);
-
             $token = $this->nextToken($tokenizer);
             if ($token->getType() !== TokenizerInterface::KEYWORD_IF) {
-                $this->parse($parent, $tokenizer);
+                /** @var Grammar\ElseKeyword $elseKeyword */
+                $elseKeyword = $this->grammar->get('ElseKeyword');
+                $conditionChain->addChild($elseKeyword);
+
+                $this->parse($elseKeyword, $tokenizer);
                 break;
             }
         }
