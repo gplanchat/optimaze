@@ -61,6 +61,7 @@ class VariableListOrExpressionTest
 
         $rule->parse($root, $this->getTokenizerMock($tokens));
     }
+
     /**
      *
      */

@@ -51,14 +51,13 @@ class VariableList
         /** @var Grammar\VariableList $node */
         $node = $this->grammar->get('VariableList');
         $parent->addChild($node);
-//        echo $parent->dump();
 
+        $token = $this->currentToken($tokenizer);
         while (true) {
             /** @var Grammar\Variable $variable */
             $variable = $this->grammar->get('Variable');
             $node->addChild($variable);
 
-            $token = $this->currentToken($tokenizer);
             if ($token->getType() !== TokenizerInterface::TOKEN_IDENTIFIER) {
                 throw new LexicalError('Invalid expression : missing identifier',
                     null, $token->getLine(), $token->getStart());
@@ -73,13 +72,15 @@ class VariableList
                 $this->nextToken($tokenizer);
 
                 /** @var AssignmentExpression $assignmentExpressionRule */
-                $assignmentExpressionRule = $this->rule->get('AssignmentExpression');;
+                $assignmentExpressionRule = $this->rule->get('AssignmentExpression');
                 $assignmentExpressionRule->parse($variable, $tokenizer);
+                $token = $this->currentToken($tokenizer);
             }
 
-            if ($token->getType() === TokenizerInterface::OP_COMMA) {
+            if ($token->getType() !== TokenizerInterface::OP_COMMA) {
                 break;
             }
+            $token = $this->nextToken($tokenizer);
         }
     }
 }
