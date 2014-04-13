@@ -92,9 +92,7 @@ class Statement
             } else if ($token->getType() === TokenizerInterface::KEYWORD_WHILE) {
                 $this->parseWhile($node, $tokenizer);
             } else if ($token->getType() === TokenizerInterface::KEYWORD_FOR) {
-//                echo $token->dump();
-//                return;
-                $this->parseFor($node, $tokenizer, $this->getExpressionRule());
+                $this->parseFor($node, $tokenizer);
             } else if ($token->getType() === TokenizerInterface::KEYWORD_BREAK) {
                 $this->parseBreak($node, $tokenizer);
                 break;
@@ -102,13 +100,11 @@ class Statement
                 $this->parseContinue($node, $tokenizer);
                 break;
             } else if ($token->getType() === TokenizerInterface::KEYWORD_WITH) {
-//                echo $token->dump();
-//                return;
-                $this->parseWith($node, $tokenizer, $this->getExpressionRule());
+                $this->parseWith($node, $tokenizer);
             } else if ($token->getType() === TokenizerInterface::KEYWORD_RETURN) {
 //                echo $token->dump();
 //                return;
-                $this->parseReturn($node, $tokenizer, $this->getExpressionRule());
+                $this->parseReturn($node, $tokenizer);
                 break;
             } else if ($token->getType() === TokenizerInterface::OP_LEFT_CURLY) {
 //                echo $token->dump();
@@ -189,9 +185,7 @@ class Statement
      * @return void
      * @throws LexicalError
      */
-    protected function parseFor(
-        RecursiveGrammarInterface $parent,
-        TokenizerInterface $tokenizer)
+    protected function parseFor(RecursiveGrammarInterface $parent, TokenizerInterface $tokenizer)
     {
         /** @var Grammar\ForKeyword $forKeyword */
         $forKeyword = $this->grammar->get('ForKeyword');
@@ -245,6 +239,7 @@ class Statement
     protected function parseForCondition(RecursiveGrammarInterface $parent, TokenizerInterface $tokenizer)
     {
         $this->getExpressionRule()->parse($parent, $tokenizer);
+
         $token = $this->currentToken($tokenizer);
 
         if ($token->getType() !== TokenizerInterface::OP_SEMICOLON) {
