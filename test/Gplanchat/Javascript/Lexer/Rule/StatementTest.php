@@ -155,6 +155,47 @@ class StatementTest
     /**
      *
      */
+    public function testIfControlStructureWithReturnStatementWithMissingSemicolon()
+    {
+        $this->setExpectedException(Exception\LexicalError::class, 'Invalid expression : missing semicolon');
+
+        $tokens = [
+            [TokenizerInterface::KEYWORD_IF,               'if', null],
+            [TokenizerInterface::OP_LEFT_BRACKET,           '(', null],
+            [TokenizerInterface::KEYWORD_TRUE,           'true', null],
+            [TokenizerInterface::OP_RIGHT_BRACKET,          ')', null],
+            [TokenizerInterface::KEYWORD_RETURN,       'return', null],
+            [TokenizerInterface::TOKEN_END,                null, null]
+        ];
+
+        $ruleServices = [
+            ['Condition', new Rule\TokenSeeker(TokenizerInterface::OP_RIGHT_BRACKET, ')', true)],
+            ['Expression', new Rule\TokenNullSeeker()]
+        ];
+
+        $grammarServices = [
+            ['Statement',     Grammar\Statement::class],
+            ['ConditionChain', Grammar\ConditionChain::class],
+            ['IfKeyword',     Grammar\IfKeyword::class],
+            ['Statement',     Grammar\Statement::class],
+            ['ReturnKeyword', Grammar\ReturnKeyword::class]
+        ];
+
+        $root = $this->getRootGrammarMock();
+        $root->expects($this->at(0))
+            ->method('addChild')
+            ->with($this->isInstanceOf(Grammar\Statement::class))
+        ;
+
+        $rule = new Statement($this->getRuleServiceManagerMock($ruleServices),
+            $this->getGrammarServiceManagerMock($grammarServices));
+
+        $rule->parse($root, $this->getTokenizerMock($tokens));
+    }
+
+    /**
+     *
+     */
     public function testIfElseControlStructure()
     {
         $tokens = [
@@ -428,6 +469,82 @@ class StatementTest
             [TokenizerInterface::OP_RIGHT_BRACKET,        ')', null],
             [TokenizerInterface::KEYWORD_CONTINUE, 'continue', null],
             [TokenizerInterface::OP_SEMICOLON,            ';', null],
+            [TokenizerInterface::TOKEN_END,              null, null]
+        ];
+
+        $ruleServices = [
+            ['Condition',  new Rule\TokenSeeker(TokenizerInterface::OP_RIGHT_BRACKET, ')', true)]
+        ];
+
+        $grammarServices = [
+            ['Statement', Grammar\Statement::class],
+            ['WhileKeyword', Grammar\WhileKeyword::class],
+            ['ContinueKeyword', Grammar\ContinueKeyword::class]
+        ];
+
+        $root = $this->getRootGrammarMock();
+        $root->expects($this->at(0))
+            ->method('addChild')
+            ->with($this->isInstanceOf(Grammar\Statement::class))
+        ;
+
+        $rule = new Statement($this->getRuleServiceManagerMock($ruleServices),
+            $this->getGrammarServiceManagerMock($grammarServices));
+
+        $rule->parse($root, $this->getTokenizerMock($tokens));
+    }
+
+    /**
+     *
+     */
+    public function testWhileWhithBreakWithMissingSemicolonStatement()
+    {
+        $this->setExpectedException(Exception\LexicalError::class, 'Invalid expression : missing semicolon');
+
+        $tokens = [
+            [TokenizerInterface::KEYWORD_WHILE,     'while', null],
+            [TokenizerInterface::OP_LEFT_BRACKET,       '(', null],
+            [TokenizerInterface::KEYWORD_TRUE,       'true', null],
+            [TokenizerInterface::OP_RIGHT_BRACKET,      ')', null],
+            [TokenizerInterface::KEYWORD_BREAK,     'break', null],
+            [TokenizerInterface::TOKEN_END,            null, null]
+        ];
+
+        $ruleServices = [
+            ['Condition',  new Rule\TokenSeeker(TokenizerInterface::OP_RIGHT_BRACKET, ')', true)]
+        ];
+
+        $grammarServices = [
+            ['Statement', Grammar\Statement::class],
+            ['WhileKeyword', Grammar\WhileKeyword::class],
+            ['BreakKeyword', Grammar\BreakKeyword::class]
+        ];
+
+        $root = $this->getRootGrammarMock();
+        $root->expects($this->at(0))
+            ->method('addChild')
+            ->with($this->isInstanceOf(Grammar\Statement::class))
+        ;
+
+        $rule = new Statement($this->getRuleServiceManagerMock($ruleServices),
+            $this->getGrammarServiceManagerMock($grammarServices));
+
+        $rule->parse($root, $this->getTokenizerMock($tokens));
+    }
+
+    /**
+     *
+     */
+    public function testWhileWhithContinueWithMissingSemicolonStatement()
+    {
+        $this->setExpectedException(Exception\LexicalError::class, 'Invalid expression : missing semicolon');
+
+        $tokens = [
+            [TokenizerInterface::KEYWORD_WHILE,       'while', null],
+            [TokenizerInterface::OP_LEFT_BRACKET,         '(', null],
+            [TokenizerInterface::KEYWORD_TRUE,         'true', null],
+            [TokenizerInterface::OP_RIGHT_BRACKET,        ')', null],
+            [TokenizerInterface::KEYWORD_CONTINUE, 'continue', null],
             [TokenizerInterface::TOKEN_END,              null, null]
         ];
 
