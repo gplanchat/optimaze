@@ -903,8 +903,7 @@ class StatementTest
         ];
 
         $ruleServices = [
-            ['Expression', new Rule\TokenSeeker(TokenizerInterface::TOKEN_IDENTIFIER, 'a', true)],
-            ['VariableListOrExpression', new Rule\TokenNullSeeker()]
+            ['Expression', new Rule\TokenSeeker(TokenizerInterface::TOKEN_IDENTIFIER, 'a', true)]
         ];
 
         $grammarServices = [
@@ -981,6 +980,104 @@ class StatementTest
         $grammarServices = [
             ['Statement', Grammar\Statement::class],
             ['WithKeyword', Grammar\WithKeyword::class]
+        ];
+
+        $root = $this->getRootGrammarMock();
+        $root->expects($this->at(0))
+            ->method('addChild')
+            ->with($this->isInstanceOf(Grammar\Statement::class))
+        ;
+
+        $rule = new Statement($this->getRuleServiceManagerMock($ruleServices),
+            $this->getGrammarServiceManagerMock($grammarServices));
+
+        $rule->parse($root, $this->getTokenizerMock($tokens));
+    }
+
+    /**
+     *
+     */
+    public function testCoumpoundStatement()
+    {
+        $tokens = [
+            [TokenizerInterface::OP_LEFT_CURLY,           '{', null],
+            [TokenizerInterface::TOKEN_IDENTIFIER,        'a', null],
+            [TokenizerInterface::OP_RIGHT_CURLY,          '}', null],
+            [TokenizerInterface::TOKEN_END,              null, null]
+        ];
+
+        $ruleServices = [
+            ['StatementListRule', new Rule\TokenSeeker(TokenizerInterface::TOKEN_IDENTIFIER, 'a', true)]
+        ];
+
+        $grammarServices = [
+            ['Statement', Grammar\Statement::class],
+            ['CompoundStatement', Grammar\CompoundStatement::class]
+        ];
+
+        $root = $this->getRootGrammarMock();
+        $root->expects($this->at(0))
+            ->method('addChild')
+            ->with($this->isInstanceOf(Grammar\Statement::class))
+        ;
+
+        $rule = new Statement($this->getRuleServiceManagerMock($ruleServices),
+            $this->getGrammarServiceManagerMock($grammarServices));
+
+        $rule->parse($root, $this->getTokenizerMock($tokens));
+    }
+
+    /**
+     *
+     */
+    public function testCoumpoundStatementWithMissingRightCurlyBrace()
+    {
+        $this->setExpectedException(Exception\LexicalError::class, 'Invalid expression : missing right curly brace');
+
+        $tokens = [
+            [TokenizerInterface::OP_LEFT_CURLY,           '{', null],
+            [TokenizerInterface::TOKEN_IDENTIFIER,        'a', null],
+            [TokenizerInterface::TOKEN_END,              null, null]
+        ];
+
+        $ruleServices = [
+            ['StatementListRule', new Rule\TokenSeeker(TokenizerInterface::TOKEN_IDENTIFIER, 'a', true)]
+        ];
+
+        $grammarServices = [
+            ['Statement', Grammar\Statement::class],
+            ['CompoundStatement', Grammar\CompoundStatement::class]
+        ];
+
+        $root = $this->getRootGrammarMock();
+        $root->expects($this->at(0))
+            ->method('addChild')
+            ->with($this->isInstanceOf(Grammar\Statement::class))
+        ;
+
+        $rule = new Statement($this->getRuleServiceManagerMock($ruleServices),
+            $this->getGrammarServiceManagerMock($grammarServices));
+
+        $rule->parse($root, $this->getTokenizerMock($tokens));
+    }
+
+    /**
+     *
+     */
+    public function testVariableListOrExpressionFallback()
+    {
+        $tokens = [
+            [TokenizerInterface::TOKEN_IDENTIFIER,  'a', null],
+            [TokenizerInterface::OP_SEMICOLON,      ';', null],
+            [TokenizerInterface::TOKEN_END,        null, null]
+        ];
+
+        $ruleServices = [
+            ['VariableListOrExpression', new Rule\TokenSeeker(TokenizerInterface::OP_SEMICOLON, ';')]
+        ];
+
+        $grammarServices = [
+            ['Statement', Grammar\Statement::class],
         ];
 
         $root = $this->getRootGrammarMock();

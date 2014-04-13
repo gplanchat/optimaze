@@ -102,19 +102,14 @@ class Statement
             } else if ($token->getType() === TokenizerInterface::KEYWORD_WITH) {
                 $this->parseWith($node, $tokenizer);
             } else if ($token->getType() === TokenizerInterface::KEYWORD_RETURN) {
-//                echo $token->dump();
-//                return;
                 $this->parseReturn($node, $tokenizer);
                 break;
             } else if ($token->getType() === TokenizerInterface::OP_LEFT_CURLY) {
-//                echo $token->dump();
-//                return;
                 $this->parseCoumpoundStatement($node, $tokenizer);
                 break;
             } else {
                 $this->getVariableListOrExpressionRule()->parse($node, $tokenizer);
-                $token = $this->nextToken($tokenizer);
-//                echo $token->dump();
+                $token = $this->currentToken($tokenizer);
 
                 if ($token->getType() === TokenizerInterface::OP_SEMICOLON) {
                     break;
@@ -318,6 +313,7 @@ class Statement
             throw new LexicalError('Invalid expression : missing right bracket',
                 null, $token->getLine(), $token->getStart());
         }
+        $this->nextToken($tokenizer);
     }
 
     /**
