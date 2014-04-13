@@ -90,21 +90,15 @@ class Statement
                 $this->parseConditionChain($node, $tokenizer);
                 break;
             } else if ($token->getType() === TokenizerInterface::KEYWORD_WHILE) {
-//                echo $token->dump();
-//                return;
                 $this->parseWhile($node, $tokenizer);
             } else if ($token->getType() === TokenizerInterface::KEYWORD_FOR) {
 //                echo $token->dump();
 //                return;
                 $this->parseFor($node, $tokenizer, $this->getExpressionRule());
             } else if ($token->getType() === TokenizerInterface::KEYWORD_BREAK) {
-//                echo $token->dump();
-//                return;
                 $this->parseBreak($node, $tokenizer);
                 break;
             } else if ($token->getType() === TokenizerInterface::KEYWORD_CONTINUE) {
-//                echo $token->dump();
-//                return;
                 $this->parseContinue($node, $tokenizer);
                 break;
             } else if ($token->getType() === TokenizerInterface::KEYWORD_WITH) {
