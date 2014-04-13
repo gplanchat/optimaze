@@ -28,6 +28,7 @@ class ServiceManager
             'CompoundStatement'        => CompoundStatement::class,
             'Condition'                => Condition::class,
             'ConditionalExpression'    => ConditionalExpression::class,
+            'ConditionChain'           => ConditionChain::class,
             'Constructor'              => Constructor::class,
             'ConstructorCall'          => ConstructorCall::class,
             'ContinueKeyword'          => ContinueKeyword::class,
