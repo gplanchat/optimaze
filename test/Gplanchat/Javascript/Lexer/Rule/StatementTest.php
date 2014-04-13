@@ -192,4 +192,50 @@ class StatementTest
 
         $rule->parse($root, $this->getTokenizerMock($tokens));
     }
+
+    /**
+     *
+     */
+    public function testIfElseControlStructureWithReturnStatement()
+    {
+        $tokens = [
+            [TokenizerInterface::KEYWORD_IF,           'if', null],
+            [TokenizerInterface::OP_LEFT_BRACKET,       '(', null],
+            [TokenizerInterface::KEYWORD_TRUE,       'true', null],
+            [TokenizerInterface::OP_RIGHT_BRACKET,      ')', null],
+            [TokenizerInterface::KEYWORD_RETURN,   'return', null],
+            [TokenizerInterface::OP_SEMICOLON,          ';', null],
+            [TokenizerInterface::KEYWORD_ELSE,       'else', null],
+            [TokenizerInterface::KEYWORD_RETURN,   'return', null],
+            [TokenizerInterface::OP_SEMICOLON,          ';', null],
+            [TokenizerInterface::TOKEN_END,            null, null]
+        ];
+
+        $ruleServices = [
+            ['Condition',  new Rule\TokenSeeker(TokenizerInterface::OP_RIGHT_BRACKET, ')', true)],
+            ['Expression', new Rule\TokenSeeker(TokenizerInterface::OP_SEMICOLON, ';')]
+        ];
+
+        $grammarServices = [
+            ['Statement', Grammar\Statement::class],
+            ['ConditionChain', Grammar\ConditionChain::class],
+            ['IfKeyword', Grammar\IfKeyword::class],
+            ['Statement', Grammar\Statement::class],
+            ['ReturnKeyword', Grammar\ReturnKeyword::class],
+            ['ElseKeyword', Grammar\ElseKeyword::class],
+            ['Statement', Grammar\Statement::class],
+            ['ReturnKeyword', Grammar\ReturnKeyword::class]
+        ];
+
+        $root = $this->getRootGrammarMock();
+        $root->expects($this->at(0))
+            ->method('addChild')
+            ->with($this->isInstanceOf(Grammar\Statement::class))
+        ;
+
+        $rule = new Statement($this->getRuleServiceManagerMock($ruleServices),
+            $this->getGrammarServiceManagerMock($grammarServices));
+
+        $rule->parse($root, $this->getTokenizerMock($tokens));
+    }
 }
