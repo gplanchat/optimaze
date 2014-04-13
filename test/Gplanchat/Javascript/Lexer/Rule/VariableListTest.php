@@ -28,8 +28,13 @@ use Gplanchat\Javascript\Lexer\Rule;
 use Gplanchat\Javascript\Tokenizer\TokenizerInterface;
 
 /**
- * Condition:
- *     ( Expression )
+ * VariableList:
+ *     Variable
+ *     Variable , VariableList
+ *
+ * Variable:
+ *     Identifier
+ *     Identifier = AssignmentExpression
  */
 class VariableListTest
     extends AbstractRuleTest

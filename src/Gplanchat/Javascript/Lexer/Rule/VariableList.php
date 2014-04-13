@@ -31,6 +31,10 @@ use Gplanchat\Javascript\Lexer\Grammar;
  * Class Expression
  * @package Gplanchat\Javascript\Lexer\Rule
  *
+ * VariableList:
+ *     Variable
+ *     Variable , VariableList
+ *
  * Variable:
  *     Identifier
  *     Identifier = AssignmentExpression
