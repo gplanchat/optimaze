@@ -423,7 +423,7 @@ class StatementTest
     /**
      *
      */
-    public function testWhileWhithBreakStatement()
+    public function testWhileWithBreakStatement()
     {
         $tokens = [
             [TokenizerInterface::KEYWORD_WHILE,     'while', null],
@@ -460,7 +460,7 @@ class StatementTest
     /**
      *
      */
-    public function testWhileWhithContinueStatement()
+    public function testWhileWithContinueStatement()
     {
         $tokens = [
             [TokenizerInterface::KEYWORD_WHILE,       'while', null],
@@ -497,7 +497,7 @@ class StatementTest
     /**
      *
      */
-    public function testWhileWhithBreakWithMissingSemicolonStatement()
+    public function testWhileWithBreakWithMissingSemicolonStatement()
     {
         $this->setExpectedException(Exception\LexicalError::class, 'Invalid expression : missing semicolon');
 
@@ -535,7 +535,7 @@ class StatementTest
     /**
      *
      */
-    public function testWhileWhithContinueWithMissingSemicolonStatement()
+    public function testWhileWithContinueWithMissingSemicolonStatement()
     {
         $this->setExpectedException(Exception\LexicalError::class, 'Invalid expression : missing semicolon');
 
@@ -556,6 +556,215 @@ class StatementTest
             ['Statement', Grammar\Statement::class],
             ['WhileKeyword', Grammar\WhileKeyword::class],
             ['ContinueKeyword', Grammar\ContinueKeyword::class]
+        ];
+
+        $root = $this->getRootGrammarMock();
+        $root->expects($this->at(0))
+            ->method('addChild')
+            ->with($this->isInstanceOf(Grammar\Statement::class))
+        ;
+
+        $rule = new Statement($this->getRuleServiceManagerMock($ruleServices),
+            $this->getGrammarServiceManagerMock($grammarServices));
+
+        $rule->parse($root, $this->getTokenizerMock($tokens));
+    }
+
+    /**
+     *
+     */
+    public function testForTernaryNotationStatementWithInitializer()
+    {
+        $tokens = [
+            [TokenizerInterface::KEYWORD_FOR,           'for', null],
+            [TokenizerInterface::OP_LEFT_BRACKET,         '(', null],
+            [TokenizerInterface::KEYWORD_VAR,           'var', null],
+            [TokenizerInterface::TOKEN_IDENTIFIER,        'i', null],
+            [TokenizerInterface::OP_EQ,                   '=', null],
+            [TokenizerInterface::TOKEN_NUMBER_INTEGER,    '0', null],
+            [TokenizerInterface::OP_SEMICOLON,            ';', null],
+            [TokenizerInterface::KEYWORD_TRUE,         'true', null],
+            [TokenizerInterface::OP_SEMICOLON,            ';', null],
+            [TokenizerInterface::KEYWORD_TRUE,         'true', null],
+            [TokenizerInterface::OP_RIGHT_BRACKET,        ')', null],
+            [TokenizerInterface::OP_SEMICOLON,            ';', null],
+            [TokenizerInterface::TOKEN_END,              null, null]
+        ];
+
+        $ruleServices = [
+            ['Expression', new Rule\TokenSeekerIterator([
+                new Rule\TokenSeeker(TokenizerInterface::OP_SEMICOLON, ';'),
+                new Rule\TokenSeeker(TokenizerInterface::OP_RIGHT_BRACKET, ')')
+                ])
+            ],
+            ['VariableListOrExpression', new Rule\TokenSeeker(TokenizerInterface::OP_SEMICOLON, ';')]
+        ];
+
+        $grammarServices = [
+            ['Statement', Grammar\Statement::class],
+            ['ForKeyword', Grammar\ForKeyword::class]
+        ];
+
+        $root = $this->getRootGrammarMock();
+        $root->expects($this->at(0))
+            ->method('addChild')
+            ->with($this->isInstanceOf(Grammar\Statement::class))
+        ;
+
+        $rule = new Statement($this->getRuleServiceManagerMock($ruleServices),
+            $this->getGrammarServiceManagerMock($grammarServices));
+
+        $rule->parse($root, $this->getTokenizerMock($tokens));
+    }
+
+    /**
+     *
+     */
+    public function testForTernaryNotationStatementWithoutInitializer()
+    {
+        $tokens = [
+            [TokenizerInterface::KEYWORD_FOR,       'for', null],
+            [TokenizerInterface::OP_LEFT_BRACKET,     '(', null],
+            [TokenizerInterface::OP_SEMICOLON,        ';', null],
+            [TokenizerInterface::KEYWORD_TRUE,     'true', null],
+            [TokenizerInterface::OP_SEMICOLON,        ';', null],
+            [TokenizerInterface::KEYWORD_TRUE,     'true', null],
+            [TokenizerInterface::OP_RIGHT_BRACKET,   ')', null],
+            [TokenizerInterface::OP_SEMICOLON,       ';', null],
+            [TokenizerInterface::TOKEN_END,         null, null]
+        ];
+
+        $ruleServices = [
+            ['Expression', new Rule\TokenSeekerIterator([
+                new Rule\TokenSeeker(TokenizerInterface::OP_SEMICOLON, ';'),
+                new Rule\TokenSeeker(TokenizerInterface::OP_RIGHT_BRACKET, ')')
+                ])
+            ]
+        ];
+
+        $grammarServices = [
+            ['Statement', Grammar\Statement::class],
+            ['ForKeyword', Grammar\ForKeyword::class]
+        ];
+
+        $root = $this->getRootGrammarMock();
+        $root->expects($this->at(0))
+            ->method('addChild')
+            ->with($this->isInstanceOf(Grammar\Statement::class))
+        ;
+
+        $rule = new Statement($this->getRuleServiceManagerMock($ruleServices),
+            $this->getGrammarServiceManagerMock($grammarServices));
+
+        $rule->parse($root, $this->getTokenizerMock($tokens));
+    }
+
+    /**
+     *
+     */
+    public function testForTernaryNotationStatementWithoutInitializerWithoutCondition()
+    {
+        $tokens = [
+            [TokenizerInterface::KEYWORD_FOR,       'for', null],
+            [TokenizerInterface::OP_LEFT_BRACKET,     '(', null],
+            [TokenizerInterface::OP_SEMICOLON,        ';', null],
+            [TokenizerInterface::OP_SEMICOLON,        ';', null],
+            [TokenizerInterface::KEYWORD_TRUE,     'true', null],
+            [TokenizerInterface::OP_RIGHT_BRACKET,   ')', null],
+            [TokenizerInterface::OP_SEMICOLON,       ';', null],
+            [TokenizerInterface::TOKEN_END,         null, null]
+        ];
+
+        $ruleServices = [
+            ['Expression', new Rule\TokenSeekerIterator([
+                new Rule\TokenNullSeeker(),
+                new Rule\TokenSeeker(TokenizerInterface::OP_RIGHT_BRACKET, ')')
+            ])
+            ]
+        ];
+
+        $grammarServices = [
+            ['Statement', Grammar\Statement::class],
+            ['ForKeyword', Grammar\ForKeyword::class]
+        ];
+
+        $root = $this->getRootGrammarMock();
+        $root->expects($this->at(0))
+            ->method('addChild')
+            ->with($this->isInstanceOf(Grammar\Statement::class))
+        ;
+
+        $rule = new Statement($this->getRuleServiceManagerMock($ruleServices),
+            $this->getGrammarServiceManagerMock($grammarServices));
+
+        $rule->parse($root, $this->getTokenizerMock($tokens));
+    }
+
+    /**
+     *
+     */
+    public function testForTernaryNotationStatementWithoutInitializerWithoutConditionWithoutStep()
+    {
+        $tokens = [
+            [TokenizerInterface::KEYWORD_FOR,       'for', null],
+            [TokenizerInterface::OP_LEFT_BRACKET,     '(', null],
+            [TokenizerInterface::OP_SEMICOLON,        ';', null],
+            [TokenizerInterface::OP_SEMICOLON,        ';', null],
+            [TokenizerInterface::OP_RIGHT_BRACKET,   ')', null],
+            [TokenizerInterface::OP_SEMICOLON,       ';', null],
+            [TokenizerInterface::TOKEN_END,         null, null]
+        ];
+
+        $ruleServices = [
+            ['Expression', new Rule\TokenSeekerIterator([
+                new Rule\TokenNullSeeker(),
+                new Rule\TokenSeeker(TokenizerInterface::OP_RIGHT_BRACKET, ')')
+                ])
+            ]
+        ];
+
+        $grammarServices = [
+            ['Statement', Grammar\Statement::class],
+            ['ForKeyword', Grammar\ForKeyword::class]
+        ];
+
+        $root = $this->getRootGrammarMock();
+        $root->expects($this->at(0))
+            ->method('addChild')
+            ->with($this->isInstanceOf(Grammar\Statement::class))
+        ;
+
+        $rule = new Statement($this->getRuleServiceManagerMock($ruleServices),
+            $this->getGrammarServiceManagerMock($grammarServices));
+
+        $rule->parse($root, $this->getTokenizerMock($tokens));
+    }
+
+    /**
+     *
+     */
+    public function testForUnaryNotationStatementWithoutInitializerWithoutConditionWithoutStep()
+    {
+        $tokens = [
+            [TokenizerInterface::KEYWORD_FOR,       'for', null],
+            [TokenizerInterface::OP_LEFT_BRACKET,     '(', null],
+            [TokenizerInterface::TOKEN_IDENTIFIER,    'a', null],
+            [TokenizerInterface::KEYWORD_IN,         'in', null],
+            [TokenizerInterface::TOKEN_IDENTIFIER,    'b', null],
+            [TokenizerInterface::OP_SEMICOLON,        ';', null],
+            [TokenizerInterface::OP_RIGHT_BRACKET,   ')', null],
+            [TokenizerInterface::OP_SEMICOLON,       ';', null],
+            [TokenizerInterface::TOKEN_END,         null, null]
+        ];
+
+        $ruleServices = [
+            ['Expression', new Rule\TokenSeeker(TokenizerInterface::OP_RIGHT_BRACKET, ')')],
+            ['VariableListOrExpression', new Rule\TokenSeeker(TokenizerInterface::KEYWORD_IN, 'in')]
+        ];
+
+        $grammarServices = [
+            ['Statement', Grammar\Statement::class],
+            ['ForKeyword', Grammar\ForKeyword::class]
         ];
 
         $root = $this->getRootGrammarMock();

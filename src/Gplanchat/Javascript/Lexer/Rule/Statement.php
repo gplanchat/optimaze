@@ -205,25 +205,20 @@ class Statement
 
         $token = $this->nextToken($tokenizer);
         if ($token->getType() === TokenizerInterface::OP_SEMICOLON) {
-            $token = $this->nextToken($tokenizer);
+            $this->nextToken($tokenizer);
+            $this->parseForCondition($forKeyword, $tokenizer);
+
+            $token = $this->currentToken($tokenizer);
         } else {
             $this->getVariableListOrExpressionRule()->parse($forKeyword, $tokenizer);
             $token = $this->currentToken($tokenizer);
 
             if ($token->getType() === TokenizerInterface::OP_SEMICOLON) {
                 $this->nextToken($tokenizer);
+                $this->parseForCondition($forKeyword, $tokenizer);
 
-                $this->getExpressionRule()->parse($forKeyword, $tokenizer);
                 $token = $this->currentToken($tokenizer);
-
-                if ($token->getType() !== TokenizerInterface::OP_SEMICOLON) {
-                    throw new LexicalError('Invalid expression : missing semicolon',
-                        null, $token->getLine(), $token->getStart());
-                }
-
-                $this->getExpressionRule()->parse($forKeyword, $tokenizer);
-                $token = $this->currentToken($tokenizer);
-            } else if ($token->getType() !== TokenizerInterface::KEYWORD_IN) {
+            } else if ($token->getType() === TokenizerInterface::KEYWORD_IN) {
                 $this->nextToken($tokenizer);
 
                 $this->getExpressionRule()->parse($forKeyword, $tokenizer);
@@ -239,6 +234,25 @@ class Statement
                 null, $token->getLine(), $token->getStart());
         }
         $this->nextToken($tokenizer);
+    }
+
+    /**
+     * @param RecursiveGrammarInterface $parent
+     * @param TokenizerInterface $tokenizer
+     * @return void
+     * @throws LexicalError
+     */
+    protected function parseForCondition(RecursiveGrammarInterface $parent, TokenizerInterface $tokenizer)
+    {
+        $this->getExpressionRule()->parse($parent, $tokenizer);
+        $token = $this->currentToken($tokenizer);
+
+        if ($token->getType() !== TokenizerInterface::OP_SEMICOLON) {
+            throw new LexicalError('Invalid expression : missing semicolon',
+                null, $token->getLine(), $token->getStart());
+        }
+
+        $this->getExpressionRule()->parse($parent, $tokenizer);
     }
 
     /**
