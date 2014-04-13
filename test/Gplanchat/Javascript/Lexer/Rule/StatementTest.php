@@ -848,6 +848,46 @@ class StatementTest
 
         $rule->parse($root, $this->getTokenizerMock($tokens));
     }
+    /**
+     *
+     */
+    public function testForTernaryNotationStatementWithMissingSemicolon()
+    {
+        $this->setExpectedException(Exception\LexicalError::class, 'Invalid expression : missing semicolon');
+
+        $tokens = [
+            [TokenizerInterface::KEYWORD_FOR,       'for', null],
+            [TokenizerInterface::OP_LEFT_BRACKET,     '(', null],
+            [TokenizerInterface::OP_SEMICOLON,        ';', null],
+            [TokenizerInterface::OP_RIGHT_BRACKET,    ')', null],
+            [TokenizerInterface::OP_SEMICOLON,        ';', null],
+            [TokenizerInterface::TOKEN_END,          null, null]
+        ];
+
+        $ruleServices = [
+            ['Expression', new Rule\TokenSeekerIterator([
+                new Rule\TokenNullSeeker(),
+                new Rule\TokenSeeker(TokenizerInterface::OP_RIGHT_BRACKET, ')')
+            ])
+            ]
+        ];
+
+        $grammarServices = [
+            ['Statement', Grammar\Statement::class],
+            ['ForKeyword', Grammar\ForKeyword::class]
+        ];
+
+        $root = $this->getRootGrammarMock();
+        $root->expects($this->at(0))
+            ->method('addChild')
+            ->with($this->isInstanceOf(Grammar\Statement::class))
+        ;
+
+        $rule = new Statement($this->getRuleServiceManagerMock($ruleServices),
+            $this->getGrammarServiceManagerMock($grammarServices));
+
+        $rule->parse($root, $this->getTokenizerMock($tokens));
+    }
 
     /**
      *
