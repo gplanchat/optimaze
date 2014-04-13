@@ -51,9 +51,6 @@ class VariableListOrExpression
         $token = $this->currentToken($tokenizer);
 
         if ($token->getType() === TokenizerInterface::KEYWORD_VAR) {
-//            echo $token->dump();
-//            return;
-
             /** @var VariableList $variableListRule */
             $variableListRule = $this->rule->get('VariableList');;
             $variableListRule->parse($parent, $tokenizer);
