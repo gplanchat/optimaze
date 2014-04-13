@@ -50,7 +50,6 @@ class Condition
         /** @var Grammar\Condition $node */
         $node = $this->grammar->get('Condition');
         $parent->addChild($node);
-//        echo $parent->dump();
 
         $token = $this->currentToken($tokenizer);
         if ($token->getType() !== TokenizerInterface::OP_LEFT_BRACKET) {
