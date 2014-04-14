@@ -62,6 +62,7 @@ class ConditionalExpression
             $node->optimize();
             return;
         }
+        $this->nextToken($tokenizer);
 
         /** @var AssignmentExpression $assignmentExpressionRule */
         $assignmentExpressionRule = $this->rule->get('AssignmentExpression');
@@ -72,9 +73,8 @@ class ConditionalExpression
             throw new LexicalError('Invalid conditional expression : missing colon',
                 null, $token->getLine(), $token->getStart());
         }
+        $this->nextToken($tokenizer);
 
         $assignmentExpressionRule->parse($node, $tokenizer);
-
-        $this->nextToken($tokenizer);
     }
 }
