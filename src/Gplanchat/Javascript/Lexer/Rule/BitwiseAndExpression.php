@@ -55,7 +55,7 @@ class BitwiseAndExpression
 //        echo $parent->dump();
 
         /** @var EqualityExpression $rule */
-        $rule = $this->rule->get('EqualityExpression');;
+        $rule = $this->rule->get('EqualityExpression');
         while (true) {
             $rule->parse($node, $tokenizer);
 

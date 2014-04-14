@@ -54,7 +54,7 @@ class ConditionalExpression
         $parent->addChild($node);
 
         /** @var OrExpression $orExpressionRule */
-        $orExpressionRule = $this->rule->get('OrExpression');;
+        $orExpressionRule = $this->rule->get('OrExpression');
         $orExpressionRule->parse($node, $tokenizer);
 
         $token = $this->currentToken($tokenizer);
@@ -64,7 +64,7 @@ class ConditionalExpression
         }
 
         /** @var AssignmentExpression $assignmentExpressionRule */
-        $assignmentExpressionRule = $this->rule->get('AssignmentExpression');;
+        $assignmentExpressionRule = $this->rule->get('AssignmentExpression');
         $assignmentExpressionRule->parse($node, $tokenizer);
 
         $token = $this->currentToken($tokenizer);

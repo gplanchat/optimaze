@@ -61,7 +61,7 @@ class AdditiveExpression
 //        echo $parent->dump();
 
         /** @var MultiplicativeExpression $multiplicativeExpressionRule */
-        $multiplicativeExpressionRule = $this->rule->get('MultiplicativeExpression');;
+        $multiplicativeExpressionRule = $this->rule->get('MultiplicativeExpression');
 
         while (true) {
             $multiplicativeExpressionRule->parse($node, $tokenizer);

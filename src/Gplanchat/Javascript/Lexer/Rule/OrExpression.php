@@ -55,7 +55,7 @@ class OrExpression
 //        echo $parent->dump();
 
         /** @var AndExpression $rule */
-        $rule = $this->rule->get('AndExpression');;
+        $rule = $this->rule->get('AndExpression');
         while (true) {
             $rule->parse($node, $tokenizer);
 

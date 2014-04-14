@@ -63,7 +63,7 @@ class ShiftExpression
 //        echo $parent->dump();
 
         /** @var AdditiveExpression $additiveExpressionRule */
-        $additiveExpressionRule = $this->rule->get('AdditiveExpression');;
+        $additiveExpressionRule = $this->rule->get('AdditiveExpression');
 
         while (true) {
             $additiveExpressionRule->parse($node, $tokenizer);

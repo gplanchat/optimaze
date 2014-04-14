@@ -355,7 +355,7 @@ class Statement
         $this->nextToken($tokenizer);
 
         /** @var Rule\StatementList $statementListRule */
-        $statementListRule = $this->rule->get('StatementListRule');;
+        $statementListRule = $this->rule->get('StatementListRule');
         $statementListRule->parse($compoundStatement, $tokenizer);
 
         $token = $this->currentToken($tokenizer);

@@ -79,7 +79,7 @@ class Constructor
         }
 
         /** @var ConstructorCall $rule */
-        $rule = $this->rule->get('ConstructorCall');;
+        $rule = $this->rule->get('ConstructorCall');
         $rule->parse($node, $tokenizer);
     }
 }

@@ -61,7 +61,7 @@ class MultiplicativeExpression
 //        echo $parent->dump();
 
         /** @var UnaryExpression $unaryExpressionRule */
-        $unaryExpressionRule = $this->rule->get('UnaryExpression');;
+        $unaryExpressionRule = $this->rule->get('UnaryExpression');
 
         while (true) {
             $unaryExpressionRule->parse($node, $tokenizer);

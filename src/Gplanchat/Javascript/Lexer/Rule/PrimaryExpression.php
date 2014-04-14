@@ -82,7 +82,7 @@ class PrimaryExpression
             $this->nextToken($tokenizer);
 
             /** @var Expression $rule */
-            $rule = $this->rule->get('Expression');;
+            $rule = $this->rule->get('Expression');
             $rule->parse($node, $tokenizer);
 
             $token = $this->currentToken($tokenizer);

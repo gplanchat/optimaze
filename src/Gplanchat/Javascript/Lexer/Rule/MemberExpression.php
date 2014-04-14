@@ -56,7 +56,7 @@ class MemberExpression
         $parent->addChild($node);
 
         /** @var PrimaryExpression $rule */
-        $rule = $this->rule->get('PrimaryExpression');;
+        $rule = $this->rule->get('PrimaryExpression');
 
         $token = $this->currentToken($tokenizer);
         while (true) {
@@ -66,7 +66,7 @@ class MemberExpression
                 $this->nextToken($tokenizer);
 
                 /** @var Expression $expressionRule */
-                $expressionRule = $this->rule->get('Expression');;
+                $expressionRule = $this->rule->get('Expression');
                 $expressionRule->parse($node, $tokenizer);
 
                 $token = $this->currentToken($tokenizer);
@@ -80,7 +80,7 @@ class MemberExpression
                 $this->nextToken($tokenizer);
 
                 /** @var ArgumentList $argumentListRule */
-                $argumentListRule = $this->rule->get('ArgumentList');;
+                $argumentListRule = $this->rule->get('ArgumentList');
                 $argumentListRule->parse($node, $tokenizer);
 
                 $token = $this->currentToken($tokenizer);

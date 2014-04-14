@@ -108,7 +108,7 @@ class Element
             $this->nextToken($tokenizer);
         } else {
             /** @var Rule\Statement $statementRule */
-            $statementRule = $this->rule->get('Statement');;
+            $statementRule = $this->rule->get('Statement');
             $statementRule->parse($node, $tokenizer);
         }
     }

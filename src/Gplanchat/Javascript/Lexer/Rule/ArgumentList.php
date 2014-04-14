@@ -56,7 +56,7 @@ class ArgumentList
 //        echo $parent->dump();
 
         /** @var AssignmentExpression $rule */
-        $rule = $this->rule->get('AssignmentExpression');;
+        $rule = $this->rule->get('AssignmentExpression');
         while (true) {
             $rule->parse($node, $tokenizer);
 

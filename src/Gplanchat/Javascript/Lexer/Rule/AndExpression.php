@@ -55,7 +55,7 @@ class AndExpression
 //        echo $parent->dump();
 
         /** @var BitwiseOrExpression $rule */
-        $rule = $this->rule->get('BitwiseOrExpression');;
+        $rule = $this->rule->get('BitwiseOrExpression');
         while (true) {
             $rule->parse($node, $tokenizer);
 

@@ -62,7 +62,7 @@ class EqualityExpression
 //        echo $parent->dump();
 
         /** @var RelationalExpression $relationalExpressionRule */
-        $relationalExpressionRule = $this->rule->get('RelationalExpression');;
+        $relationalExpressionRule = $this->rule->get('RelationalExpression');
 
         while (true) {
             $relationalExpressionRule->parse($node, $tokenizer);

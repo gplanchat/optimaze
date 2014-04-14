@@ -87,7 +87,7 @@ class UnaryExpression
 //        echo $parent->dump();
 
         /** @var MemberExpression $memberExpressionRule */
-        $memberExpressionRule = $this->rule->get('MemberExpression');;
+        $memberExpressionRule = $this->rule->get('MemberExpression');
 
         while (true) {
 //            var_dump($token->getType(), !in_array($token->getType(), $this->unaryOperators));
@@ -141,7 +141,7 @@ class UnaryExpression
                 $node->addChild($newKeyword);
 
                 /** @var Constructor $constructorRule */
-                $constructorRule = $this->rule->get('Constructor');;
+                $constructorRule = $this->rule->get('Constructor');
 
                 $this->nextToken($tokenizer);
                 $constructorRule->parse($node, $tokenizer);

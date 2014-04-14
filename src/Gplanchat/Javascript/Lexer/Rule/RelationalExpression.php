@@ -63,7 +63,7 @@ class RelationalExpression
 //        echo $parent->dump();
 
         /** @var ShiftExpression $shiftExpressionRule */
-        $shiftExpressionRule = $this->rule->get('ShiftExpression');;
+        $shiftExpressionRule = $this->rule->get('ShiftExpression');
 
         while (true) {
             $shiftExpressionRule->parse($node, $tokenizer);

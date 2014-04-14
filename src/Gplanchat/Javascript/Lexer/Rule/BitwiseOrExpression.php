@@ -55,7 +55,7 @@ class BitwiseOrExpression
 //        echo $parent->dump();
 
         /** @var BitwiseXorExpression $rule */
-        $rule = $this->rule->get('BitwiseXorExpression');;
+        $rule = $this->rule->get('BitwiseXorExpression');
         while (true) {
             $rule->parse($node, $tokenizer);
 

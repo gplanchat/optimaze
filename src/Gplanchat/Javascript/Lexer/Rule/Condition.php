@@ -61,7 +61,7 @@ class Condition
         $this->nextToken($tokenizer);
 
         /** @var Expression $expressionRule */
-        $expressionRule = $this->rule->get('Expression');;
+        $expressionRule = $this->rule->get('Expression');
         $expressionRule->parse($node, $tokenizer);
 
         $token = $this->currentToken($tokenizer);

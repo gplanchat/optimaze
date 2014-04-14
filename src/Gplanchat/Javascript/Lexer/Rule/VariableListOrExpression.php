@@ -53,13 +53,13 @@ class VariableListOrExpression
 
         if ($token->getType() === TokenizerInterface::KEYWORD_VAR) {
             /** @var VariableList $variableListRule */
-            $variableListRule = $this->rule->get('VariableList');;
+            $variableListRule = $this->rule->get('VariableList');
             $variableListRule->parse($parent, $tokenizer);
             return;
         }
 
         /** @var Expression $expressionRule */
-        $expressionRule = $this->rule->get('Expression');;
+        $expressionRule = $this->rule->get('Expression');
         $expressionRule->parse($parent, $tokenizer);
     }
 }
