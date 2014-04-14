@@ -22,7 +22,7 @@
 
 namespace Gplanchat\Javascript\Lexer;
 
-use Gplanchat\Javascript\Tokenizer\TokenizerInterface;
+use Gplanchat\Tokenizer\TokenizerInterface;
 use Gplanchat\Javascript\Lexer\Exception\LexicalError;
 use Gplanchat\Tokenizer\Token;
 

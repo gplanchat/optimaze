@@ -24,8 +24,9 @@ namespace Gplanchat\Javascript\Lexer\Rule;
 
 use Gplanchat\Javascript\Tokenizer\TokenizerInterface;
 use Gplanchat\Javascript\Lexer\Exception\LexicalError;
-use Gplanchat\Javascript\Lexer\Grammar;
-use Gplanchat\Javascript\Lexer\Grammar\RecursiveGrammarInterface;
+use Gplanchat\Lexer\Grammar;
+use Gplanchat\Lexer\Grammar\RecursiveGrammarInterface;
+use Gplanchat\Tokenizer\TokenizerInterface as BaseTokenizerInterface;
 
 /**
  * Class PrimaryExpression
@@ -61,11 +62,11 @@ class PrimaryExpression
 
     /**
      * @param RecursiveGrammarInterface $parent
-     * @param TokenizerInterface $tokenizer
+     * @param BaseTokenizerInterface $tokenizer
      * @return void
      * @throws LexicalError
      */
-    public function parse(RecursiveGrammarInterface $parent, TokenizerInterface $tokenizer)
+    public function parse(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
     {
         $token = $this->currentToken($tokenizer);
         if (!in_array($token->getType(), $this->validTokenTypes)) {

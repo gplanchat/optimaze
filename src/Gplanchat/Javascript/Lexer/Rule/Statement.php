@@ -24,10 +24,11 @@
 namespace Gplanchat\Javascript\Lexer\Rule;
 
 use Gplanchat\Javascript\Lexer\Exception\LexicalError;
-use Gplanchat\Javascript\Lexer\Grammar\RecursiveGrammarInterface;
+use Gplanchat\Lexer\Grammar\RecursiveGrammarInterface;
 use Gplanchat\Javascript\Tokenizer\TokenizerInterface;
-use Gplanchat\Javascript\Lexer\Grammar;
+use Gplanchat\Lexer\Grammar;
 use Gplanchat\Javascript\Lexer\Rule;
+use Gplanchat\Tokenizer\TokenizerInterface as BaseTokenizerInterface;
 
 /**
  * Class Statement
@@ -70,11 +71,11 @@ class Statement
 
     /**
      * @param RecursiveGrammarInterface $parent
-     * @param TokenizerInterface $tokenizer
+     * @param BaseTokenizerInterface $tokenizer
      * @return void
      * @throws LexicalError
      */
-    public function parse(RecursiveGrammarInterface $parent, TokenizerInterface $tokenizer)
+    public function parse(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
     {
         /** @var Grammar\Statement $node */
         $node = $this->grammar->get('Statement');
@@ -120,11 +121,11 @@ class Statement
 
     /**
      * @param RecursiveGrammarInterface $parent
-     * @param TokenizerInterface $tokenizer
+     * @param BaseTokenizerInterface $tokenizer
      * @return void
      * @throws LexicalError
      */
-    protected function parseConditionChain(RecursiveGrammarInterface $parent, TokenizerInterface $tokenizer)
+    protected function parseConditionChain(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
     {
         /** @var Grammar\ConditionChain $conditionChain */
         $conditionChain = $this->grammar->get('ConditionChain');
@@ -159,11 +160,11 @@ class Statement
 
     /**
      * @param RecursiveGrammarInterface $parent
-     * @param TokenizerInterface $tokenizer
+     * @param BaseTokenizerInterface $tokenizer
      * @return void
      * @throws LexicalError
      */
-    protected function parseWhile(RecursiveGrammarInterface $parent, TokenizerInterface $tokenizer)
+    protected function parseWhile(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
     {
         /** @var Grammar\WhileKeyword $whileKeyword */
         $whileKeyword = $this->grammar->get('WhileKeyword');
@@ -176,11 +177,11 @@ class Statement
 
     /**
      * @param RecursiveGrammarInterface $parent
-     * @param TokenizerInterface $tokenizer
+     * @param BaseTokenizerInterface $tokenizer
      * @return void
      * @throws LexicalError
      */
-    protected function parseFor(RecursiveGrammarInterface $parent, TokenizerInterface $tokenizer)
+    protected function parseFor(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
     {
         /** @var Grammar\ForKeyword $forKeyword */
         $forKeyword = $this->grammar->get('ForKeyword');
@@ -227,11 +228,11 @@ class Statement
 
     /**
      * @param RecursiveGrammarInterface $parent
-     * @param TokenizerInterface $tokenizer
+     * @param BaseTokenizerInterface $tokenizer
      * @return void
      * @throws LexicalError
      */
-    protected function parseForCondition(RecursiveGrammarInterface $parent, TokenizerInterface $tokenizer)
+    protected function parseForCondition(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
     {
         $this->getExpressionRule()->parse($parent, $tokenizer);
 
@@ -247,11 +248,11 @@ class Statement
 
     /**
      * @param RecursiveGrammarInterface $parent
-     * @param TokenizerInterface $tokenizer
+     * @param BaseTokenizerInterface $tokenizer
      * @return void
      * @throws LexicalError
      */
-    protected function parseBreak(RecursiveGrammarInterface $parent, TokenizerInterface $tokenizer)
+    protected function parseBreak(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
     {
         /** @var Grammar\BreakKeyword $breakKeyword */
         $breakKeyword = $this->grammar->get('BreakKeyword');
@@ -268,11 +269,11 @@ class Statement
 
     /**
      * @param RecursiveGrammarInterface $parent
-     * @param TokenizerInterface $tokenizer
+     * @param BaseTokenizerInterface $tokenizer
      * @return void
      * @throws LexicalError
      */
-    protected function parseContinue(RecursiveGrammarInterface $parent, TokenizerInterface $tokenizer)
+    protected function parseContinue(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
     {
         /** @var Grammar\ContinueKeyword $continueKeyword */
         $continueKeyword = $this->grammar->get('ContinueKeyword');
@@ -289,11 +290,11 @@ class Statement
 
     /**
      * @param RecursiveGrammarInterface $parent
-     * @param TokenizerInterface $tokenizer
+     * @param BaseTokenizerInterface $tokenizer
      * @return void
      * @throws LexicalError
      */
-    protected function parseWith(RecursiveGrammarInterface $parent, TokenizerInterface $tokenizer)
+    protected function parseWith(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
     {
         /** @var Grammar\WithKeyword $withKeyword */
         $withKeyword = $this->grammar->get('WithKeyword');
@@ -318,11 +319,11 @@ class Statement
 
     /**
      * @param RecursiveGrammarInterface $parent
-     * @param TokenizerInterface $tokenizer
+     * @param BaseTokenizerInterface $tokenizer
      * @return void
      * @throws LexicalError
      */
-    protected function parseReturn(RecursiveGrammarInterface $parent, TokenizerInterface $tokenizer)
+    protected function parseReturn(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
     {
         /** @var Grammar\ReturnKeyword $returnKeyword */
         $returnKeyword = $this->grammar->get('ReturnKeyword');
@@ -341,11 +342,11 @@ class Statement
 
     /**
      * @param RecursiveGrammarInterface $parent
-     * @param TokenizerInterface $tokenizer
+     * @param BaseTokenizerInterface $tokenizer
      * @return void
      * @throws LexicalError
      */
-    protected function parseCoumpoundStatement(RecursiveGrammarInterface $parent, TokenizerInterface $tokenizer)
+    protected function parseCoumpoundStatement(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
     {
         /** @var Grammar\CompoundStatement $compoundStatement */
         $compoundStatement = $this->grammar->get('CompoundStatement');

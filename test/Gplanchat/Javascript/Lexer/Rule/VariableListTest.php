@@ -23,7 +23,7 @@
 namespace Gplanchat\Javascript\Lexer\Rule;
 
 use Gplanchat\Javascript\Lexer\Exception;
-use Gplanchat\Javascript\Lexer\Grammar;
+use Gplanchat\Lexer\Grammar;
 use Gplanchat\Javascript\Lexer\Rule;
 use Gplanchat\Javascript\Tokenizer\TokenizerInterface;
 
@@ -118,7 +118,7 @@ class VariableListTest
     {
         $tokens = [
             [TokenizerInterface::TOKEN_IDENTIFIER,      'a', null],
-            [TokenizerInterface::OP_EQ,                 '=', null],
+            [TokenizerInterface::OP_ASSIGN,             '=', null],
             [TokenizerInterface::TOKEN_NUMBER_INTEGER,  '1', null],
             [TokenizerInterface::OP_SEMICOLON,          ';', null],
             [TokenizerInterface::TOKEN_END,            null, null]
@@ -153,7 +153,7 @@ class VariableListTest
     {
         $tokens = [
             [TokenizerInterface::TOKEN_IDENTIFIER,      'a', null],
-            [TokenizerInterface::OP_EQ,                 '=', null],
+            [TokenizerInterface::OP_ASSIGN,             '=', null],
             [TokenizerInterface::TOKEN_NUMBER_INTEGER,  '1', null],
             [TokenizerInterface::OP_COMMA,              ',', null],
             [TokenizerInterface::TOKEN_IDENTIFIER,      'b', null],

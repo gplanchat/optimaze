@@ -22,10 +22,11 @@
 
 namespace Gplanchat\Javascript\Lexer\Rule;
 
-use Gplanchat\Javascript\Lexer\Grammar;
-use Gplanchat\Javascript\Lexer\Grammar\RecursiveGrammarInterface;
+use Gplanchat\Lexer\Grammar;
+use Gplanchat\Lexer\Grammar\RecursiveGrammarInterface;
 use Gplanchat\Javascript\Tokenizer\TokenizerInterface;
 use Gplanchat\Javascript\Lexer\Exception\LexicalError;
+use Gplanchat\Tokenizer\TokenizerInterface as BaseTokenizerInterface;
 
 /**
  * Class ConditionalExpression
@@ -42,16 +43,15 @@ class ConditionalExpression
 
     /**
      * @param RecursiveGrammarInterface $parent
-     * @param TokenizerInterface $tokenizer
+     * @param BaseTokenizerInterface $tokenizer
      * @return void
      * @throws LexicalError
      */
-    public function parse(RecursiveGrammarInterface $parent, TokenizerInterface $tokenizer)
+    public function parse(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
     {
         /** @var Grammar\Expression $node */
         $node = $this->grammar->get('ConditionalExpression');
         $parent->addChild($node);
-//        echo $parent->dump();
 
         /** @var OrExpression $orExpressionRule */
         $orExpressionRule = $this->rule->get('OrExpression');;
@@ -68,8 +68,8 @@ class ConditionalExpression
         $assignmentExpressionRule->parse($node, $tokenizer);
 
         $token = $this->currentToken($tokenizer);
-        if ($token->getType() !== TokenizerInterface::OP_SEMICOLON) {
-            throw new LexicalError('Invalid conditional expression : missing semicolon',
+        if ($token->getType() !== TokenizerInterface::OP_COLON) {
+            throw new LexicalError('Invalid conditional expression : missing colon',
                 null, $token->getLine(), $token->getStart());
         }
 

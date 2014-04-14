@@ -23,7 +23,7 @@
 namespace Gplanchat\Javascript\Lexer\Rule;
 
 use Gplanchat\Javascript\Lexer\Exception;
-use Gplanchat\Javascript\Lexer\Grammar;
+use Gplanchat\Lexer\Grammar;
 use Gplanchat\Javascript\Lexer\Rule;
 use Gplanchat\Javascript\Tokenizer\TokenizerInterface;
 

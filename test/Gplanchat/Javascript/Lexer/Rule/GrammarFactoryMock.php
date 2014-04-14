@@ -45,7 +45,6 @@ class GrammarFactoryMock
     /**
      * @param TestCase $testCase
      * @param string $className
-     * @param ServiceManagerInterface $grammarServiceManager
      */
     public function __construct(TestCase $testCase, $className)
     {

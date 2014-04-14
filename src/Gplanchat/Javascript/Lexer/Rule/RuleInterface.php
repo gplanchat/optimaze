@@ -22,15 +22,15 @@
 
 namespace Gplanchat\Javascript\Lexer\Rule;
 
-use Gplanchat\Javascript\Lexer\Grammar\RecursiveGrammarInterface;
-use Gplanchat\Javascript\Tokenizer\TokenizerInterface;
+use Gplanchat\Lexer\Grammar\RecursiveGrammarInterface;
+use Gplanchat\Tokenizer\TokenizerInterface as BaseTokenizerInterface;
 
 interface RuleInterface
 {
     /**
      * @param RecursiveGrammarInterface $parent
-     * @param TokenizerInterface $tokenizer
+     * @param BaseTokenizerInterface $tokenizer
      * @return void
      */
-    public function parse(RecursiveGrammarInterface $parent, TokenizerInterface $tokenizer);
+    public function parse(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer);
 }

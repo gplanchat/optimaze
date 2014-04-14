@@ -23,9 +23,10 @@
 namespace Gplanchat\Javascript\Lexer\Rule;
 
 use Gplanchat\Javascript\Lexer\TokenizerNavigationAwareTrait;
-use Gplanchat\Javascript\Lexer\Grammar\RecursiveGrammarInterface;
+use Gplanchat\Lexer\Grammar\RecursiveGrammarInterface;
 use Gplanchat\Javascript\Tokenizer\TokenizerInterface;
 use Gplanchat\Tokenizer\Token;
+use Gplanchat\Tokenizer\TokenizerInterface as BaseTokenizerInterface;
 
 class TokenSeeker
     implements RuleInterface
@@ -85,9 +86,9 @@ class TokenSeeker
 
     /**
      * @param RecursiveGrammarInterface $parent
-     * @param TokenizerInterface $tokenizer
+     * @param BaseTokenizerInterface $tokenizer
      */
-    public function parse(RecursiveGrammarInterface $parent, TokenizerInterface $tokenizer)
+    public function parse(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
     {
         /** @var Token $token */
         $token = $this->currentToken($tokenizer);

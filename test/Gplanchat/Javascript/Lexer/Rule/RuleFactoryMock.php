@@ -55,6 +55,7 @@ class RuleFactoryMock
     /**
      * @param TestCase $testCase
      * @param string $className
+     * @param ServiceManagerInterface $ruleServiceManager
      * @param ServiceManagerInterface $grammarServiceManager
      */
     public function __construct(TestCase $testCase, $className, ServiceManagerInterface $ruleServiceManager, ServiceManagerInterface $grammarServiceManager)

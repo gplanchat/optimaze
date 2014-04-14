@@ -23,9 +23,10 @@
 namespace Gplanchat\Javascript\Lexer\Rule;
 
 use Gplanchat\Javascript\Lexer\Exception\LexicalError;
-use Gplanchat\Javascript\Lexer\Grammar\RecursiveGrammarInterface;
+use Gplanchat\Lexer\Grammar\RecursiveGrammarInterface;
 use Gplanchat\Javascript\Tokenizer\TokenizerInterface;
-use Gplanchat\Javascript\Lexer\Grammar;
+use Gplanchat\Lexer\Grammar;
+use Gplanchat\Tokenizer\TokenizerInterface as BaseTokenizerInterface;
 
 /**
  * Class AssignmentExpression
@@ -42,22 +43,15 @@ class AssignmentExpression
 
     /**
      * @param RecursiveGrammarInterface $parent
-     * @param TokenizerInterface $tokenizer
+     * @param BaseTokenizerInterface $tokenizer
      * @return void
      * @throws LexicalError
      */
-    public function parse(RecursiveGrammarInterface $parent, TokenizerInterface $tokenizer)
+    public function parse(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
     {
-        $token = $this->currentToken($tokenizer);
-        if ($token->getType() === TokenizerInterface::OP_LEFT_BRACKET) {
-            return;
-        }
-
         /** @var Grammar\AssignmentExpression $node */
         $node = $this->grammar->get('AssignmentExpression');
         $parent->addChild($node);
-//        echo $token->dump();
-//        return;
 
         /** @var AssignmentExpression $conditionalExpressionRule */
         $conditionalExpressionRule = $this->rule->get('ConditionalExpression');
@@ -75,6 +69,8 @@ class AssignmentExpression
                 ->get('AssignmentOperator', [$token->getAssignOperator()])
             ;
             $node->addChild($assignmentOperator);
+
+            $this->nextToken($tokenizer);
         }
 
         $node->optimize();

@@ -23,7 +23,7 @@
 namespace Gplanchat\Javascript\Lexer\Rule;
 
 use Gplanchat\Javascript\Lexer\Exception;
-use Gplanchat\Javascript\Lexer\Grammar;
+use Gplanchat\Lexer\Grammar;
 use Gplanchat\Javascript\Lexer\Rule;
 use Gplanchat\Javascript\Tokenizer\TokenizerInterface;
 
@@ -41,9 +41,9 @@ class ConditionTest
     {
         $tokens = [
             [TokenizerInterface::OP_LEFT_BRACKET,    '(', null],
-            [TokenizerInterface::KEYWORD_TRUE,     'true', null],
-            [TokenizerInterface::OP_RIGHT_BRACKET,     ')', null],
-            [TokenizerInterface::TOKEN_END,          null, null]
+            [TokenizerInterface::KEYWORD_TRUE,    'true', null],
+            [TokenizerInterface::OP_RIGHT_BRACKET,   ')', null],
+            [TokenizerInterface::TOKEN_END,         null, null]
         ];
 
         $ruleServices = [

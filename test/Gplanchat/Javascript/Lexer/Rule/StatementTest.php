@@ -23,7 +23,7 @@
 namespace Gplanchat\Javascript\Lexer\Rule;
 
 use Gplanchat\Javascript\Lexer\Exception;
-use Gplanchat\Javascript\Lexer\Grammar;
+use Gplanchat\Lexer\Grammar;
 use Gplanchat\Javascript\Lexer\Rule;
 use Gplanchat\Javascript\Tokenizer\TokenizerInterface;
 
@@ -580,7 +580,7 @@ class StatementTest
             [TokenizerInterface::OP_LEFT_BRACKET,         '(', null],
             [TokenizerInterface::KEYWORD_VAR,           'var', null],
             [TokenizerInterface::TOKEN_IDENTIFIER,        'i', null],
-            [TokenizerInterface::OP_EQ,                   '=', null],
+            [TokenizerInterface::OP_ASSIGN,               '=', null],
             [TokenizerInterface::TOKEN_NUMBER_INTEGER,    '0', null],
             [TokenizerInterface::OP_SEMICOLON,            ';', null],
             [TokenizerInterface::KEYWORD_TRUE,         'true', null],
