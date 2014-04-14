@@ -59,7 +59,6 @@ class EqualityExpression
         /** @var Grammar\EqualityExpression $node */
         $node = $this->grammar->get('EqualityExpression');
         $parent->addChild($node);
-//        echo $parent->dump();
 
         /** @var RelationalExpression $relationalExpressionRule */
         $relationalExpressionRule = $this->rule->get('RelationalExpression');
