@@ -70,7 +70,7 @@ class ConditionalOperatorsTest
      * @param string $grammarClass
      * @param string $childRuleService
      */
-    public function testCondition($operatorType, $operatorValue, $ruleClass, $grammarService, $grammarClass, $childRuleService)
+    public function testOneCondition($operatorType, $operatorValue, $ruleClass, $grammarService, $grammarClass, $childRuleService)
     {
         $tokens = [
             [TokenizerInterface::TOKEN_IDENTIFIER,            'a', null],
@@ -84,6 +84,51 @@ class ConditionalOperatorsTest
                 new Rule\TokenSeeker(TokenizerInterface::TOKEN_IDENTIFIER, 'a', true),
                 new Rule\TokenSeeker(TokenizerInterface::TOKEN_IDENTIFIER, 'b', true)
                 ])
+            ]
+        ];
+
+        $grammarServices = [
+            [$grammarService, $grammarClass]
+        ];
+
+        $root = $this->getRootGrammarMock();
+        $root->expects($this->at(0))
+            ->method('addChild')
+            ->with($this->isInstanceOf($grammarClass))
+        ;
+
+        $rule = new $ruleClass($this->getRuleServiceManagerMock($ruleServices),
+            $this->getGrammarServiceManagerMock($grammarServices));
+
+        $rule->parse($root, $this->getTokenizerMock($tokens));
+    }
+
+    /**
+     * @dataProvider dataProvider
+     * @param string|int $operatorType
+     * @param string $operatorValue
+     * @param string $ruleClass
+     * @param string $grammarService
+     * @param string $grammarClass
+     * @param string $childRuleService
+     */
+    public function testMultipleConditions($operatorType, $operatorValue, $ruleClass, $grammarService, $grammarClass, $childRuleService)
+    {
+        $tokens = [
+            [TokenizerInterface::TOKEN_IDENTIFIER,            'a', null],
+            [$operatorType,                        $operatorValue, null],
+            [TokenizerInterface::TOKEN_IDENTIFIER,            'b', null],
+            [$operatorType,                        $operatorValue, null],
+            [TokenizerInterface::TOKEN_IDENTIFIER,            'c', null],
+            [TokenizerInterface::TOKEN_END,                  null, null]
+        ];
+
+        $ruleServices = [
+            [$childRuleService, new Rule\TokenSeekerIterator([
+                new Rule\TokenSeeker(TokenizerInterface::TOKEN_IDENTIFIER, 'a', true),
+                new Rule\TokenSeeker(TokenizerInterface::TOKEN_IDENTIFIER, 'b', true),
+                new Rule\TokenSeeker(TokenizerInterface::TOKEN_IDENTIFIER, 'c', true)
+            ])
             ]
         ];
 
