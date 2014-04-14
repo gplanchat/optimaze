@@ -53,11 +53,11 @@ class ConditionalOperatorsTest
     public function dataProvider()
     {
         return [
-            [TokenizerInterface::OP_OR,          '||', Rule\OrExpression::class,         'OrExpression',         Grammar\OrExpression::class,         'AndExpression'],
-            [TokenizerInterface::OP_AND,         '&&', Rule\AndExpression::class,        'AndExpression',        Grammar\AndExpression::class,        'BitwiseOrExpression'],
+            [TokenizerInterface::OP_OR,          '||', Rule\OrExpression::class,        'OrExpression',         Grammar\OrExpression::class,         'AndExpression'],
+            [TokenizerInterface::OP_AND,         '&&', Rule\AndExpression::class,       'AndExpression',        Grammar\AndExpression::class,        'BitwiseOrExpression'],
             [TokenizerInterface::OP_BITWISE_OR,   '|', Rule\BitwiseOrExpression::class,  'BitwiseOrExpression',  Grammar\BitwiseOrExpression::class,  'BitwiseXorExpression'],
             [TokenizerInterface::OP_BITWISE_AND,  '&', Rule\BitwiseXorExpression::class, 'BitwiseXorExpression', Grammar\BitwiseXorExpression::class, 'BitwiseAndExpression'],
-            [TokenizerInterface::OP_BITWISE_XOR,  '^', Rule\BitwiseAndExpression::class, 'BitwiseAndExpression', Grammar\BitwiseAndExpression::class, 'EqualityExpression'],
+            [TokenizerInterface::OP_BITWISE_XOR,  '^', Rule\BitwiseAndExpression::class, 'BitwiseAndExpression', Grammar\BitwiseAndExpression::class, 'EqualityExpression']
         ];
     }
 
