@@ -48,7 +48,7 @@ class PrimaryExpression
 {
     use RuleTrait;
 
-    protected $validTokenTypes = [
+    protected static $validTokenTypes = [
         TokenizerInterface::OP_LEFT_BRACKET,
         TokenizerInterface::TOKEN_IDENTIFIER,
         TokenizerInterface::TOKEN_NUMBER_INTEGER,
@@ -69,7 +69,7 @@ class PrimaryExpression
     public function parse(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
     {
         $token = $this->currentToken($tokenizer);
-        if (!in_array($token->getType(), $this->validTokenTypes)) {
+        if (!in_array($token->getType(), static::$validTokenTypes)) {
             return;
         }
 

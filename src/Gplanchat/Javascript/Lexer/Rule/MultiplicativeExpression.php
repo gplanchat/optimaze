@@ -41,7 +41,7 @@ class MultiplicativeExpression
 {
     use RuleTrait;
 
-    protected $multiplicativeOperators = [
+    protected static $multiplicativeOperators = [
         TokenizerInterface::OP_MUL,
         TokenizerInterface::OP_DIV,
         TokenizerInterface::OP_MOD
@@ -58,7 +58,6 @@ class MultiplicativeExpression
         /** @var Grammar\MultiplicativeExpression $node */
         $node = $this->grammar->get('MultiplicativeExpression');
         $parent->addChild($node);
-//        echo $parent->dump();
 
         /** @var UnaryExpression $unaryExpressionRule */
         $unaryExpressionRule = $this->rule->get('UnaryExpression');
@@ -67,7 +66,7 @@ class MultiplicativeExpression
             $unaryExpressionRule->parse($node, $tokenizer);
 
             $token = $this->currentToken($tokenizer);
-            if (!in_array($token->getType(), $this->multiplicativeOperators)) {
+            if (!in_array($token->getType(), static::$multiplicativeOperators)) {
                 break;
             }
 

@@ -43,6 +43,7 @@ class MultiplicativeExpressionTest
         return [
             [TokenizerInterface::OP_MUL, '*'],
             [TokenizerInterface::OP_MUL, '/'],
+            [TokenizerInterface::OP_MOD, '%']
         ];
     }
 

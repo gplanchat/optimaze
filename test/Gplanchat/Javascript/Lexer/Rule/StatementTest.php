@@ -1131,4 +1131,71 @@ class StatementTest
 
         $rule->parse($root, $this->getTokenizerMock($tokens));
     }
+
+    /**
+     *
+     */
+    public function testReturnStatementWithoutExpression()
+    {
+        $tokens = [
+            [TokenizerInterface::KEYWORD_RETURN,   'return', null],
+            [TokenizerInterface::OP_SEMICOLON,          ';', null],
+            [TokenizerInterface::TOKEN_END,            null, null]
+        ];
+
+        $ruleServices = [
+            ['Expression', new Rule\TokenSeeker(TokenizerInterface::OP_SEMICOLON, ';')]
+        ];
+
+        $grammarServices = [
+            ['Statement', Grammar\Statement::class],
+            ['ReturnKeyword', Grammar\ReturnKeyword::class],
+        ];
+
+        $root = $this->getRootGrammarMock();
+        $root->expects($this->at(0))
+            ->method('addChild')
+            ->with($this->isInstanceOf(Grammar\Statement::class))
+        ;
+
+        $rule = new Statement($this->getRuleServiceManagerMock($ruleServices),
+            $this->getGrammarServiceManagerMock($grammarServices));
+
+        $rule->parse($root, $this->getTokenizerMock($tokens));
+    }
+
+    /**
+     *
+     */
+    public function testReturnStatementWithExpression()
+    {
+        $tokens = [
+            [TokenizerInterface::KEYWORD_RETURN,   'return', null],
+            [TokenizerInterface::TOKEN_IDENTIFIER,      '$', null],
+            [TokenizerInterface::OP_DOT,                '.', null],
+            [TokenizerInterface::TOKEN_IDENTIFIER,     'fn', null],
+            [TokenizerInterface::OP_SEMICOLON,          ';', null],
+            [TokenizerInterface::TOKEN_END,            null, null]
+        ];
+
+        $ruleServices = [
+            ['Expression', new Rule\TokenSeeker(TokenizerInterface::TOKEN_IDENTIFIER, 'fn', true)]
+        ];
+
+        $grammarServices = [
+            ['Statement', Grammar\Statement::class],
+            ['ReturnKeyword', Grammar\ReturnKeyword::class],
+        ];
+
+        $root = $this->getRootGrammarMock();
+        $root->expects($this->at(0))
+            ->method('addChild')
+            ->with($this->isInstanceOf(Grammar\Statement::class))
+        ;
+
+        $rule = new Statement($this->getRuleServiceManagerMock($ruleServices),
+            $this->getGrammarServiceManagerMock($grammarServices));
+
+        $rule->parse($root, $this->getTokenizerMock($tokens));
+    }
 }

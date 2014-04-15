@@ -52,7 +52,6 @@ class OrExpression
         /** @var Grammar\OrExpression $node */
         $node = $this->grammar->get('OrExpression');
         $parent->addChild($node);
-//        echo $parent->dump();
 
         /** @var AndExpression $rule */
         $rule = $this->rule->get('AndExpression');

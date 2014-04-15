@@ -52,7 +52,6 @@ class BitwiseXorExpression
         /** @var Grammar\BitwiseXorExpression $node */
         $node = $this->grammar->get('BitwiseXorExpression');
         $parent->addChild($node);
-//        echo $parent->dump();
 
         /** @var BitwiseAndExpression $rule */
         $rule = $this->rule->get('BitwiseAndExpression');

@@ -41,7 +41,7 @@ class EqualityExpression
 {
     use RuleTrait;
 
-    protected $equalityOperators = [
+    protected static $equalityOperators = [
         TokenizerInterface::OP_STRICT_EQ,
         TokenizerInterface::OP_EQ,
         TokenizerInterface::OP_STRICT_NE,
@@ -67,7 +67,7 @@ class EqualityExpression
             $relationalExpressionRule->parse($node, $tokenizer);
 
             $token = $this->currentToken($tokenizer);
-            if (!in_array($token->getType(), $this->equalityOperators)) {
+            if (!in_array($token->getType(), static::$equalityOperators)) {
                 break;
             }
 

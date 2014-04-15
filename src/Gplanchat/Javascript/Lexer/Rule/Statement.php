@@ -329,9 +329,10 @@ class Statement
         $returnKeyword = $this->grammar->get('ReturnKeyword');
         $parent->addChild($returnKeyword);
 
-        $token = $this->nextToken($tokenizer);
+        $this->nextToken($tokenizer);
         $this->getExpressionRule()->parse($returnKeyword, $tokenizer);
 
+        $token = $this->currentToken($tokenizer);
         if ($token->getType() !== TokenizerInterface::OP_SEMICOLON) {
             throw new LexicalError('Invalid expression : missing semicolon',
                 null, $token->getLine(), $token->getStart());

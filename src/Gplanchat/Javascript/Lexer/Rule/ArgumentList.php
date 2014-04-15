@@ -53,7 +53,6 @@ class ArgumentList
         /** @var Grammar\ArgumentList $node */
         $node = $this->grammar->get('ArgumentList');
         $parent->addChild($node);
-//        echo $parent->dump();
 
         /** @var AssignmentExpression $rule */
         $rule = $this->rule->get('AssignmentExpression');
