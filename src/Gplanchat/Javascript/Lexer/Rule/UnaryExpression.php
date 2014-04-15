@@ -46,20 +46,19 @@ class UnaryExpression
 {
     use RuleTrait;
 
-    protected $unaryOperators = [
+    protected static $unaryOperators = [
         TokenizerInterface::OP_BITWISE_NOT,
-        TokenizerInterface::KEYWORD_DELETE,
         TokenizerInterface::KEYWORD_TYPEOF,
         TokenizerInterface::KEYWORD_VOID,
         TokenizerInterface::OP_MINUS
     ];
 
-    protected $incrementOperators = [
+    protected static $incrementOperators = [
         TokenizerInterface::OP_INCREMENT,
         TokenizerInterface::OP_DECREMENT
     ];
 
-    protected $primaryExpressionTokens = [
+    protected static $primaryExpressionTokens = [
         TokenizerInterface::OP_LEFT_BRACKET,
         TokenizerInterface::TOKEN_IDENTIFIER,
         TokenizerInterface::TOKEN_NUMBER_INTEGER,
@@ -84,36 +83,23 @@ class UnaryExpression
         /** @var Grammar\UnaryExpression $node */
         $node = $this->grammar->get('UnaryExpression');
         $parent->addChild($node);
-//        echo $parent->dump();
 
         /** @var MemberExpression $memberExpressionRule */
         $memberExpressionRule = $this->rule->get('MemberExpression');
 
         while (true) {
-//            var_dump($token->getType(), !in_array($token->getType(), $this->unaryOperators));
-            if (in_array($token->getType(), $this->unaryOperators)) {
+            if (in_array($token->getType(), static::$unaryOperators)) {
                 /** @var Grammar\UnaryOperator $unaryOperator */
                 $unaryOperator = $this->grammar
                     ->get('UnaryOperator', [$token->getValue()])
                 ;
                 $node->addChild($unaryOperator);
-                $token = $this->nextToken($tokenizer);
-                continue;
-            }
+                $this->nextToken($tokenizer);
 
-            if (in_array($token->getType(), $this->primaryExpressionTokens)) {
                 $memberExpressionRule->parse($node, $tokenizer);
 
                 $token = $this->currentToken($tokenizer);
-                if (in_array($token->getType(), $this->incrementOperators)) {
-                    /** @var Grammar\IncrementOperator $incrementOperator */
-                    $incrementOperator = $this->grammar
-                        ->get('IncrementOperator', [$token->getValue()])
-                    ;
-                    $node->addChild($incrementOperator);
-                }
-                break;
-            } else if (in_array($token->getType(), $this->incrementOperators)) {
+            } else if (in_array($token->getType(), static::$incrementOperators)) {
                 /** @var Grammar\IncrementOperator $incrementOperator */
                 $incrementOperator = $this->grammar
                     ->get('IncrementOperator', [$token->getValue()])
@@ -126,17 +112,17 @@ class UnaryExpression
             } else if ($token->getType() === TokenizerInterface::KEYWORD_DELETE) {
                 /** @var Grammar\DeleteKeyword $deleteKeyword */
                 $deleteKeyword = $this->grammar
-                    ->get('DeleteKeyword', [$token->getValue()])
+                    ->get('DeleteKeyword')
                 ;
                 $node->addChild($deleteKeyword);
 
                 $this->nextToken($tokenizer);
                 $memberExpressionRule->parse($node, $tokenizer);
-                return;
+                break;
             } else if ($token->getType() === TokenizerInterface::KEYWORD_NEW) {
                 /** @var Grammar\NewKeyword $newKeyword */
                 $newKeyword = $this->grammar
-                    ->get('NewKeyword', [$token->getValue()])
+                    ->get('NewKeyword')
                 ;
                 $node->addChild($newKeyword);
 
@@ -145,6 +131,8 @@ class UnaryExpression
 
                 $this->nextToken($tokenizer);
                 $constructorRule->parse($node, $tokenizer);
+                break;
+            } else {
                 break;
             }
         }
