@@ -58,10 +58,10 @@ class MemberExpression
         /** @var PrimaryExpression $rule */
         $rule = $this->rule->get('PrimaryExpression');
 
-        $token = $this->currentToken($tokenizer);
         while (true) {
             $rule->parse($node, $tokenizer);
 
+            $token = $this->currentToken($tokenizer);
             if ($token->getType() === TokenizerInterface::OP_LEFT_SQUARE_BRACKET) {
                 $this->nextToken($tokenizer);
 
@@ -74,8 +74,7 @@ class MemberExpression
                     throw new LexicalError('Invalid expression : missing right square bracket',
                         null, $token->getLine(), $token->getStart());
                 }
-
-                $token = $this->nextToken($tokenizer);
+                break;
             } else if ($token->getType() === TokenizerInterface::OP_LEFT_BRACKET) {
                 $this->nextToken($tokenizer);
 
@@ -88,18 +87,17 @@ class MemberExpression
                     throw new LexicalError('Invalid expression : missing right bracket',
                         null, $token->getLine(), $token->getStart());
                 }
-
-                $token = $this->nextToken($tokenizer);
+                break;
             } else if ($token->getType() === TokenizerInterface::OP_DOT) {
                 /** @var Grammar\DotOperator $dotOperator */
                 $dotOperator = $this->grammar
                     ->get('DotOperator')
                 ;
                 $node->addChild($dotOperator);
-                $token = $this->nextToken($tokenizer);
             } else {
                 break;
             }
+            $this->nextToken($tokenizer);
         }
 
         $node->optimize();
