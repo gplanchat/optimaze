@@ -79,11 +79,11 @@ BitwiseAndExpression:
 
 EqualityExpression:
     RelationalExpression
-    RelationalExpression EqualityualityOperator EqualityExpression
+    RelationalExpression EqualityOperator EqualityExpression
 
 RelationalExpression:
     ShiftExpression
-    RelationalExpression RelationalationalOperator ShiftExpression
+    RelationalExpression RelationalOperator ShiftExpression
 
 ShiftExpression:
     AdditiveExpression
