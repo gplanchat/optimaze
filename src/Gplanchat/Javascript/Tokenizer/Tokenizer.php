@@ -387,7 +387,7 @@ class Tokenizer
                     return $this->push(TokenizerInterface::OP_UNARY_MINUS, $match[0], TokenizerInterface::OP_MINUS);
                 }
             }
-            return $this->push(TokenizerInterface::OP_UNARY_PLUS, $match[0]);
+            return $this->push(TokenizerInterface::OP_ASSIGN, $match[0]);
 
         /** @noinspection PhpMissingBreakStatementInspection */
         case '.':
