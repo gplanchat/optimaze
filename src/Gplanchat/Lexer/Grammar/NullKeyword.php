@@ -26,4 +26,6 @@ class NullKeyword
     implements GrammarInterface
 {
     use GrammarTrait;
+    use Optimization\MandatoryGrammarTrait;
+    use GrammarDumpTrait;
 }

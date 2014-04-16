@@ -25,6 +25,8 @@ namespace Gplanchat\Lexer\Grammar;
 trait OperatorTrait
 {
     use GrammarTrait;
+    use Optimization\MandatoryGrammarTrait;
+    use GrammarDumpTrait;
 
     /**
      * @var string

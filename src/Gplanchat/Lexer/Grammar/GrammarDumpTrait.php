@@ -22,31 +22,23 @@
 
 namespace Gplanchat\Lexer\Grammar;
 
-class IntegerLiteral
-    implements GrammarInterface
+/**
+ * Class GrammarDumpTrait
+ * @package Gplanchat\Lexer\Grammar
+ */
+trait GrammarDumpTrait
 {
-    use GrammarTrait;
-    use Optimization\MandatoryGrammarTrait;
-    use GrammarDumpTrait;
-
     /**
-     * @var string
+     * @param int $level
+     * @return string
      */
-    protected $integerLiteral = null;
-
-    /**
-     * @param int $integerLiteral
-     */
-    public function __construct($integerLiteral)
+    public function dump($level = 0)
     {
-        $this->integerLiteral = $integerLiteral;
-    }
+        $separatorPosition = strrpos(static::class, '\\');
+        $namespace = substr(static::class, 0, $separatorPosition);
+        $class = substr(static::class, $separatorPosition + 1);
+        $padding = str_pad('', $level * 2, ' ');
 
-    /**
-     * @return int
-     */
-    public function getIntegerLiteral()
-    {
-        return $this->integerLiteral;
+        return sprintf("\n%1\$s%2\$s [%3\$s]", $padding, $class, $namespace);
     }
 }

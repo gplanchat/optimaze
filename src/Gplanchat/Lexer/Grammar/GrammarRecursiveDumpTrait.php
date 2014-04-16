@@ -22,31 +22,29 @@
 
 namespace Gplanchat\Lexer\Grammar;
 
-class IntegerLiteral
-    implements GrammarInterface
+trait GrammarRecursiveDumpTrait
 {
-    use GrammarTrait;
-    use Optimization\MandatoryGrammarTrait;
-    use GrammarDumpTrait;
-
-    /**
-     * @var string
-     */
-    protected $integerLiteral = null;
-
-    /**
-     * @param int $integerLiteral
-     */
-    public function __construct($integerLiteral)
-    {
-        $this->integerLiteral = $integerLiteral;
+    use GrammarDumpTrait {
+        GrammarDumpTrait::dump as protected defaultDump;
     }
 
     /**
-     * @return int
+     * @return GrammarInterface[]
      */
-    public function getIntegerLiteral()
+    abstract public function getChildren();
+
+    /**
+     * @param int $level
+     * @return string
+     */
+    public function dump($level = 0)
     {
-        return $this->integerLiteral;
+        $output = $this->defaultDump($level);
+
+        foreach ($this->getChildren() as $child) {
+            $output .= $child->dump($level + 1);
+        }
+
+        return $output;
     }
 }

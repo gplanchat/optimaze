@@ -27,4 +27,6 @@ class AdditiveExpression
     implements RecursiveGrammarInterface
 {
     use RightAssociativeGrammarTrait;
+    use Optimization\OptionalGrammarTrait;
+    use GrammarRecursiveDumpTrait;
 }

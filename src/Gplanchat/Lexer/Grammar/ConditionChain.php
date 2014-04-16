@@ -27,4 +27,6 @@ class ConditionChain
     implements RecursiveGrammarInterface
 {
     use LeftAssociativeGrammarTrait;
+    use Optimization\MandatoryGrammarTrait;
+    use GrammarRecursiveDumpTrait;
 }

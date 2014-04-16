@@ -24,10 +24,7 @@ namespace Gplanchat\Lexer\Grammar;
 
 trait RecursiveGrammarTrait
 {
-    use GrammarTrait {
-        GrammarTrait::optimize as private grammarTraitOptimize;
-        GrammarTrait::dump as private grammarTraitDump;
-    }
+    use GrammarTrait;
 
     /** @var GrammarInterface[] */
     protected $children = [];
@@ -55,45 +52,13 @@ trait RecursiveGrammarTrait
     public function removeChild(GrammarInterface $node)
     {
         $key = array_search($node, $this->children);
+        if ($key === false) {
+            return $this;
+        }
+
         $this->children[$key]->unsetParent();
         unset($this->children[$key]);
 
         return $this;
-    }
-
-    /**
-     * @return $this
-     */
-    public function optimize()
-    {
-        $this->grammarTraitOptimize();
-
-        if (count($children = $this->getChildren()) <= 1) {
-            $parent = $this->getParent();
-            if ($parent !== null) {
-                $parent->removeChild($this);
-
-                foreach ($children as $child) {
-                    $parent->addChild($child);
-                }
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param int $level
-     * @return string
-     */
-    public function dump($level = 0)
-    {
-        $output = $this->grammarTraitDump($level);
-
-        foreach ($this->getChildren() as $child) {
-            $output .= $child->dump($level + 1);
-        }
-
-        return $output;
     }
 }

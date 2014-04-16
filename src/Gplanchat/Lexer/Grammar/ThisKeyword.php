@@ -26,4 +26,6 @@ class ThisKeyword
     implements GrammarInterface
 {
     use GrammarTrait;
+    use Optimization\MandatoryGrammarTrait;
+    use GrammarDumpTrait;
 }

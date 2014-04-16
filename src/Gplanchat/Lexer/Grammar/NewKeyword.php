@@ -26,4 +26,6 @@ class NewKeyword
     implements GrammarInterface
 {
     use GrammarTrait;
+    use Optimization\MandatoryGrammarTrait;
+    use GrammarDumpTrait;
 }

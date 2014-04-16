@@ -26,4 +26,6 @@ class EqualityExpression
     implements RecursiveGrammarInterface
 {
     use LeftAssociativeGrammarTrait;
+    use Optimization\OptionalGrammarTrait;
+    use GrammarRecursiveDumpTrait;
 }

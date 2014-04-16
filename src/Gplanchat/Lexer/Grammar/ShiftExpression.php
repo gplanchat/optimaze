@@ -26,4 +26,6 @@ class ShiftExpression
     implements RecursiveGrammarInterface
 {
     use RightAssociativeGrammarTrait;
+    use Optimization\OptionalGrammarTrait;
+    use GrammarRecursiveDumpTrait;
 }

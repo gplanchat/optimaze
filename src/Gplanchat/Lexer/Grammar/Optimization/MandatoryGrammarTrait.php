@@ -20,33 +20,22 @@
  * @package Gplanchat\Javascript\Lexer
  */
 
-namespace Gplanchat\Lexer\Grammar;
+namespace Gplanchat\Lexer\Grammar\Optimization;
 
-class IntegerLiteral
-    implements GrammarInterface
+use Gplanchat\Lexer\Grammar\GrammarInterface;
+use Gplanchat\Lexer\Grammar\RecursiveGrammarInterface;
+
+/**
+ * Class MandatoryGrammarTrait
+ * @package Gplanchat\Lexer\Grammar
+ */
+trait MandatoryGrammarTrait
 {
-    use GrammarTrait;
-    use Optimization\MandatoryGrammarTrait;
-    use GrammarDumpTrait;
-
     /**
-     * @var string
+     * @return GrammarInterface
      */
-    protected $integerLiteral = null;
-
-    /**
-     * @param int $integerLiteral
-     */
-    public function __construct($integerLiteral)
+    public function optimize()
     {
-        $this->integerLiteral = $integerLiteral;
-    }
-
-    /**
-     * @return int
-     */
-    public function getIntegerLiteral()
-    {
-        return $this->integerLiteral;
+        return $this;
     }
 }

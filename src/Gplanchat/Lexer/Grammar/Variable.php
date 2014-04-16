@@ -26,4 +26,6 @@ class Variable
     implements RecursiveGrammarInterface
 {
     use LeftAssociativeGrammarTrait;
+    use Optimization\MandatoryGrammarTrait;
+    use GrammarRecursiveDumpTrait;
 }
