@@ -78,10 +78,10 @@ class UnaryExpressionTest
     public function unaryOperatorsDataProvider()
     {
         return [
-            [TokenizerInterface::OP_BITWISE_NOT, '~',      true],
-            [TokenizerInterface::KEYWORD_TYPEOF, 'typeof', true],
-            [TokenizerInterface::KEYWORD_VOID,   'void',   true],
-            [TokenizerInterface::OP_MINUS,       '-',      true]
+            [TokenizerInterface::OP_BITWISE_NOT, '~'],
+            [TokenizerInterface::KEYWORD_TYPEOF, 'typeof'],
+            [TokenizerInterface::KEYWORD_VOID,   'void'],
+            [TokenizerInterface::OP_MINUS,       '-']
         ];
     }
 
@@ -99,7 +99,11 @@ class UnaryExpressionTest
         ];
 
         $ruleServices = [
-            ['MemberExpression', new Rule\TokenSeeker(TokenizerInterface::TOKEN_IDENTIFIER, 'a', true)]
+            ['MemberExpression', new Rule\TokenSeekerIterator([
+                new Rule\TokenSeeker(TokenizerInterface::TOKEN_IDENTIFIER, 'a', true),
+                new Rule\TokenNullSeeker()
+                ])
+            ]
         ];
 
         $grammarServices = [
@@ -123,7 +127,6 @@ class UnaryExpressionTest
      * @dataProvider unaryOperatorsDataProvider
      * @param string|int $operatorType
      * @param string $operatorValue
-     * @param bool $canChain
      */
     public function testChainedUnaryOperators($operatorType, $operatorValue)
     {
@@ -138,7 +141,8 @@ class UnaryExpressionTest
         $ruleServices = [
             ['MemberExpression', new Rule\TokenSeekerIterator([
                 new Rule\TokenSeeker(TokenizerInterface::TOKEN_IDENTIFIER, 'a', true),
-                new Rule\TokenSeeker(TokenizerInterface::TOKEN_IDENTIFIER, 'b', true)
+                new Rule\TokenSeeker(TokenizerInterface::TOKEN_IDENTIFIER, 'b', true),
+                new Rule\TokenNullSeeker()
                 ])
             ]
         ];

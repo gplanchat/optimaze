@@ -133,6 +133,18 @@ class UnaryExpression
                 $constructorRule->parse($node, $tokenizer);
                 break;
             } else {
+                $memberExpressionRule->parse($node, $tokenizer);
+
+                $token = $this->currentToken($tokenizer);
+                if (in_array($token->getType(), static::$incrementOperators)) {
+                    /** @var Grammar\IncrementOperator $incrementOperator */
+                    $incrementOperator = $this->grammar
+                        ->get('IncrementOperator', [$token->getValue()])
+                    ;
+                    $node->addChild($incrementOperator);
+
+                    $this->nextToken($tokenizer);
+                }
                 break;
             }
         }
