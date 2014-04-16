@@ -65,5 +65,7 @@ class StatementList
 
             $statementRule->parse($node, $tokenizer);
         }
+
+        $node->optimize();
     }
 }

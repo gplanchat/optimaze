@@ -129,7 +129,7 @@ class StatementTest
 
         $ruleServices = [
             ['Condition', new Rule\TokenSeeker(TokenizerInterface::OP_RIGHT_BRACKET, ')', true)],
-            ['Expression', new Rule\TokenSeeker(TokenizerInterface::OP_SEMICOLON, ';')]
+            ['Expression', new Rule\TokenNullSeeker()]
         ];
 
         $grammarServices = [
@@ -157,7 +157,7 @@ class StatementTest
      */
     public function testIfControlStructureWithReturnStatementWithMissingSemicolon()
     {
-        $this->setExpectedException(Exception\LexicalError::class, 'Invalid expression : missing semicolon');
+        $this->setExpectedException(Exception\LexicalError::class, RuleInterface::MESSAGE_MISSING_SEMICOLON);
 
         $tokens = [
             [TokenizerInterface::KEYWORD_IF,               'if', null],
@@ -254,7 +254,7 @@ class StatementTest
 
         $ruleServices = [
             ['Condition',  new Rule\TokenSeeker(TokenizerInterface::OP_RIGHT_BRACKET, ')', true)],
-            ['Expression', new Rule\TokenSeeker(TokenizerInterface::OP_SEMICOLON, ';')]
+            ['Expression', new Rule\TokenNullSeeker()]
         ];
 
         $grammarServices = [
@@ -356,7 +356,7 @@ class StatementTest
 
         $ruleServices = [
             ['Condition',  new Rule\TokenSeeker(TokenizerInterface::OP_RIGHT_BRACKET, ')', true)],
-            ['Expression', new Rule\TokenSeeker(TokenizerInterface::OP_SEMICOLON, ';')]
+            ['Expression', new Rule\TokenNullSeeker()]
         ];
 
         $grammarServices = [
@@ -499,7 +499,7 @@ class StatementTest
      */
     public function testWhileWithBreakWithMissingSemicolonStatement()
     {
-        $this->setExpectedException(Exception\LexicalError::class, 'Invalid expression : missing semicolon');
+        $this->setExpectedException(Exception\LexicalError::class, RuleInterface::MESSAGE_MISSING_SEMICOLON);
 
         $tokens = [
             [TokenizerInterface::KEYWORD_WHILE,     'while', null],
@@ -537,7 +537,7 @@ class StatementTest
      */
     public function testWhileWithContinueWithMissingSemicolonStatement()
     {
-        $this->setExpectedException(Exception\LexicalError::class, 'Invalid expression : missing semicolon');
+        $this->setExpectedException(Exception\LexicalError::class, RuleInterface::MESSAGE_MISSING_SEMICOLON);
 
         $tokens = [
             [TokenizerInterface::KEYWORD_WHILE,       'while', null],
@@ -592,12 +592,8 @@ class StatementTest
         ];
 
         $ruleServices = [
-            ['VariableListOrExpression', new Rule\TokenSeeker(TokenizerInterface::OP_SEMICOLON, ';')],
-            ['Expression', new Rule\TokenSeekerIterator([
-                new Rule\TokenSeeker(TokenizerInterface::OP_SEMICOLON, ';'),
-                new Rule\TokenSeeker(TokenizerInterface::OP_RIGHT_BRACKET, ')')
-                ])
-            ]
+            ['VariableListOrExpression', new Rule\TokenSeeker(TokenizerInterface::TOKEN_NUMBER_INTEGER, '0', true)],
+            ['Expression', new Rule\TokenSeeker(TokenizerInterface::KEYWORD_TRUE, 'true', true)]
         ];
 
         $grammarServices = [
@@ -784,7 +780,7 @@ class StatementTest
      */
     public function testForTernaryNotationStatementWithMissingLeftBracket()
     {
-        $this->setExpectedException(Exception\LexicalError::class, 'Invalid expression : missing left bracket');
+        $this->setExpectedException(Exception\LexicalError::class, RuleInterface::MESSAGE_MISSING_LEFT_BRACKET);
 
         $tokens = [
             [TokenizerInterface::KEYWORD_FOR,           'for', null],
@@ -817,7 +813,7 @@ class StatementTest
      */
     public function testForTernaryNotationStatementWithMissingRightBracket()
     {
-        $this->setExpectedException(Exception\LexicalError::class, 'Invalid expression : missing right bracket');
+        $this->setExpectedException(Exception\LexicalError::class, RuleInterface::MESSAGE_MISSING_RIGHT_BRACKET);
 
         $tokens = [
             [TokenizerInterface::KEYWORD_FOR,       'for', null],
@@ -853,7 +849,7 @@ class StatementTest
      */
     public function testForTernaryNotationStatementWithMissingSemicolon()
     {
-        $this->setExpectedException(Exception\LexicalError::class, 'Invalid expression : missing semicolon');
+        $this->setExpectedException(Exception\LexicalError::class, RuleInterface::MESSAGE_MISSING_SEMICOLON);
 
         $tokens = [
             [TokenizerInterface::KEYWORD_FOR,       'for', null],
@@ -894,7 +890,7 @@ class StatementTest
      */
     public function testForMalformedNotationStatementWithInitializer()
     {
-        $this->setExpectedException(Exception\LexicalError::class, 'Invalid expression : missing semicolon or "in" keyword');
+        $this->setExpectedException(Exception\LexicalError::class, RuleInterface::MESSAGE_MISSING_SEMICOLON_OR_IN_KEYWORD);
 
         $tokens = [
             [TokenizerInterface::KEYWORD_FOR,           'for', null],
@@ -968,7 +964,7 @@ class StatementTest
      */
     public function testWithMalformedNotationStatementWithMissingLeftBracket()
     {
-        $this->setExpectedException(Exception\LexicalError::class, 'Invalid expression : missing left bracket');
+        $this->setExpectedException(Exception\LexicalError::class, RuleInterface::MESSAGE_MISSING_LEFT_BRACKET);
 
         $tokens = [
             [TokenizerInterface::KEYWORD_WITH,           'with', null],
@@ -1003,7 +999,7 @@ class StatementTest
      */
     public function testWithMalformedNotationStatementWithMissingRightBracket()
     {
-        $this->setExpectedException(Exception\LexicalError::class, 'Invalid expression : missing right bracket');
+        $this->setExpectedException(Exception\LexicalError::class, RuleInterface::MESSAGE_MISSING_RIGHT_BRACKET);
 
         $tokens = [
             [TokenizerInterface::KEYWORD_WITH,           'with', null],
@@ -1072,7 +1068,7 @@ class StatementTest
      */
     public function testCoumpoundStatementWithMissingRightCurlyBrace()
     {
-        $this->setExpectedException(Exception\LexicalError::class, 'Invalid expression : missing right curly brace');
+        $this->setExpectedException(Exception\LexicalError::class, RuleInterface::MESSAGE_MISSING_RIGHT_CURLY_BRACE);
 
         $tokens = [
             [TokenizerInterface::OP_LEFT_CURLY,           '{', null],
@@ -1113,7 +1109,7 @@ class StatementTest
         ];
 
         $ruleServices = [
-            ['VariableListOrExpression', new Rule\TokenSeeker(TokenizerInterface::OP_SEMICOLON, ';')]
+            ['VariableListOrExpression', new Rule\TokenSeeker(TokenizerInterface::TOKEN_IDENTIFIER, 'a', true)]
         ];
 
         $grammarServices = [
@@ -1144,7 +1140,7 @@ class StatementTest
         ];
 
         $ruleServices = [
-            ['Expression', new Rule\TokenSeeker(TokenizerInterface::OP_SEMICOLON, ';')]
+            ['Expression', new Rule\TokenNullSeeker()]
         ];
 
         $grammarServices = [

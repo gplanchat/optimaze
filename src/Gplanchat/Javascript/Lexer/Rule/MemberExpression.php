@@ -71,7 +71,7 @@ class MemberExpression
 
                 $token = $this->currentToken($tokenizer);
                 if ($token->getType() !== TokenizerInterface::OP_RIGHT_SQUARE_BRACKET) {
-                    throw new LexicalError('Invalid expression : missing right square bracket',
+                    throw new LexicalError(static::MESSAGE_MISSING_RIGHT_SQUARE_BRACKET,
                         null, $token->getLine(), $token->getStart());
                 }
                 break;
@@ -84,7 +84,7 @@ class MemberExpression
 
                 $token = $this->currentToken($tokenizer);
                 if ($token->getType() !== TokenizerInterface::OP_RIGHT_BRACKET) {
-                    throw new LexicalError('Invalid expression : missing right bracket',
+                    throw new LexicalError(static::MESSAGE_MISSING_RIGHT_BRACKET,
                         null, $token->getLine(), $token->getStart());
                 }
                 break;

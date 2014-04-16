@@ -71,5 +71,7 @@ class ParameterList
 
             $token = $this->nextToken($tokenizer);
         }
+
+        $node->optimize();
     }
 }

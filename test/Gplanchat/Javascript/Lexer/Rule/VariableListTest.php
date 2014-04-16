@@ -190,7 +190,7 @@ class VariableListTest
      */
     public function testOneVariableWithoutIdentifier()
     {
-        $this->setExpectedException(Exception\LexicalError::class, 'Invalid expression : missing identifier');
+        $this->setExpectedException(Exception\LexicalError::class, RuleInterface::MESSAGE_MISSING_IDENTIFIER);
 
         $tokens = [
             [TokenizerInterface::OP_SEMICOLON,  ';', null],

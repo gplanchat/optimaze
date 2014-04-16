@@ -73,7 +73,7 @@ class Element
             }
 
             if ($token->getType() !== TokenizerInterface::OP_LEFT_BRACKET) {
-                throw new LexicalError('Invalid expression : missing left bracket',
+                throw new LexicalError(static::MESSAGE_MISSING_LEFT_BRACKET,
                     null, $token->getLine(), $token->getStart());
             }
             $this->nextToken($tokenizer);
@@ -84,13 +84,13 @@ class Element
 
             $token = $this->currentToken($tokenizer);
             if ($token->getType() !== TokenizerInterface::OP_RIGHT_BRACKET) {
-                throw new LexicalError('Invalid expression : missing right bracket',
+                throw new LexicalError(static::MESSAGE_MISSING_RIGHT_BRACKET,
                     null, $token->getLine(), $token->getStart());
             }
             $token = $this->nextToken($tokenizer);
 
             if ($token->getType() !== TokenizerInterface::OP_LEFT_CURLY) {
-                throw new LexicalError('Invalid expression : missing left curly brace',
+                throw new LexicalError(static::MESSAGE_MISSING_LEFT_CURLY_BRACE,
                     null, $token->getLine(), $token->getStart());
             }
             $this->nextToken($tokenizer);
@@ -102,7 +102,7 @@ class Element
 
             $token = $this->currentToken($tokenizer);
             if ($token->getType() !== TokenizerInterface::OP_RIGHT_CURLY) {
-                throw new LexicalError('Invalid expression : missing right curly brace',
+                throw new LexicalError(static::MESSAGE_MISSING_RIGHT_CURLY_BRACE,
                     null, $token->getLine(), $token->getStart());
             }
             $this->nextToken($tokenizer);
@@ -111,5 +111,7 @@ class Element
             $statementRule = $this->rule->get('Statement');
             $statementRule->parse($node, $tokenizer);
         }
+
+        $node->optimize();
     }
 }

@@ -64,7 +64,7 @@ class Constructor
 
             $token = $this->nextToken($tokenizer);
             if ($token->getType() !== TokenizerInterface::OP_DOT) {
-                throw new LexicalError('Invalid expression : missing constructor call',
+                throw new LexicalError(static::MESSAGE_UNEXPECTED_DOT,
                     null, $token->getLine(), $token->getStart());
             }
 
@@ -80,5 +80,7 @@ class Constructor
         /** @var ConstructorCall $rule */
         $rule = $this->rule->get('ConstructorCall');
         $rule->parse($node, $tokenizer);
+
+        $node->optimize();
     }
 }

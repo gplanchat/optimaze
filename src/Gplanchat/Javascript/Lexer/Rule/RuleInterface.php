@@ -27,6 +27,19 @@ use Gplanchat\Tokenizer\TokenizerInterface as BaseTokenizerInterface;
 
 interface RuleInterface
 {
+    const MESSAGE_UNEXPECTED_DOT                  = 'Unexpected dot';
+    const MESSAGE_UNEXPECTED_TOKEN                = 'Unexpected token';
+    const MESSAGE_MISSING_IDENTIFIER              = 'Missing identifier';
+    const MESSAGE_MISSING_SEMICOLON               = 'Missing semicolon';
+    const MESSAGE_MISSING_SEMICOLON_OR_IN_KEYWORD = 'Missing semicolon or "in" keyword';
+    const MESSAGE_MISSING_COLON                   = 'Missing colon';
+    const MESSAGE_MISSING_LEFT_BRACKET            = 'Missing left bracket';
+    const MESSAGE_MISSING_RIGHT_BRACKET           = 'Missing right bracket';
+    const MESSAGE_MISSING_LEFT_CURLY_BRACE        = 'Missing left curly brace';
+    const MESSAGE_MISSING_RIGHT_CURLY_BRACE       = 'Missing right curly brace';
+    const MESSAGE_MISSING_LEFT_SQUARE_BRACKET     = 'Missing left square bracket';
+    const MESSAGE_MISSING_RIGHT_SQUARE_BRACKET    = 'Missing right square bracket';
+
     /**
      * @param RecursiveGrammarInterface $parent
      * @param BaseTokenizerInterface $tokenizer

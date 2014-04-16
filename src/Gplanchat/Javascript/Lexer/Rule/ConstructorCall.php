@@ -59,7 +59,7 @@ class ConstructorCall
         $token = $this->currentToken($tokenizer);
         while (true) {
             if ($token->getType() !== TokenizerInterface::TOKEN_IDENTIFIER) {
-                throw new LexicalError('Invalid expression : missing identifier',
+                throw new LexicalError(static::MESSAGE_MISSING_IDENTIFIER,
                     null, $token->getLine(), $token->getStart());
             }
             /** @var Grammar\Identifier $identifier */
@@ -76,7 +76,7 @@ class ConstructorCall
 
                 $token = $this->currentToken($tokenizer);
                 if ($token->getType() !== TokenizerInterface::OP_RIGHT_BRACKET) {
-                    throw new LexicalError('Invalid expression : missing right bracket',
+                    throw new LexicalError(static::MESSAGE_MISSING_RIGHT_BRACKET,
                         null, $token->getLine(), $token->getStart());
                 }
 
@@ -90,5 +90,7 @@ class ConstructorCall
             }
             break;
         }
+
+        $node->optimize();
     }
 }

@@ -153,7 +153,7 @@ class MemberExpressionTest
      */
     public function testSquareBracketExpressionsWithMissingRightSquareBracket()
     {
-        $this->setExpectedException(Exception\LexicalError::class, 'Invalid expression : missing right square bracket');
+        $this->setExpectedException(Exception\LexicalError::class, RuleInterface::MESSAGE_MISSING_RIGHT_SQUARE_BRACKET);
 
         $tokens = [
             [TokenizerInterface::TOKEN_IDENTIFIER,         'a', null],
@@ -226,7 +226,7 @@ class MemberExpressionTest
      */
     public function testBracketExpressionsWithMissingRightBracket()
     {
-        $this->setExpectedException(Exception\LexicalError::class, 'Invalid expression : missing right bracket');
+        $this->setExpectedException(Exception\LexicalError::class, RuleInterface::MESSAGE_MISSING_RIGHT_BRACKET);
 
         $tokens = [
             [TokenizerInterface::TOKEN_IDENTIFIER,      'a', null],

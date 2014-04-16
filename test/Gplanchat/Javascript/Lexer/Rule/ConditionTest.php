@@ -71,7 +71,7 @@ class ConditionTest
      */
     public function testConditionWithMissingLeftBracket()
     {
-        $this->setExpectedException(Exception\LexicalError::class, 'Invalid expression : missing left bracket');
+        $this->setExpectedException(Exception\LexicalError::class, RuleInterface::MESSAGE_MISSING_LEFT_BRACKET);
 
         $tokens = [
             [TokenizerInterface::KEYWORD_TRUE,     'true', null],
@@ -102,7 +102,7 @@ class ConditionTest
      */
     public function testConditionWithMissingRightBracket()
     {
-        $this->setExpectedException(Exception\LexicalError::class, 'Invalid expression : missing right bracket');
+        $this->setExpectedException(Exception\LexicalError::class, RuleInterface::MESSAGE_MISSING_RIGHT_BRACKET);
 
         $tokens = [
             [TokenizerInterface::OP_LEFT_BRACKET,    '(', null],

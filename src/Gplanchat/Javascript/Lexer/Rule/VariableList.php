@@ -64,7 +64,7 @@ class VariableList
             $node->addChild($variable);
 
             if ($token->getType() !== TokenizerInterface::TOKEN_IDENTIFIER) {
-                throw new LexicalError('Invalid expression : missing identifier',
+                throw new LexicalError(static::MESSAGE_MISSING_IDENTIFIER,
                     null, $token->getLine(), $token->getStart());
             }
 
@@ -87,5 +87,7 @@ class VariableList
             }
             $token = $this->nextToken($tokenizer);
         }
+
+        $node->optimize();
     }
 }

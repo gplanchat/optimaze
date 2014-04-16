@@ -70,11 +70,13 @@ class ConditionalExpression
 
         $token = $this->currentToken($tokenizer);
         if ($token->getType() !== TokenizerInterface::OP_COLON) {
-            throw new LexicalError('Invalid conditional expression : missing colon',
+            throw new LexicalError(static::MESSAGE_MISSING_COLON,
                 null, $token->getLine(), $token->getStart());
         }
         $this->nextToken($tokenizer);
 
         $assignmentExpressionRule->parse($node, $tokenizer);
+
+        $node->optimize();
     }
 }

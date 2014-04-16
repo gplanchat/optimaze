@@ -110,13 +110,19 @@ class Statement
                 break;
             } else {
                 $this->getVariableListOrExpressionRule()->parse($node, $tokenizer);
-                $token = $this->currentToken($tokenizer);
 
-                if ($token->getType() === TokenizerInterface::OP_SEMICOLON) {
-                    break;
+                $token = $this->currentToken($tokenizer);
+                if ($token->getType() !== TokenizerInterface::OP_SEMICOLON) {
+                    throw new LexicalError(static::MESSAGE_MISSING_SEMICOLON,
+                        null, $token->getLine(), $token->getStart());
                 }
+
+                $this->nextToken($tokenizer);
+                break;
             }
         }
+
+        $node->optimize();
     }
 
     /**
@@ -189,7 +195,7 @@ class Statement
 
         $token = $this->nextToken($tokenizer);
         if ($token->getType() !== TokenizerInterface::OP_LEFT_BRACKET) {
-            throw new LexicalError('Invalid expression : missing left bracket',
+            throw new LexicalError(static::MESSAGE_MISSING_LEFT_BRACKET,
                 null, $token->getLine(), $token->getStart());
         }
 
@@ -214,13 +220,13 @@ class Statement
                 $this->getExpressionRule()->parse($forKeyword, $tokenizer);
                 $token = $this->currentToken($tokenizer);
             } else {
-                throw new LexicalError('Invalid expression : missing semicolon or "in" keyword',
+                throw new LexicalError(static::MESSAGE_MISSING_SEMICOLON_OR_IN_KEYWORD,
                     null, $token->getLine(), $token->getStart());
             }
         }
 
         if ($token->getType() !== TokenizerInterface::OP_RIGHT_BRACKET) {
-            throw new LexicalError('Invalid expression : missing right bracket',
+            throw new LexicalError(static::MESSAGE_MISSING_RIGHT_BRACKET,
                 null, $token->getLine(), $token->getStart());
         }
         $this->nextToken($tokenizer);
@@ -239,7 +245,7 @@ class Statement
         $token = $this->currentToken($tokenizer);
 
         if ($token->getType() !== TokenizerInterface::OP_SEMICOLON) {
-            throw new LexicalError('Invalid expression : missing semicolon',
+            throw new LexicalError(static::MESSAGE_MISSING_SEMICOLON,
                 null, $token->getLine(), $token->getStart());
         }
 
@@ -260,7 +266,7 @@ class Statement
 
         $token = $this->nextToken($tokenizer);
         if ($token->getType() !== TokenizerInterface::OP_SEMICOLON) {
-            throw new LexicalError('Invalid expression : missing semicolon',
+            throw new LexicalError(static::MESSAGE_MISSING_SEMICOLON,
                 null, $token->getLine(), $token->getStart());
         }
 
@@ -281,7 +287,7 @@ class Statement
 
         $token = $this->nextToken($tokenizer);
         if ($token->getType() !== TokenizerInterface::OP_SEMICOLON) {
-            throw new LexicalError('Invalid expression : missing semicolon',
+            throw new LexicalError(static::MESSAGE_MISSING_SEMICOLON,
                 null, $token->getLine(), $token->getStart());
         }
 
@@ -302,7 +308,7 @@ class Statement
 
         $token = $this->nextToken($tokenizer);
         if ($token->getType() !== TokenizerInterface::OP_LEFT_BRACKET) {
-            throw new LexicalError('Invalid expression : missing left bracket',
+            throw new LexicalError(static::MESSAGE_MISSING_LEFT_BRACKET,
                 null, $token->getLine(), $token->getStart());
         }
 
@@ -311,7 +317,7 @@ class Statement
 
         $token = $this->currentToken($tokenizer);
         if ($token->getType() !== TokenizerInterface::OP_RIGHT_BRACKET) {
-            throw new LexicalError('Invalid expression : missing right bracket',
+            throw new LexicalError(static::MESSAGE_MISSING_RIGHT_BRACKET,
                 null, $token->getLine(), $token->getStart());
         }
         $this->nextToken($tokenizer);
@@ -334,7 +340,7 @@ class Statement
 
         $token = $this->currentToken($tokenizer);
         if ($token->getType() !== TokenizerInterface::OP_SEMICOLON) {
-            throw new LexicalError('Invalid expression : missing semicolon',
+            throw new LexicalError(static::MESSAGE_MISSING_SEMICOLON,
                 null, $token->getLine(), $token->getStart());
         }
 
@@ -361,7 +367,7 @@ class Statement
 
         $token = $this->currentToken($tokenizer);
         if ($token->getType() !== TokenizerInterface::OP_RIGHT_CURLY) {
-            throw new LexicalError('Invalid expression : missing right curly brace',
+            throw new LexicalError(static::MESSAGE_MISSING_RIGHT_CURLY_BRACE,
                 null, $token->getLine(), $token->getStart());
         }
 

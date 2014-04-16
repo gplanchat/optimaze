@@ -54,7 +54,7 @@ class Condition
 
         $token = $this->currentToken($tokenizer);
         if ($token->getType() !== TokenizerInterface::OP_LEFT_BRACKET) {
-            throw new LexicalError('Invalid expression : missing left bracket',
+            throw new LexicalError(RuleInterface::MESSAGE_MISSING_LEFT_BRACKET,
                 null, $token->getLine(), $token->getStart());
         }
 
@@ -66,10 +66,12 @@ class Condition
 
         $token = $this->currentToken($tokenizer);
         if ($token->getType() !== TokenizerInterface::OP_RIGHT_BRACKET) {
-            throw new LexicalError('Invalid expression : missing right bracket',
+            throw new LexicalError(RuleInterface::MESSAGE_MISSING_RIGHT_BRACKET,
                 null, $token->getLine(), $token->getStart());
         }
 
         $this->nextToken($tokenizer);
+
+        $node->optimize();
     }
 }

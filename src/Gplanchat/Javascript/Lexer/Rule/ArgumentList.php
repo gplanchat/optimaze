@@ -71,5 +71,7 @@ class ArgumentList
             $node->addChild($commaOperator);
             $this->nextToken($tokenizer);
         }
+
+        $node->optimize();
     }
 }

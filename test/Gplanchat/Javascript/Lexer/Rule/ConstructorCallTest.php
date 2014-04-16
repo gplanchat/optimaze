@@ -137,7 +137,7 @@ class ConstructorCallTest
      */
     public function testInvalidTokenMissingIdentifier()
     {
-        $this->setExpectedException(Exception\LexicalError::class, 'Invalid expression : missing identifier');
+        $this->setExpectedException(Exception\LexicalError::class, RuleInterface::MESSAGE_MISSING_IDENTIFIER);
 
         $tokens = [
             [TokenizerInterface::OP_LEFT_BRACKET,  '(', null],
@@ -167,7 +167,7 @@ class ConstructorCallTest
      */
     public function testInvalidTokenMissingRightBracket()
     {
-        $this->setExpectedException(Exception\LexicalError::class, 'Invalid expression : missing right bracket');
+        $this->setExpectedException(Exception\LexicalError::class, RuleInterface::MESSAGE_MISSING_RIGHT_BRACKET);
 
         $tokens = [
             [TokenizerInterface::TOKEN_IDENTIFIER, 'identifier', null],

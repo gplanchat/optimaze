@@ -87,7 +87,7 @@ class PrimaryExpression
 
             $token = $this->currentToken($tokenizer);
             if ($token->getType() !== TokenizerInterface::OP_RIGHT_BRACKET) {
-                throw new LexicalError('Invalid expression : missing ending bracket',
+                throw new LexicalError(static::MESSAGE_MISSING_RIGHT_BRACKET,
                     null, $token->getLine(), $token->getStart());
             }
         } else if ($token->getType() === TokenizerInterface::TOKEN_IDENTIFIER) {
@@ -139,7 +139,7 @@ class PrimaryExpression
             ;
             $node->addChild($child);
         } else {
-            throw new LexicalError('Invalid expression',
+            throw new LexicalError(static::MESSAGE_UNEXPECTED_TOKEN,
                 null, $token->getLine(), $token->getStart());
         }
 

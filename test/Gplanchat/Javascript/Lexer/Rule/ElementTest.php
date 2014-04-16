@@ -195,7 +195,7 @@ class ElementTest
      */
     public function testFunctionWithMissingParameterLeftBracketLexerError()
     {
-        $this->setExpectedException(Exception\LexicalError::class, 'Invalid expression : missing left bracket');
+        $this->setExpectedException(Exception\LexicalError::class, RuleInterface::MESSAGE_MISSING_LEFT_BRACKET);
 
         $tokens = [
             [TokenizerInterface::KEYWORD_FUNCTION, 'function', null],
@@ -234,7 +234,7 @@ class ElementTest
      */
     public function testFunctionWithMissingParameterRightBracketLexerError()
     {
-        $this->setExpectedException(Exception\LexicalError::class, 'Invalid expression : missing right bracket');
+        $this->setExpectedException(Exception\LexicalError::class, RuleInterface::MESSAGE_MISSING_RIGHT_BRACKET);
 
         $tokens = [
             [TokenizerInterface::KEYWORD_FUNCTION, 'function', null],
@@ -273,7 +273,7 @@ class ElementTest
      */
     public function testFunctionWithMissingBodyLeftCurlyLexerError()
     {
-        $this->setExpectedException(Exception\LexicalError::class, 'Invalid expression : missing left curly brace');
+        $this->setExpectedException(Exception\LexicalError::class, RuleInterface::MESSAGE_MISSING_LEFT_CURLY_BRACE);
 
         $tokens = [
             [TokenizerInterface::KEYWORD_FUNCTION, 'function', null],
@@ -312,7 +312,7 @@ class ElementTest
      */
     public function testFunctionWithMissingBodyRightCurlyLexerError()
     {
-        $this->setExpectedException(Exception\LexicalError::class, 'Invalid expression : missing right curly brace');
+        $this->setExpectedException(Exception\LexicalError::class, RuleInterface::MESSAGE_MISSING_RIGHT_CURLY_BRACE);
 
         $tokens = [
             [TokenizerInterface::KEYWORD_FUNCTION, 'function', null],
