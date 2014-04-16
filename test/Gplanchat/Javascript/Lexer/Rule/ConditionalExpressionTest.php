@@ -73,6 +73,45 @@ class ConditionalExpressionTest
 
         $rule->parse($root, $this->getTokenizerMock($tokens));
     }
+    /**
+     *
+     */
+    public function testConditionWithMissingColon()
+    {
+        $this->setExpectedException(Exception\LexicalError::class, RuleInterface::MESSAGE_MISSING_COLON);
+
+        $tokens = [
+            [TokenizerInterface::TOKEN_IDENTIFIER,      'a', null],
+            [TokenizerInterface::OP_HOOK,               '?', null],
+            [TokenizerInterface::TOKEN_NUMBER_INTEGER,  '1', null],
+            [TokenizerInterface::TOKEN_NUMBER_INTEGER,  '2', null],
+            [TokenizerInterface::TOKEN_END,            null, null]
+        ];
+
+        $ruleServices = [
+            ['OrExpression', new Rule\TokenSeeker(TokenizerInterface::TOKEN_IDENTIFIER, 'a', true)],
+            ['AssignmentExpression', new Rule\TokenSeekerIterator([
+                new Rule\TokenSeeker(TokenizerInterface::TOKEN_NUMBER_INTEGER, '1', true),
+                new Rule\TokenSeeker(TokenizerInterface::TOKEN_NUMBER_INTEGER, '2', true)
+            ])
+            ]
+        ];
+
+        $grammarServices = [
+            ['ConditionalExpression', Grammar\ConditionalExpression::class]
+        ];
+
+        $root = $this->getRootGrammarMock();
+        $root->expects($this->at(0))
+            ->method('addChild')
+            ->with($this->isInstanceOf(Grammar\ConditionalExpression::class))
+        ;
+
+        $rule = new ConditionalExpression($this->getRuleServiceManagerMock($ruleServices),
+            $this->getGrammarServiceManagerMock($grammarServices));
+
+        $rule->parse($root, $this->getTokenizerMock($tokens));
+    }
 
     /**
      *
