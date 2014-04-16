@@ -224,9 +224,7 @@ class Lexer
      * @param ServiceManagerInterface $ruleServiceManager
      * @param ServiceManagerInterface $grammarServiceManager
      */
-    public function __construct(
-        ServiceManagerInterface $ruleServiceManager = null,
-        ServiceManagerInterface $grammarServiceManager = null)
+    public function __construct(ServiceManagerInterface $ruleServiceManager = null, ServiceManagerInterface $grammarServiceManager = null)
     {
         if ($grammarServiceManager === null) {
             $this->grammar = new Grammar\ServiceManager();
@@ -274,15 +272,19 @@ class Lexer
         /** @var Rule\Element $elementRule */
         $elementRule = $this->rule->get('Element', [$this->rule, $this->grammar]);
 
-        $token = $this->currentToken($tokenizer);
         while ($tokenizer->valid()) {
+            $token = $this->currentToken($tokenizer);
+
             if ($token->getType() === TokenizerInterface::TOKEN_BLOCK_COMMENT ||
                 $token->getType() === TokenizerInterface::TOKEN_LINE_COMMENT) {
-                $token = $this->nextToken($tokenizer);
+                $this->nextToken($tokenizer);
                 continue;
             }
+
+            if ($token->getType() === TokenizerInterface::TOKEN_END) {
+                break;
+            }
             $elementRule->parse($program, $tokenizer);
-            break;
         }
 
         return $program;
