@@ -194,6 +194,9 @@ class Token
         return $this->value;
     }
 
+    /**
+     * @return string
+     */
     public function dump()
     {
         $re = new \ReflectionClass(Javascript\TokenizerInterface::class);
@@ -204,5 +207,13 @@ class Token
             str_pad($key, 25, ' ', STR_PAD_RIGHT),
             $this->getValue()
         );
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->dump();
     }
 }
