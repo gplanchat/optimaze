@@ -1,6 +1,6 @@
 {
     "name": "gplanchat/php-javascript-tokenizer",
-    "description": "Parses and tokennizes Javascript",
+    "description": "Parses and tokenize Javascript",
     "minimum-stability": "dev",
     "authors": [
         {
