@@ -59,53 +59,9 @@ class Element
         $token = $this->currentToken($tokenizer);
 
         if ($token->getType() === TokenizerInterface::KEYWORD_FUNCTION) {
-            /** @var Grammar\FunctionKeyword $functionKeyword */
-            $functionKeyword = $this->grammar->get('FunctionKeyword');
-            $node->addChild($functionKeyword);
-
-            $token = $this->nextToken($tokenizer);
-            if ($token->getType() === TokenizerInterface::TOKEN_IDENTIFIER) {
-                /** @var Grammar\Identifier $identifier */
-                $identifier = $this->grammar->get('Identifier', [$token->getValue()]);
-                $functionKeyword->addChild($identifier);
-
-                $token = $this->nextToken($tokenizer);
-            }
-
-            if ($token->getType() !== TokenizerInterface::OP_LEFT_BRACKET) {
-                throw new LexicalError(static::MESSAGE_MISSING_LEFT_BRACKET,
-                    null, $token->getLine(), $token->getStart());
-            }
-            $this->nextToken($tokenizer);
-
-            /** @var Rule\ParameterList $parameterListRule */
-            $parameterListRule = $this->rule->get('ParameterList');
-            $parameterListRule->parse($functionKeyword, $tokenizer);
-
-            $token = $this->currentToken($tokenizer);
-            if ($token->getType() !== TokenizerInterface::OP_RIGHT_BRACKET) {
-                throw new LexicalError(static::MESSAGE_MISSING_RIGHT_BRACKET,
-                    null, $token->getLine(), $token->getStart());
-            }
-            $token = $this->nextToken($tokenizer);
-
-            if ($token->getType() !== TokenizerInterface::OP_LEFT_CURLY) {
-                throw new LexicalError(static::MESSAGE_MISSING_LEFT_CURLY_BRACE,
-                    null, $token->getLine(), $token->getStart());
-            }
-            $this->nextToken($tokenizer);
-
-
-            /** @var Rule\StatementList $statementListRule */
-            $statementListRule = $this->rule->get('StatementList');
-            $statementListRule->parse($functionKeyword, $tokenizer);
-
-            $token = $this->currentToken($tokenizer);
-            if ($token->getType() !== TokenizerInterface::OP_RIGHT_CURLY) {
-                throw new LexicalError(static::MESSAGE_MISSING_RIGHT_CURLY_BRACE,
-                    null, $token->getLine(), $token->getStart());
-            }
-            $this->nextToken($tokenizer);
+            /** @var FunctionExpression $functionExpressionRule */
+            $functionExpressionRule = $this->rule->get('FunctionExpression');
+            $functionExpressionRule->parse($node, $tokenizer);
         } else {
             /** @var Rule\Statement $statementRule */
             $statementRule = $this->rule->get('Statement');
