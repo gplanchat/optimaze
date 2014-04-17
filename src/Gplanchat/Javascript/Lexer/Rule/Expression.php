@@ -33,6 +33,7 @@ use Gplanchat\Tokenizer\TokenizerInterface as BaseTokenizerInterface;
  * @package Gplanchat\Javascript\Lexer\Rule
  *
  * Expression:
+ *     FunctionExpression
  *     AssignmentExpression
  *     AssignmentExpression , Expression
  */
@@ -53,10 +54,18 @@ class Expression
         $node = $this->grammar->get('Expression');
         $parent->addChild($node);
 
-        /** @var AssignmentExpression $rule */
-        $rule = $this->rule->get('AssignmentExpression');
+        /** @var AssignmentExpression $assignmentExpressionRule */
+        $assignmentExpressionRule = $this->rule->get('AssignmentExpression');
         while (true) {
-            $rule->parse($node, $tokenizer);
+            $token = $this->currentToken($tokenizer);
+            if ($token->getType() === TokenizerInterface::KEYWORD_FUNCTION) {
+                /** @var FunctionExpression $functionExpressionRule */
+                $functionExpressionRule = $this->rule->get('FunctionExpression');
+                $functionExpressionRule->parse($node, $tokenizer);
+                break;
+            }
+
+            $assignmentExpressionRule->parse($node, $tokenizer);
 
             $token = $this->currentToken($tokenizer);
             if ($token->getType() !== TokenizerInterface::OP_COMMA) {

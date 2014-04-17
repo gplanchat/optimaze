@@ -41,7 +41,7 @@ class ServiceManager
             'Expression'               => Expression::class,
             'FloatingPointLiteral'     => FloatingPointLiteral::class,
             'ForKeyword'               => ForKeyword::class,
-            'FunctionKeyword'          => FunctionKeyword::class,
+            'FunctionExpression'       => FunctionExpression::class,
             'Identifier'               => Identifier::class,
             'IfKeyword'                => IfKeyword::class,
             'IncrementOperator'        => IncrementOperator::class,

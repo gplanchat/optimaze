@@ -39,6 +39,7 @@ class ServiceManager
             'Element'                  => Element::class,
             'EqualityExpression'       => EqualityExpression::class,
             'Expression'               => Expression::class,
+            'FunctionExpression'       => FunctionExpression::class,
             'MemberExpression'         => MemberExpression::class,
             'MultiplicativeExpression' => MultiplicativeExpression::class,
             'OrExpression'             => OrExpression::class,

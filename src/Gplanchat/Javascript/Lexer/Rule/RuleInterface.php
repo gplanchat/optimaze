@@ -39,6 +39,7 @@ interface RuleInterface
     const MESSAGE_MISSING_RIGHT_CURLY_BRACE       = 'Missing right curly brace';
     const MESSAGE_MISSING_LEFT_SQUARE_BRACKET     = 'Missing left square bracket';
     const MESSAGE_MISSING_RIGHT_SQUARE_BRACKET    = 'Missing right square bracket';
+    const MESSAGE_MISSING_FUNCTION_KEYWORD        = 'Missing function keyword';
 
     /**
      * @param RecursiveGrammarInterface $parent

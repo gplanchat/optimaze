@@ -200,4 +200,38 @@ class PrimaryExpressionTest
 
         $rule->parse($root, $this->getTokenizerMock($tokens));
     }
+
+    /**
+     *
+     */
+    public function testFunctionExpressionPassThrough()
+    {
+        $tokens = [
+            [TokenizerInterface::KEYWORD_FUNCTION, 'function', null],
+            [TokenizerInterface::OP_LEFT_BRACKET,         '(', null],
+            [TokenizerInterface::OP_RIGHT_BRACKET,        ')', null],
+            [TokenizerInterface::OP_LEFT_CURLY,           '{', null],
+            [TokenizerInterface::OP_RIGHT_CURLY,          '}', null],
+            [TokenizerInterface::TOKEN_END,              null, null]
+        ];
+
+        $ruleServices = [
+            ['FunctionExpression', new Rule\TokenSeeker(TokenizerInterface::OP_RIGHT_CURLY, '}', true)]
+        ];
+
+        $grammarServices = [
+            ['PrimaryExpression', Grammar\PrimaryExpression::class]
+        ];
+
+        $root = $this->getRootGrammarMock();
+        $root->expects($this->at(0))
+            ->method('addChild')
+            ->with($this->isInstanceOf(Grammar\PrimaryExpression::class))
+        ;
+
+        $rule = new PrimaryExpression($this->getRuleServiceManagerMock($ruleServices),
+            $this->getGrammarServiceManagerMock($grammarServices));
+
+        $rule->parse($root, $this->getTokenizerMock($tokens));
+    }
 }

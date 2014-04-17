@@ -70,4 +70,39 @@ class ExpressionTest
 
         $rule->parse($root, $this->getTokenizerMock($tokens));
     }
+
+    /**
+     *
+     */
+    public function testFunctionExpressionPassThrough()
+    {
+        $tokens = [
+            [TokenizerInterface::KEYWORD_FUNCTION, 'function', null],
+            [TokenizerInterface::OP_LEFT_BRACKET,         '(', null],
+            [TokenizerInterface::OP_RIGHT_BRACKET,        ')', null],
+            [TokenizerInterface::OP_LEFT_CURLY,           '{', null],
+            [TokenizerInterface::OP_RIGHT_CURLY,          '}', null],
+            [TokenizerInterface::TOKEN_END,              null, null]
+        ];
+
+        $ruleServices = [
+            ['AssignmentExpression', new Rule\TokenNullSeeker()],
+            ['FunctionExpression', new Rule\TokenSeeker(TokenizerInterface::OP_RIGHT_CURLY, '}', true)]
+        ];
+
+        $grammarServices = [
+            ['Expression', Grammar\Expression::class]
+        ];
+
+        $root = $this->getRootGrammarMock();
+        $root->expects($this->at(0))
+            ->method('addChild')
+            ->with($this->isInstanceOf(Grammar\Expression::class))
+        ;
+
+        $rule = new Expression($this->getRuleServiceManagerMock($ruleServices),
+            $this->getGrammarServiceManagerMock($grammarServices));
+
+        $rule->parse($root, $this->getTokenizerMock($tokens));
+    }
 }

@@ -3,9 +3,14 @@ Program:
     Element Program
 
 Element:
+    FunctionExpression
+    Statement
+
+FunctionExpression:
     function Identifier ( empty ) { StatementList }
     function Identifier ( ParameterList ) { StatementList }
-    Statement
+    function ( empty ) { StatementList }
+    function ( ParameterList ) { StatementList }
 
 ParameterList:
     Identifier
@@ -46,6 +51,7 @@ Variable:
     Identifier = AssignmentExpression
 
 Expression:
+    FunctionExpression
     AssignmentExpression
     AssignmentExpression , Expression
 
@@ -128,6 +134,7 @@ ArgumentList:
     AssignmentExpression , ArgumentList
 
 PrimaryExpression:
+    FunctionExpression
     ( Expression )
     Identifier
     IntegerLiteral

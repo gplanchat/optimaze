@@ -54,7 +54,6 @@ class ConstructorCall
         /** @var Grammar\ConstructorCall $node */
         $node = $this->grammar->get('ConstructorCall');
         $parent->addChild($node);
-        echo $parent->dump();
 
         $token = $this->currentToken($tokenizer);
         while (true) {
