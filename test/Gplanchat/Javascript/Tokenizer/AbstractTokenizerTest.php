@@ -23,7 +23,7 @@
 namespace Gplanchat\Javascript\Tokenizer;
 
 use Gplanchat\PHPUnit\Constraint\TokenList;
-use Gplanchat\Tokenizer\TokenizerInterface;
+use Gplanchat\Tokenizer\TokenizerInterface as BaseTokenizerInterface;
 use PHPUnit_Framework_TestCase as TestCase;
 use PHPUnit_Util_InvalidArgumentHelper as InvalidArgumentHelper;
 
@@ -48,7 +48,7 @@ abstract class AbstractTokenizerTest
             throw InvalidArgumentHelper::factory(1, 'array');
         }
 
-        if (!$tokenizer instanceof TokenizerInterface) {
+        if (!$tokenizer instanceof BaseTokenizerInterface) {
             throw InvalidArgumentHelper::factory(2, TokenizerInterface::class);
         }
 
