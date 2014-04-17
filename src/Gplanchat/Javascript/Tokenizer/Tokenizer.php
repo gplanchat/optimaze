@@ -187,7 +187,7 @@ class Tokenizer
     public function __construct(DataSourceInterface $source)
     {
         $this->source = $source;
-        $this->opRegExp = '#^(' . implode('|', array_map('preg_quote', $this->opTypeNames)) . ')#';
+        $this->opRegExp = '#^' . implode('|', array_map('preg_quote', $this->opTypeNames)) . '#';
     }
 
     /**
@@ -376,8 +376,11 @@ class Tokenizer
         case '!':
             // should always match
             preg_match($this->opRegExp, $input, $match);
-            if (in_array($match[0], $this->assignOps) && $input[strlen($match[0])] == '=') {
-                return $this->push(TokenizerInterface::OP_ASSIGN, $match[0] . '=', $match[0]);
+            if ($match[0][strlen($match[0]) - 1] === '=') {
+                $operator = substr($match[0], 0, -1);
+                if (in_array($operator, $this->assignOps)) {
+                    return $this->push(TokenizerInterface::OP_ASSIGN, $match[0], $operator);
+                }
             }
 
             if ($this->scanOperand) {
@@ -387,7 +390,7 @@ class Tokenizer
                     return $this->push(TokenizerInterface::OP_UNARY_MINUS, $match[0], TokenizerInterface::OP_MINUS);
                 }
             }
-            return $this->push(TokenizerInterface::OP_ASSIGN, $match[0]);
+            return $this->push($match[0], $match[0]);
 
         /** @noinspection PhpMissingBreakStatementInspection */
         case '.':
