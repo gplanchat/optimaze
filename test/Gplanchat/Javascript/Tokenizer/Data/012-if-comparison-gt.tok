@@ -1,0 +1,11 @@
+<?php
+use Gplanchat\Javascript\Tokenizer\TokenizerInterface;
+return [
+    [TokenizerInterface::KEYWORD_IF, 'if'],
+    [TokenizerInterface::OP_LEFT_BRACKET, '('],
+    [TokenizerInterface::TOKEN_IDENTIFIER, 'a'],
+    [TokenizerInterface::OP_GT, '>'],
+    [TokenizerInterface::TOKEN_NUMBER_INTEGER, '1'],
+    [TokenizerInterface::OP_RIGHT_BRACKET, ')'],
+    [TokenizerInterface::OP_SEMICOLON, ';']
+];

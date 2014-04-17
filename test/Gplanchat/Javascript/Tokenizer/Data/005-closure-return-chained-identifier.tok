@@ -1,0 +1,17 @@
+<?php
+use Gplanchat\Javascript\Tokenizer\TokenizerInterface;
+return [
+    [TokenizerInterface::OP_LEFT_BRACKET, '('],
+    [TokenizerInterface::KEYWORD_FUNCTION, 'function'],
+    [TokenizerInterface::OP_LEFT_BRACKET, '('],
+    [TokenizerInterface::TOKEN_IDENTIFIER, '$'],
+    [TokenizerInterface::OP_RIGHT_BRACKET, ')'],
+    [TokenizerInterface::OP_LEFT_CURLY, '{'],
+    [TokenizerInterface::KEYWORD_RETURN, 'return'],
+    [TokenizerInterface::TOKEN_IDENTIFIER, '$'],
+    [TokenizerInterface::OP_DOT, '.'],
+    [TokenizerInterface::TOKEN_IDENTIFIER, 'fn'],
+    [TokenizerInterface::OP_SEMICOLON, ';'],
+    [TokenizerInterface::OP_RIGHT_CURLY, '}'],
+    [TokenizerInterface::OP_RIGHT_BRACKET, ')']
+];

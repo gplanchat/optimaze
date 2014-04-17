@@ -1,0 +1,6 @@
+<?php
+use Gplanchat\Javascript\Tokenizer\TokenizerInterface;
+return [
+    [TokenizerInterface::KEYWORD_RETURN, 'return'],
+    [TokenizerInterface::OP_SEMICOLON, ';']
+];
