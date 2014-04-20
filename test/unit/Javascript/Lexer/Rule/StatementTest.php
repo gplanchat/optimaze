@@ -72,7 +72,7 @@ class StatementTest
         $rule = new Statement($this->getRuleServiceManagerMock($ruleServices),
             $this->getGrammarServiceManagerMock($grammarServices));
 
-        $rule->parse($root, $this->getTokenizerMock($tokens));
+        $rule($root, $this->getTokenizerMock($tokens));
     }
 
     /**
@@ -109,7 +109,7 @@ class StatementTest
         $rule = new Statement($this->getRuleServiceManagerMock($ruleServices),
             $this->getGrammarServiceManagerMock($grammarServices));
 
-        $rule->parse($root, $this->getTokenizerMock($tokens));
+        $rule($root, $this->getTokenizerMock($tokens));
     }
 
     /**
@@ -149,7 +149,7 @@ class StatementTest
         $rule = new Statement($this->getRuleServiceManagerMock($ruleServices),
             $this->getGrammarServiceManagerMock($grammarServices));
 
-        $rule->parse($root, $this->getTokenizerMock($tokens));
+        $rule($root, $this->getTokenizerMock($tokens));
     }
 
     /**
@@ -190,7 +190,7 @@ class StatementTest
         $rule = new Statement($this->getRuleServiceManagerMock($ruleServices),
             $this->getGrammarServiceManagerMock($grammarServices));
 
-        $rule->parse($root, $this->getTokenizerMock($tokens));
+        $rule($root, $this->getTokenizerMock($tokens));
     }
 
     /**
@@ -231,7 +231,7 @@ class StatementTest
         $rule = new Statement($this->getRuleServiceManagerMock($ruleServices),
             $this->getGrammarServiceManagerMock($grammarServices));
 
-        $rule->parse($root, $this->getTokenizerMock($tokens));
+        $rule($root, $this->getTokenizerMock($tokens));
     }
 
     /**
@@ -277,7 +277,7 @@ class StatementTest
         $rule = new Statement($this->getRuleServiceManagerMock($ruleServices),
             $this->getGrammarServiceManagerMock($grammarServices));
 
-        $rule->parse($root, $this->getTokenizerMock($tokens));
+        $rule($root, $this->getTokenizerMock($tokens));
     }
 
     /**
@@ -326,7 +326,7 @@ class StatementTest
         $rule = new Statement($this->getRuleServiceManagerMock($ruleServices),
             $this->getGrammarServiceManagerMock($grammarServices));
 
-        $rule->parse($root, $this->getTokenizerMock($tokens));
+        $rule($root, $this->getTokenizerMock($tokens));
     }
 
     /**
@@ -382,7 +382,7 @@ class StatementTest
         $rule = new Statement($this->getRuleServiceManagerMock($ruleServices),
             $this->getGrammarServiceManagerMock($grammarServices));
 
-        $rule->parse($root, $this->getTokenizerMock($tokens));
+        $rule($root, $this->getTokenizerMock($tokens));
     }
 
     /**
@@ -417,7 +417,7 @@ class StatementTest
         $rule = new Statement($this->getRuleServiceManagerMock($ruleServices),
             $this->getGrammarServiceManagerMock($grammarServices));
 
-        $rule->parse($root, $this->getTokenizerMock($tokens));
+        $rule($root, $this->getTokenizerMock($tokens));
     }
 
     /**
@@ -454,7 +454,7 @@ class StatementTest
         $rule = new Statement($this->getRuleServiceManagerMock($ruleServices),
             $this->getGrammarServiceManagerMock($grammarServices));
 
-        $rule->parse($root, $this->getTokenizerMock($tokens));
+        $rule($root, $this->getTokenizerMock($tokens));
     }
 
     /**
@@ -491,7 +491,7 @@ class StatementTest
         $rule = new Statement($this->getRuleServiceManagerMock($ruleServices),
             $this->getGrammarServiceManagerMock($grammarServices));
 
-        $rule->parse($root, $this->getTokenizerMock($tokens));
+        $rule($root, $this->getTokenizerMock($tokens));
     }
 
     /**
@@ -529,7 +529,7 @@ class StatementTest
         $rule = new Statement($this->getRuleServiceManagerMock($ruleServices),
             $this->getGrammarServiceManagerMock($grammarServices));
 
-        $rule->parse($root, $this->getTokenizerMock($tokens));
+        $rule($root, $this->getTokenizerMock($tokens));
     }
 
     /**
@@ -567,7 +567,7 @@ class StatementTest
         $rule = new Statement($this->getRuleServiceManagerMock($ruleServices),
             $this->getGrammarServiceManagerMock($grammarServices));
 
-        $rule->parse($root, $this->getTokenizerMock($tokens));
+        $rule($root, $this->getTokenizerMock($tokens));
     }
 
     /**
@@ -610,7 +610,7 @@ class StatementTest
         $rule = new Statement($this->getRuleServiceManagerMock($ruleServices),
             $this->getGrammarServiceManagerMock($grammarServices));
 
-        $rule->parse($root, $this->getTokenizerMock($tokens));
+        $rule($root, $this->getTokenizerMock($tokens));
     }
 
     /**
@@ -652,7 +652,7 @@ class StatementTest
         $rule = new Statement($this->getRuleServiceManagerMock($ruleServices),
             $this->getGrammarServiceManagerMock($grammarServices));
 
-        $rule->parse($root, $this->getTokenizerMock($tokens));
+        $rule($root, $this->getTokenizerMock($tokens));
     }
 
     /**
@@ -693,7 +693,7 @@ class StatementTest
         $rule = new Statement($this->getRuleServiceManagerMock($ruleServices),
             $this->getGrammarServiceManagerMock($grammarServices));
 
-        $rule->parse($root, $this->getTokenizerMock($tokens));
+        $rule($root, $this->getTokenizerMock($tokens));
     }
 
     /**
@@ -733,7 +733,7 @@ class StatementTest
         $rule = new Statement($this->getRuleServiceManagerMock($ruleServices),
             $this->getGrammarServiceManagerMock($grammarServices));
 
-        $rule->parse($root, $this->getTokenizerMock($tokens));
+        $rule($root, $this->getTokenizerMock($tokens));
     }
 
     /**
@@ -772,7 +772,7 @@ class StatementTest
         $rule = new Statement($this->getRuleServiceManagerMock($ruleServices),
             $this->getGrammarServiceManagerMock($grammarServices));
 
-        $rule->parse($root, $this->getTokenizerMock($tokens));
+        $rule($root, $this->getTokenizerMock($tokens));
     }
 
     /**
@@ -805,7 +805,7 @@ class StatementTest
         $rule = new Statement($this->getRuleServiceManagerMock($ruleServices),
             $this->getGrammarServiceManagerMock($grammarServices));
 
-        $rule->parse($root, $this->getTokenizerMock($tokens));
+        $rule($root, $this->getTokenizerMock($tokens));
     }
 
     /**
@@ -842,7 +842,7 @@ class StatementTest
         $rule = new Statement($this->getRuleServiceManagerMock($ruleServices),
             $this->getGrammarServiceManagerMock($grammarServices));
 
-        $rule->parse($root, $this->getTokenizerMock($tokens));
+        $rule($root, $this->getTokenizerMock($tokens));
     }
     /**
      *
@@ -882,7 +882,7 @@ class StatementTest
         $rule = new Statement($this->getRuleServiceManagerMock($ruleServices),
             $this->getGrammarServiceManagerMock($grammarServices));
 
-        $rule->parse($root, $this->getTokenizerMock($tokens));
+        $rule($root, $this->getTokenizerMock($tokens));
     }
 
     /**
@@ -921,7 +921,7 @@ class StatementTest
         $rule = new Statement($this->getRuleServiceManagerMock($ruleServices),
             $this->getGrammarServiceManagerMock($grammarServices));
 
-        $rule->parse($root, $this->getTokenizerMock($tokens));
+        $rule($root, $this->getTokenizerMock($tokens));
     }
 
     /**
@@ -956,7 +956,7 @@ class StatementTest
         $rule = new Statement($this->getRuleServiceManagerMock($ruleServices),
             $this->getGrammarServiceManagerMock($grammarServices));
 
-        $rule->parse($root, $this->getTokenizerMock($tokens));
+        $rule($root, $this->getTokenizerMock($tokens));
     }
 
     /**
@@ -991,7 +991,7 @@ class StatementTest
         $rule = new Statement($this->getRuleServiceManagerMock($ruleServices),
             $this->getGrammarServiceManagerMock($grammarServices));
 
-        $rule->parse($root, $this->getTokenizerMock($tokens));
+        $rule($root, $this->getTokenizerMock($tokens));
     }
 
     /**
@@ -1027,7 +1027,7 @@ class StatementTest
         $rule = new Statement($this->getRuleServiceManagerMock($ruleServices),
             $this->getGrammarServiceManagerMock($grammarServices));
 
-        $rule->parse($root, $this->getTokenizerMock($tokens));
+        $rule($root, $this->getTokenizerMock($tokens));
     }
 
     /**
@@ -1060,7 +1060,7 @@ class StatementTest
         $rule = new Statement($this->getRuleServiceManagerMock($ruleServices),
             $this->getGrammarServiceManagerMock($grammarServices));
 
-        $rule->parse($root, $this->getTokenizerMock($tokens));
+        $rule($root, $this->getTokenizerMock($tokens));
     }
 
     /**
@@ -1094,7 +1094,7 @@ class StatementTest
         $rule = new Statement($this->getRuleServiceManagerMock($ruleServices),
             $this->getGrammarServiceManagerMock($grammarServices));
 
-        $rule->parse($root, $this->getTokenizerMock($tokens));
+        $rule($root, $this->getTokenizerMock($tokens));
     }
 
     /**
@@ -1125,7 +1125,7 @@ class StatementTest
         $rule = new Statement($this->getRuleServiceManagerMock($ruleServices),
             $this->getGrammarServiceManagerMock($grammarServices));
 
-        $rule->parse($root, $this->getTokenizerMock($tokens));
+        $rule($root, $this->getTokenizerMock($tokens));
     }
 
     /**
@@ -1157,7 +1157,7 @@ class StatementTest
         $rule = new Statement($this->getRuleServiceManagerMock($ruleServices),
             $this->getGrammarServiceManagerMock($grammarServices));
 
-        $rule->parse($root, $this->getTokenizerMock($tokens));
+        $rule($root, $this->getTokenizerMock($tokens));
     }
 
     /**
@@ -1192,6 +1192,6 @@ class StatementTest
         $rule = new Statement($this->getRuleServiceManagerMock($ruleServices),
             $this->getGrammarServiceManagerMock($grammarServices));
 
-        $rule->parse($root, $this->getTokenizerMock($tokens));
+        $rule($root, $this->getTokenizerMock($tokens));
     }
 }

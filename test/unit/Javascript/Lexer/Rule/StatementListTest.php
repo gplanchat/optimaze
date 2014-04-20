@@ -62,7 +62,7 @@ class StatementListTest
         $rule = new StatementList($this->getRuleServiceManagerMock($ruleServices),
             $this->getGrammarServiceManagerMock($grammarServices));
 
-        $rule->parse($root, $this->getTokenizerMock($tokens));
+        $rule($root, $this->getTokenizerMock($tokens));
     }
 
     /**
@@ -94,7 +94,7 @@ class StatementListTest
         $rule = new StatementList($this->getRuleServiceManagerMock($ruleServices),
             $this->getGrammarServiceManagerMock($grammarServices));
 
-        $rule->parse($root, $this->getTokenizerMock($tokens));
+        $rule($root, $this->getTokenizerMock($tokens));
     }
 
     /**
@@ -128,6 +128,6 @@ class StatementListTest
         $rule = new StatementList($this->getRuleServiceManagerMock($ruleServices),
             $this->getGrammarServiceManagerMock($grammarServices));
 
-        $rule->parse($root, $this->getTokenizerMock($tokens));
+        $rule($root, $this->getTokenizerMock($tokens));
     }
 }

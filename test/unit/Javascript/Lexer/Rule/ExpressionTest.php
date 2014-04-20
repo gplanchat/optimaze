@@ -68,7 +68,7 @@ class ExpressionTest
         $rule = new Expression($this->getRuleServiceManagerMock($ruleServices),
             $this->getGrammarServiceManagerMock($grammarServices));
 
-        $rule->parse($root, $this->getTokenizerMock($tokens));
+        $rule($root, $this->getTokenizerMock($tokens));
     }
 
     /**
@@ -103,6 +103,6 @@ class ExpressionTest
         $rule = new Expression($this->getRuleServiceManagerMock($ruleServices),
             $this->getGrammarServiceManagerMock($grammarServices));
 
-        $rule->parse($root, $this->getTokenizerMock($tokens));
+        $rule($root, $this->getTokenizerMock($tokens));
     }
 }

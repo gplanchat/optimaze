@@ -77,7 +77,7 @@ class TokenSeekerIterator
         /** @var RuleInterface $current */
         $current = $this->iterator->current();
         if ($current !== null) {
-            $current->parse($parent, $tokenizer);
+            $current($parent, $tokenizer);
         }
         $this->iterator->next();
     }

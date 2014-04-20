@@ -62,7 +62,7 @@ class ConstructorCallTest
         $rule = new ConstructorCall($this->getRuleServiceManagerMock($ruleServices),
             $this->getGrammarServiceManagerMock($grammarServices));
 
-        $rule->parse($root, $this->getTokenizerMock($tokens));
+        $rule($root, $this->getTokenizerMock($tokens));
     }
 
     /**
@@ -95,7 +95,7 @@ class ConstructorCallTest
         $rule = new ConstructorCall($this->getRuleServiceManagerMock($ruleServices),
             $this->getGrammarServiceManagerMock($grammarServices));
 
-        $rule->parse($root, $this->getTokenizerMock($tokens));
+        $rule($root, $this->getTokenizerMock($tokens));
     }
 
 
@@ -129,7 +129,7 @@ class ConstructorCallTest
         $rule = new ConstructorCall($this->getRuleServiceManagerMock($ruleServices),
             $this->getGrammarServiceManagerMock($grammarServices));
 
-        $rule->parse($root, $this->getTokenizerMock($tokens));
+        $rule($root, $this->getTokenizerMock($tokens));
     }
 
     /**
@@ -159,7 +159,7 @@ class ConstructorCallTest
         $rule = new ConstructorCall($this->getRuleServiceManagerMock($ruleServices),
             $this->getGrammarServiceManagerMock($grammarServices));
 
-        $rule->parse($root, $this->getTokenizerMock($tokens));
+        $rule($root, $this->getTokenizerMock($tokens));
     }
 
     /**
@@ -193,6 +193,6 @@ class ConstructorCallTest
         $rule = new ConstructorCall($this->getRuleServiceManagerMock($ruleServices),
             $this->getGrammarServiceManagerMock($grammarServices));
 
-        $rule->parse($root, $this->getTokenizerMock($tokens));
+        $rule($root, $this->getTokenizerMock($tokens));
     }
 }

@@ -83,7 +83,7 @@ class MultiplicativeExpressionTest
         $rule = new MultiplicativeExpression($this->getRuleServiceManagerMock($ruleServices),
             $this->getGrammarServiceManagerMock($grammarServices));
 
-        $rule->parse($root, $this->getTokenizerMock($tokens));
+        $rule($root, $this->getTokenizerMock($tokens));
     }
 
     /**
@@ -126,7 +126,7 @@ class MultiplicativeExpressionTest
         $rule = new MultiplicativeExpression($this->getRuleServiceManagerMock($ruleServices),
             $this->getGrammarServiceManagerMock($grammarServices));
 
-        $rule->parse($root, $this->getTokenizerMock($tokens));
+        $rule($root, $this->getTokenizerMock($tokens));
     }
 
     /**
@@ -156,7 +156,7 @@ class MultiplicativeExpressionTest
         $rule = new MultiplicativeExpression($this->getRuleServiceManagerMock($ruleServices),
             $this->getGrammarServiceManagerMock($grammarServices));
 
-        $rule->parse($root, $this->getTokenizerMock($tokens));
+        $rule($root, $this->getTokenizerMock($tokens));
 
         $this->assertCount(0, $root);
     }
