@@ -76,7 +76,7 @@ class UnaryExpression
      * @return void
      * @throws LexicalError
      */
-    public function parse(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
+    public function __invoke(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
     {
         $token = $this->currentToken($tokenizer);
 
@@ -96,7 +96,7 @@ class UnaryExpression
                 $node->addChild($unaryOperator);
                 $this->nextToken($tokenizer);
 
-                $memberExpressionRule->parse($node, $tokenizer);
+                $memberExpressionRule($node, $tokenizer);
 
                 $token = $this->currentToken($tokenizer);
             } else if (in_array($token->getType(), static::$incrementOperators)) {
@@ -107,7 +107,7 @@ class UnaryExpression
                 $node->addChild($incrementOperator);
 
                 $this->nextToken($tokenizer);
-                $memberExpressionRule->parse($node, $tokenizer);
+                $memberExpressionRule($node, $tokenizer);
                 break;
             } else if ($token->getType() === TokenizerInterface::KEYWORD_DELETE) {
                 /** @var Grammar\DeleteKeyword $deleteKeyword */
@@ -117,7 +117,7 @@ class UnaryExpression
                 $node->addChild($deleteKeyword);
 
                 $this->nextToken($tokenizer);
-                $memberExpressionRule->parse($node, $tokenizer);
+                $memberExpressionRule($node, $tokenizer);
                 break;
             } else if ($token->getType() === TokenizerInterface::KEYWORD_NEW) {
                 /** @var Grammar\NewKeyword $newKeyword */
@@ -130,10 +130,10 @@ class UnaryExpression
                 $constructorRule = $this->rule->get('Constructor');
 
                 $this->nextToken($tokenizer);
-                $constructorRule->parse($node, $tokenizer);
+                $constructorRule($node, $tokenizer);
                 break;
             } else {
-                $memberExpressionRule->parse($node, $tokenizer);
+                $memberExpressionRule($node, $tokenizer);
 
                 $token = $this->currentToken($tokenizer);
                 if (in_array($token->getType(), static::$incrementOperators)) {

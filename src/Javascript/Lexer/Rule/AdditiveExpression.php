@@ -53,7 +53,7 @@ class AdditiveExpression
      * @return void
      * @throws LexicalError
      */
-    public function parse(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
+    public function __invoke(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
     {
         /** @var Grammar\AdditiveExpression $node */
         $node = $this->grammar->get('AdditiveExpression');
@@ -63,7 +63,7 @@ class AdditiveExpression
         $multiplicativeExpressionRule = $this->rule->get('MultiplicativeExpression');
 
         while (true) {
-            $multiplicativeExpressionRule->parse($node, $tokenizer);
+            $multiplicativeExpressionRule($node, $tokenizer);
 
             $token = $this->currentToken($tokenizer);
             if (!in_array($token->getType(), static::$additiveOperators)) {

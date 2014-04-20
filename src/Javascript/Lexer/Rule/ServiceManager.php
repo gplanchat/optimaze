@@ -91,8 +91,6 @@ class ServiceManager
 
     public function get($serviceName, array $constructorParams = [], $ignoreInexistent = false, $ignorePeering = false)
     {
-//        var_dump(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2));
-//        var_dump($serviceName);
         return $this->realGet($serviceName, $constructorParams, $ignoreInexistent, $ignorePeering);
     }
 }

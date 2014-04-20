@@ -54,7 +54,7 @@ class EqualityExpression
      * @return void
      * @throws LexicalError
      */
-    public function parse(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
+    public function __invoke(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
     {
         /** @var Grammar\EqualityExpression $node */
         $node = $this->grammar->get('EqualityExpression');
@@ -64,7 +64,7 @@ class EqualityExpression
         $relationalExpressionRule = $this->rule->get('RelationalExpression');
 
         while (true) {
-            $relationalExpressionRule->parse($node, $tokenizer);
+            $relationalExpressionRule($node, $tokenizer);
 
             $token = $this->currentToken($tokenizer);
             if (!in_array($token->getType(), static::$equalityOperators)) {

@@ -49,7 +49,7 @@ class MemberExpression
      * @return void
      * @throws LexicalError
      */
-    public function parse(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
+    public function __invoke(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
     {
         /** @var Grammar\MemberExpression $node */
         $node = $this->grammar->get('MemberExpression');
@@ -67,7 +67,7 @@ class MemberExpression
 
                 /** @var Expression $expressionRule */
                 $expressionRule = $this->rule->get('Expression');
-                $expressionRule->parse($node, $tokenizer);
+                $expressionRule($node, $tokenizer);
 
                 $token = $this->currentToken($tokenizer);
                 if ($token->getType() !== TokenizerInterface::OP_RIGHT_SQUARE_BRACKET) {
@@ -80,7 +80,7 @@ class MemberExpression
 
                 /** @var ArgumentList $argumentListRule */
                 $argumentListRule = $this->rule->get('ArgumentList');
-                $argumentListRule->parse($node, $tokenizer);
+                $argumentListRule($node, $tokenizer);
 
                 $token = $this->currentToken($tokenizer);
                 if ($token->getType() !== TokenizerInterface::OP_RIGHT_BRACKET) {

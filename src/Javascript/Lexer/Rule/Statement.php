@@ -75,7 +75,7 @@ class Statement
      * @return void
      * @throws LexicalError
      */
-    public function parse(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
+    public function __invoke(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
     {
         /** @var Grammar\Statement $node */
         $node = $this->grammar->get('Statement');
@@ -363,7 +363,7 @@ class Statement
 
         /** @var Rule\StatementList $statementListRule */
         $statementListRule = $this->rule->get('StatementListRule');
-        $statementListRule->parse($compoundStatement, $tokenizer);
+        $statementListRule($compoundStatement, $tokenizer);
 
         $token = $this->currentToken($tokenizer);
         if ($token->getType() !== TokenizerInterface::OP_RIGHT_CURLY) {

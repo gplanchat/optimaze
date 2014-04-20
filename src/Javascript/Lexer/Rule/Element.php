@@ -50,7 +50,7 @@ class Element
      * @return void
      * @throws LexicalError
      */
-    public function parse(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
+    public function __invoke(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
     {
         /** @var Grammar\Element $node */
         $node = $this->grammar->get('Element');
@@ -61,11 +61,11 @@ class Element
         if ($token->getType() === TokenizerInterface::KEYWORD_FUNCTION) {
             /** @var FunctionExpression $functionExpressionRule */
             $functionExpressionRule = $this->rule->get('FunctionExpression');
-            $functionExpressionRule->parse($node, $tokenizer);
+            $functionExpressionRule($node, $tokenizer);
         } else {
             /** @var Rule\Statement $statementRule */
             $statementRule = $this->rule->get('Statement');
-            $statementRule->parse($node, $tokenizer);
+            $statementRule($node, $tokenizer);
         }
 
         $node->optimize();

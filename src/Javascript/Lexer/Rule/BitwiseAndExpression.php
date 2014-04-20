@@ -47,8 +47,8 @@ class BitwiseAndExpression
      * @return void
      * @throws LexicalError
      */
-    
-    public function parse(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
+
+    public function __invoke(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
     {
         /** @var Grammar\BitwiseAndExpression $node */
         $node = $this->grammar->get('BitwiseAndExpression');

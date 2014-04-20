@@ -48,7 +48,7 @@ class ArgumentList
      * @return void
      * @throws LexicalError
      */
-    public function parse(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
+    public function __invoke(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
     {
         /** @var Grammar\ArgumentList $node */
         $node = $this->grammar->get('ArgumentList');

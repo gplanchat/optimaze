@@ -46,5 +46,5 @@ interface RuleInterface
      * @param BaseTokenizerInterface $tokenizer
      * @return void
      */
-    public function parse(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer);
+    public function __invoke(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer);
 }

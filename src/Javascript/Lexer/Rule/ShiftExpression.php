@@ -53,7 +53,7 @@ class ShiftExpression
      * @return void
      * @throws LexicalError
      */
-    public function parse(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
+    public function __invoke(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
     {
         $token = $this->currentToken($tokenizer);
 
@@ -65,7 +65,7 @@ class ShiftExpression
         $additiveExpressionRule = $this->rule->get('AdditiveExpression');
 
         while (true) {
-            $additiveExpressionRule->parse($node, $tokenizer);
+            $additiveExpressionRule($node, $tokenizer);
 
             $token = $this->currentToken($tokenizer);
             if (!in_array($token->getType(), static::$shiftOperators)) {

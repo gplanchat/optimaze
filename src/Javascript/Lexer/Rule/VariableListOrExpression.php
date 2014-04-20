@@ -47,19 +47,19 @@ class VariableListOrExpression
      * @return void
      * @throws LexicalError
      */
-    public function parse(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
+    public function __invoke(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
     {
         $token = $this->currentToken($tokenizer);
 
         if ($token->getType() === TokenizerInterface::KEYWORD_VAR) {
             /** @var VariableList $variableListRule */
             $variableListRule = $this->rule->get('VariableList');
-            $variableListRule->parse($parent, $tokenizer);
+            $variableListRule($parent, $tokenizer);
             return;
         }
 
         /** @var Expression $expressionRule */
         $expressionRule = $this->rule->get('Expression');
-        $expressionRule->parse($parent, $tokenizer);
+        $expressionRule($parent, $tokenizer);
     }
 }

@@ -55,7 +55,7 @@ class RelationalExpression
      * @return void
      * @throws LexicalError
      */
-    public function parse(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
+    public function __invoke(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
     {
         /** @var Grammar\RelationalExpression $node */
         $node = $this->grammar->get('RelationalExpression');
@@ -65,7 +65,7 @@ class RelationalExpression
         $shiftExpressionRule = $this->rule->get('ShiftExpression');
 
         while (true) {
-            $shiftExpressionRule->parse($node, $tokenizer);
+            $shiftExpressionRule($node, $tokenizer);
 
             $token = $this->currentToken($tokenizer);
             if (!in_array($token->getType(), static::$relationalOperators)) {

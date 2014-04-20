@@ -46,7 +46,7 @@ class Condition
      * @return void
      * @throws LexicalError
      */
-    public function parse(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
+    public function __invoke(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
     {
         /** @var Grammar\Condition $node */
         $node = $this->grammar->get('Condition');
@@ -62,7 +62,7 @@ class Condition
 
         /** @var Expression $expressionRule */
         $expressionRule = $this->rule->get('Expression');
-        $expressionRule->parse($node, $tokenizer);
+        $expressionRule($node, $tokenizer);
 
         $token = $this->currentToken($tokenizer);
         if ($token->getType() !== TokenizerInterface::OP_RIGHT_BRACKET) {

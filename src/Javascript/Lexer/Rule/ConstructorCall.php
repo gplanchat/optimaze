@@ -49,7 +49,7 @@ class ConstructorCall
      * @return void
      * @throws LexicalError
      */
-    public function parse(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
+    public function __invoke(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
     {
         /** @var Grammar\ConstructorCall $node */
         $node = $this->grammar->get('ConstructorCall');
@@ -71,7 +71,7 @@ class ConstructorCall
 
                 /** @var Rule\ArgumentList $argumentListRule */
                 $argumentListRule = $this->rule->get('ArgumentList');
-                $argumentListRule->parse($node, $tokenizer);
+                $argumentListRule($node, $tokenizer);
 
                 $token = $this->currentToken($tokenizer);
                 if ($token->getType() !== TokenizerInterface::OP_RIGHT_BRACKET) {
