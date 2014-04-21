@@ -59,7 +59,7 @@ class MemberExpression
         $rule = $this->rule->get('PrimaryExpression');
 
         while (true) {
-            $rule->parse($node, $tokenizer);
+            $rule($node, $tokenizer);
 
             $token = $this->currentToken($tokenizer);
             if ($token->getType() === TokenizerInterface::OP_LEFT_SQUARE_BRACKET) {

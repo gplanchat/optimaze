@@ -22,6 +22,7 @@
 
 namespace Gplanchat\Javascript\Lexer\Rule;
 
+use Gplanchat\Javascript\Lexer\Accumulator;
 use Gplanchat\Javascript\Lexer\Exception;
 use Gplanchat\Lexer\Grammar;
 use Gplanchat\Javascript\Lexer\Rule;
@@ -29,8 +30,7 @@ use Gplanchat\Javascript\Tokenizer\TokenizerInterface;
 
 /**
  * Element:
- *     function Identifier ( empty ) { StatementList }
- *     function Identifier ( ParameterList ) { StatementList }
+ *     FunctionExpression ;
  *     Statement
  */
 class ElementTest
@@ -47,7 +47,7 @@ class ElementTest
         ];
 
         $ruleServices = [
-            ['Statement', Rule\Statement::class]
+            ['Statement', new Rule\TokenNullSeeker()]
         ];
 
         $grammarServices = [
@@ -63,6 +63,7 @@ class ElementTest
         $rule = new Element($this->getRuleServiceManagerMock($ruleServices),
             $this->getGrammarServiceManagerMock($grammarServices));
 
-        $rule($root, $this->getTokenizerMock($tokens));
+        $accumulator = new Accumulator($rule, $root);
+        $accumulator($this->getTokenizerMock($tokens));
     }
 }

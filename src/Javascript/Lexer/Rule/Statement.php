@@ -147,7 +147,7 @@ class Statement
             $rule = $this->getConditionRule();
             $rule($ifKeyword, $tokenizer);
 
-            $this->parse($ifKeyword, $tokenizer);
+            $this($ifKeyword, $tokenizer);
 
             $token = $this->currentToken($tokenizer);
             if ($token->getType() !== TokenizerInterface::KEYWORD_ELSE) {
@@ -160,7 +160,7 @@ class Statement
                 $elseKeyword = $this->grammar->get('ElseKeyword');
                 $conditionChain->addChild($elseKeyword);
 
-                $this->parse($elseKeyword, $tokenizer);
+                $this($elseKeyword, $tokenizer);
                 break;
             }
         }

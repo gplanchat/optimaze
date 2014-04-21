@@ -64,7 +64,7 @@ class TokenSeekerIterator
      * @param BaseTokenizerInterface $tokenizer
      * @throws \RuntimeException
      */
-    public function parse(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
+    public function __invoke(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
     {
         if (!$this->iterator->valid()) {
             if ($this->getLoops() <= 0) {

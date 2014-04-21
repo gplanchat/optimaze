@@ -35,7 +35,7 @@ class TokenNullSeeker
      * @param RecursiveGrammarInterface $parent
      * @param BaseTokenizerInterface $tokenizer
      */
-    public function parse(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
+    public function __invoke(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
     {
         // no operation
     }

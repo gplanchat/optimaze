@@ -22,6 +22,7 @@
 
 namespace Gplanchat\Javascript\Lexer\Rule;
 
+use Gplanchat\Javascript\Lexer\Accumulator;
 use Gplanchat\Javascript\Lexer\Exception;
 use Gplanchat\Lexer\Grammar;
 use Gplanchat\Javascript\Lexer\Rule;
@@ -68,7 +69,8 @@ class VariableListTest
         $rule = new VariableList($this->getRuleServiceManagerMock($ruleServices),
             $this->getGrammarServiceManagerMock($grammarServices));
 
-        $rule($root, $this->getTokenizerMock($tokens));
+        $accumulator = new Accumulator($rule, $root);
+        $accumulator($this->getTokenizerMock($tokens));
     }
 
     /**
@@ -108,7 +110,8 @@ class VariableListTest
         $rule = new VariableList($this->getRuleServiceManagerMock($ruleServices),
             $this->getGrammarServiceManagerMock($grammarServices));
 
-        $rule($root, $this->getTokenizerMock($tokens));
+        $accumulator = new Accumulator($rule, $root);
+        $accumulator($this->getTokenizerMock($tokens));
     }
 
     /**
@@ -143,7 +146,8 @@ class VariableListTest
         $rule = new VariableList($this->getRuleServiceManagerMock($ruleServices),
             $this->getGrammarServiceManagerMock($grammarServices));
 
-        $rule($root, $this->getTokenizerMock($tokens));
+        $accumulator = new Accumulator($rule, $root);
+        $accumulator($this->getTokenizerMock($tokens));
     }
 
     /**
@@ -182,7 +186,8 @@ class VariableListTest
         $rule = new VariableList($this->getRuleServiceManagerMock($ruleServices),
             $this->getGrammarServiceManagerMock($grammarServices));
 
-        $rule($root, $this->getTokenizerMock($tokens));
+        $accumulator = new Accumulator($rule, $root);
+        $accumulator($this->getTokenizerMock($tokens));
     }
 
     /**
@@ -214,6 +219,7 @@ class VariableListTest
         $rule = new VariableList($this->getRuleServiceManagerMock($ruleServices),
             $this->getGrammarServiceManagerMock($grammarServices));
 
-        $rule($root, $this->getTokenizerMock($tokens));
+        $accumulator = new Accumulator($rule, $root);
+        $accumulator($this->getTokenizerMock($tokens));
     }
 }

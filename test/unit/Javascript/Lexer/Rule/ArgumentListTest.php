@@ -22,6 +22,7 @@
 
 namespace Gplanchat\Javascript\Lexer\Rule;
 
+use Gplanchat\Javascript\Lexer\Accumulator;
 use Gplanchat\Javascript\Lexer\Exception;
 use Gplanchat\Lexer\Grammar;
 use Gplanchat\Javascript\Lexer\Rule;
@@ -42,12 +43,11 @@ class ArgumentListTest
     public function testEmptyList()
     {
         $tokens = [
-            [TokenizerInterface::OP_LEFT_BRACKET,  ')', null],
-            [TokenizerInterface::TOKEN_END,       null, null]
+            [TokenizerInterface::TOKEN_END,        null, null]
         ];
 
         $ruleServices = [
-            ['AssignmentExpression', Rule\AssignmentExpression::class]
+            ['AssignmentExpression', new Rule\TokenNullSeeker()]
         ];
 
         $grammarServices = [
@@ -63,7 +63,8 @@ class ArgumentListTest
         $rule = new ArgumentList($this->getRuleServiceManagerMock($ruleServices),
             $this->getGrammarServiceManagerMock($grammarServices));
 
-        $rule($root, $this->getTokenizerMock($tokens));
+        $accumulator = new Accumulator($rule, $root);
+        $accumulator($this->getTokenizerMock($tokens));
     }
 
     /**
@@ -72,13 +73,15 @@ class ArgumentListTest
     public function testOneArgumentList()
     {
         $tokens = [
-            // TokenizerInterface::TOKEN_IDENTIFIER
-            [TokenizerInterface::OP_LEFT_BRACKET,  ')', null],
-            [TokenizerInterface::TOKEN_END,       null, null]
+            [TokenizerInterface::TOKEN_IDENTIFIER,  'a', null],
+            [TokenizerInterface::TOKEN_END,        null, null]
         ];
 
         $ruleServices = [
-            ['AssignmentExpression', Rule\AssignmentExpression::class]
+            ['AssignmentExpression', new Rule\TokenSeekerIterator([
+                new Rule\TokenSeeker(TokenizerInterface::TOKEN_IDENTIFIER, 'a', true)
+                ])
+            ]
         ];
 
         $grammarServices = [
@@ -94,7 +97,8 @@ class ArgumentListTest
         $rule = new ArgumentList($this->getRuleServiceManagerMock($ruleServices),
             $this->getGrammarServiceManagerMock($grammarServices));
 
-        $rule($root, $this->getTokenizerMock($tokens));
+        $accumulator = new Accumulator($rule, $root);
+        $accumulator($this->getTokenizerMock($tokens));
     }
 
     /**
@@ -103,15 +107,18 @@ class ArgumentListTest
     public function testMultipleArgumentList()
     {
         $tokens = [
-            // TokenizerInterface::TOKEN_IDENTIFIER
-            [TokenizerInterface::OP_COMMA,         ',', null],
-            // TokenizerInterface::TOKEN_IDENTIFIER
-            [TokenizerInterface::OP_LEFT_BRACKET,  ')', null],
-            [TokenizerInterface::TOKEN_END,       null, null]
+            [TokenizerInterface::TOKEN_IDENTIFIER,  'a', null],
+            [TokenizerInterface::OP_COMMA,          ',', null],
+            [TokenizerInterface::TOKEN_IDENTIFIER,  'b', null],
+            [TokenizerInterface::TOKEN_END,        null, null]
         ];
 
         $ruleServices = [
-            ['AssignmentExpression', Rule\AssignmentExpression::class]
+            ['AssignmentExpression', new Rule\TokenSeekerIterator([
+                new Rule\TokenSeeker(TokenizerInterface::TOKEN_IDENTIFIER, 'a', true),
+                new Rule\TokenSeeker(TokenizerInterface::TOKEN_IDENTIFIER, 'b', true)
+                ])
+            ]
         ];
 
         $grammarServices = [
@@ -128,6 +135,7 @@ class ArgumentListTest
         $rule = new ArgumentList($this->getRuleServiceManagerMock($ruleServices),
             $this->getGrammarServiceManagerMock($grammarServices));
 
-        $rule($root, $this->getTokenizerMock($tokens));
+        $accumulator = new Accumulator($rule, $root);
+        $accumulator($this->getTokenizerMock($tokens));
     }
 }

@@ -22,6 +22,7 @@
 
 namespace Gplanchat\Javascript\Lexer\Rule;
 
+use Gplanchat\Javascript\Lexer\Accumulator;
 use Gplanchat\Javascript\Lexer\Exception;
 use Gplanchat\Lexer\Grammar;
 use Gplanchat\Javascript\Lexer\Rule;
@@ -52,8 +53,8 @@ class FunctionExpressionTest
         ];
 
         $ruleServices = [
-            ['ParameterList', Rule\ParameterList::class],
-            ['StatementList', Rule\StatementList::class],
+            ['ParameterList', new Rule\TokenNullSeeker()],
+            ['StatementList', new Rule\TokenNullSeeker()],
         ];
 
         $grammarServices = [
@@ -69,7 +70,8 @@ class FunctionExpressionTest
         $rule = new FunctionExpression($this->getRuleServiceManagerMock($ruleServices),
             $this->getGrammarServiceManagerMock($grammarServices));
 
-        $rule($root, $this->getTokenizerMock($tokens));
+        $accumulator = new Accumulator($rule, $root);
+        $accumulator($this->getTokenizerMock($tokens));
     }
 
     /**
@@ -88,8 +90,8 @@ class FunctionExpressionTest
         ];
 
         $ruleServices = [
-            ['ParameterList', Rule\ParameterList::class],
-            ['StatementList', Rule\StatementList::class],
+            ['ParameterList', new Rule\TokenNullSeeker()],
+            ['StatementList', new Rule\TokenNullSeeker()],
         ];
 
         $grammarServices = [
@@ -105,7 +107,8 @@ class FunctionExpressionTest
         $rule = new FunctionExpression($this->getRuleServiceManagerMock($ruleServices),
             $this->getGrammarServiceManagerMock($grammarServices));
 
-        $rule($root, $this->getTokenizerMock($tokens));
+        $accumulator = new Accumulator($rule, $root);
+        $accumulator($this->getTokenizerMock($tokens));
     }
 
     /**
@@ -143,7 +146,8 @@ class FunctionExpressionTest
         $rule = new FunctionExpression($this->getRuleServiceManagerMock($ruleServices),
             $this->getGrammarServiceManagerMock($grammarServices));
 
-        $rule($root, $this->getTokenizerMock($tokens));
+        $accumulator = new Accumulator($rule, $root);
+        $accumulator($this->getTokenizerMock($tokens));
     }
 
     /**
@@ -182,7 +186,8 @@ class FunctionExpressionTest
         $rule = new FunctionExpression($this->getRuleServiceManagerMock($ruleServices),
             $this->getGrammarServiceManagerMock($grammarServices));
 
-        $rule($root, $this->getTokenizerMock($tokens));
+        $accumulator = new Accumulator($rule, $root);
+        $accumulator($this->getTokenizerMock($tokens));
     }
 
     /**
@@ -219,7 +224,8 @@ class FunctionExpressionTest
         $rule = new FunctionExpression($this->getRuleServiceManagerMock($ruleServices),
             $this->getGrammarServiceManagerMock($grammarServices));
 
-        $rule($root, $this->getTokenizerMock($tokens));
+        $accumulator = new Accumulator($rule, $root);
+        $accumulator($this->getTokenizerMock($tokens));
     }
 
     /**
@@ -257,7 +263,9 @@ class FunctionExpressionTest
         $rule = new FunctionExpression($this->getRuleServiceManagerMock($ruleServices),
             $this->getGrammarServiceManagerMock($grammarServices));
 
-        $rule($root, $this->getTokenizerMock($tokens));
+
+        $accumulator = new Accumulator($rule, $root);
+        $accumulator($this->getTokenizerMock($tokens));
     }
 
     /**
@@ -295,7 +303,9 @@ class FunctionExpressionTest
         $rule = new FunctionExpression($this->getRuleServiceManagerMock($ruleServices),
             $this->getGrammarServiceManagerMock($grammarServices));
 
-        $rule($root, $this->getTokenizerMock($tokens));
+
+        $accumulator = new Accumulator($rule, $root);
+        $accumulator($this->getTokenizerMock($tokens));
     }
 
     /**
@@ -334,6 +344,8 @@ class FunctionExpressionTest
         $rule = new FunctionExpression($this->getRuleServiceManagerMock($ruleServices),
             $this->getGrammarServiceManagerMock($grammarServices));
 
-        $rule($root, $this->getTokenizerMock($tokens));
+
+        $accumulator = new Accumulator($rule, $root);
+        $accumulator($this->getTokenizerMock($tokens));
     }
 }

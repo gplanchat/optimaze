@@ -22,6 +22,7 @@
 
 namespace Gplanchat\Javascript\Lexer\Rule;
 
+use Gplanchat\Javascript\Lexer\Accumulator;
 use Gplanchat\Javascript\Lexer\Exception;
 use Gplanchat\Lexer\Grammar;
 use Gplanchat\Javascript\Lexer\Rule;
@@ -42,8 +43,8 @@ class ConstructorCallTest
     public function testLoneIdentifier()
     {
         $tokens = [
-            [TokenizerInterface::TOKEN_IDENTIFIER, 'identifier', null],
-            [TokenizerInterface::TOKEN_END,                null, null]
+            [TokenizerInterface::TOKEN_IDENTIFIER,  'a', null],
+            [TokenizerInterface::TOKEN_END,        null, null]
         ];
 
         $ruleServices = [];
@@ -62,7 +63,8 @@ class ConstructorCallTest
         $rule = new ConstructorCall($this->getRuleServiceManagerMock($ruleServices),
             $this->getGrammarServiceManagerMock($grammarServices));
 
-        $rule($root, $this->getTokenizerMock($tokens));
+        $accumulator = new Accumulator($rule, $root);
+        $accumulator($this->getTokenizerMock($tokens));
     }
 
     /**
@@ -71,10 +73,10 @@ class ConstructorCallTest
     public function testMultipleDottedIdentifiers()
     {
         $tokens = [
-            [TokenizerInterface::TOKEN_IDENTIFIER, 'identifier1', null],
-            [TokenizerInterface::OP_DOT,                     '.', null],
-            [TokenizerInterface::TOKEN_IDENTIFIER, 'identifier2', null],
-            [TokenizerInterface::TOKEN_END,                 null, null]
+            [TokenizerInterface::TOKEN_IDENTIFIER,  'a', null],
+            [TokenizerInterface::OP_DOT,            '.', null],
+            [TokenizerInterface::TOKEN_IDENTIFIER,  'b', null],
+            [TokenizerInterface::TOKEN_END,        null, null]
         ];
 
         $ruleServices = [];
@@ -95,7 +97,8 @@ class ConstructorCallTest
         $rule = new ConstructorCall($this->getRuleServiceManagerMock($ruleServices),
             $this->getGrammarServiceManagerMock($grammarServices));
 
-        $rule($root, $this->getTokenizerMock($tokens));
+        $accumulator = new Accumulator($rule, $root);
+        $accumulator($this->getTokenizerMock($tokens));
     }
 
 
@@ -105,14 +108,14 @@ class ConstructorCallTest
     public function testIdentifierWithOptions()
     {
         $tokens = [
-            [TokenizerInterface::TOKEN_IDENTIFIER, 'identifier', null],
-            [TokenizerInterface::OP_LEFT_BRACKET,           '(', null],
-            [TokenizerInterface::OP_RIGHT_BRACKET,          ')', null],
-            [TokenizerInterface::TOKEN_END,                null, null]
+            [TokenizerInterface::TOKEN_IDENTIFIER,  'a', null],
+            [TokenizerInterface::OP_LEFT_BRACKET,   '(', null],
+            [TokenizerInterface::OP_RIGHT_BRACKET,  ')', null],
+            [TokenizerInterface::TOKEN_END,        null, null]
         ];
 
         $ruleServices = [
-            ['ArgumentList',    Rule\ArgumentList::class]
+            ['ArgumentList', new Rule\TokenNullSeeker()]
         ];
 
         $grammarServices = [
@@ -129,7 +132,9 @@ class ConstructorCallTest
         $rule = new ConstructorCall($this->getRuleServiceManagerMock($ruleServices),
             $this->getGrammarServiceManagerMock($grammarServices));
 
-        $rule($root, $this->getTokenizerMock($tokens));
+
+        $accumulator = new Accumulator($rule, $root);
+        $accumulator($this->getTokenizerMock($tokens));
     }
 
     /**
@@ -159,7 +164,9 @@ class ConstructorCallTest
         $rule = new ConstructorCall($this->getRuleServiceManagerMock($ruleServices),
             $this->getGrammarServiceManagerMock($grammarServices));
 
-        $rule($root, $this->getTokenizerMock($tokens));
+
+        $accumulator = new Accumulator($rule, $root);
+        $accumulator($this->getTokenizerMock($tokens));
     }
 
     /**
@@ -176,7 +183,7 @@ class ConstructorCallTest
         ];
 
         $ruleServices = [
-            ['ArgumentList',    Rule\ArgumentList::class]
+            ['ArgumentList', new Rule\TokenNullSeeker()]
         ];
 
         $grammarServices = [
@@ -193,6 +200,8 @@ class ConstructorCallTest
         $rule = new ConstructorCall($this->getRuleServiceManagerMock($ruleServices),
             $this->getGrammarServiceManagerMock($grammarServices));
 
-        $rule($root, $this->getTokenizerMock($tokens));
+
+        $accumulator = new Accumulator($rule, $root);
+        $accumulator($this->getTokenizerMock($tokens));
     }
 }

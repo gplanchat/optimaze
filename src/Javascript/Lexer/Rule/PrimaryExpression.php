@@ -149,8 +149,9 @@ class PrimaryExpression
             $node->addChild($child);
             $this->nextToken($tokenizer);
         } else if ($token->getType() === TokenizerInterface::KEYWORD_FUNCTION) {
+            /** @var RuleInterface $rule */
             $rule = $this->rule->get('FunctionExpression');
-            $rule->parse($node, $tokenizer);
+            $rule($node, $tokenizer);
         } else {
             throw new LexicalError(static::MESSAGE_UNEXPECTED_TOKEN,
                 null, $token->getLine(), $token->getLineOffset(), $token->getStart());

@@ -22,14 +22,17 @@
 
 namespace Gplanchat\Javascript\Lexer\Rule;
 
+use Gplanchat\Javascript\Lexer\ExecutionWrapper;
 use Gplanchat\Lexer\Grammar\RecursiveGrammarInterface;
 use Gplanchat\Javascript\Tokenizer\Tokenizer;
 use Gplanchat\Tokenizer\Token;
 use Gplanchat\ServiceManager\ServiceManagerInterface;
+use Gplanchat\Tokenizer\TokenizerInterface;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 use PHPUnit_Framework_MockObject_MockBuilder as MockBuilder;
 use Gplanchat\Javascript\Lexer\Rule;
 use Gplanchat\Lexer\Grammar;
+use Generator;
 
 abstract class AbstractRuleTest
     extends \PHPUnit_Framework_TestCase

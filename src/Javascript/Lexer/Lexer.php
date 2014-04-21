@@ -71,6 +71,7 @@ class Lexer
 
     /**
      * @param BaseTokenizerInterface $tokenizer
+     * @param AccumulatorInterface $accumulator
      * @return GrammarInterface
      * @throws
      *
@@ -78,33 +79,18 @@ class Lexer
      *     empty
      *     Element Program
      */
-    public function parse(BaseTokenizerInterface $tokenizer)
+    public function parse(BaseTokenizerInterface $tokenizer, AccumulatorInterface $accumulator = null)
     {
-        $stack = new \SplStack();
+        if ($accumulator === null) {
+            /** @var Grammar\Program $program */
+            $program = $this->grammar->get('Program');
 
-        /** @var Grammar\Program $program */
-        $program = $this->grammar->get('Program');
+            /** @var Rule\Element $elementRule */
+            $elementRule = $this->rule->get('Element');
 
-        /** @var Rule\Element $elementRule */
-        $elementRule = $this->rule->get('Element');
-
-        $stack->push(new ExecutionWrapper($elementRule($program, $tokenizer)));
-
-        while (true) {
-            if ($stack->isEmpty()) {
-                break;
-            }
-
-            /** @var ExecutionWrapper $generator */
-            $generator = $stack->pop();
-            if (!$generator->valid()) {
-                continue;
-            }
-            $stack->push($generator);
-
-            $generator($stack, $tokenizer);
+            $accumulator = new Accumulator($elementRule, $program);
         }
 
-        return $program;
+        return $accumulator($tokenizer);
     }
 }

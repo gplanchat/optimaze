@@ -22,6 +22,7 @@
 
 namespace Gplanchat\Javascript\Lexer\Rule;
 
+use Gplanchat\Javascript\Lexer\Accumulator;
 use Gplanchat\Javascript\Lexer\Exception;
 use Gplanchat\Lexer\Grammar;
 use Gplanchat\Javascript\Lexer\Rule;
@@ -42,7 +43,6 @@ class ParameterListTest
     public function testEmptyParameterList()
     {
         $tokens = [
-            [TokenizerInterface::OP_RIGHT_BRACKET,  ')', null],
             [TokenizerInterface::TOKEN_END,        null, null]
         ];
 
@@ -72,7 +72,6 @@ class ParameterListTest
     {
         $tokens = [
             [TokenizerInterface::TOKEN_IDENTIFIER,  'a', null],
-            [TokenizerInterface::OP_RIGHT_BRACKET,  ')', null],
             [TokenizerInterface::TOKEN_END,        null, null]
         ];
 
@@ -105,7 +104,6 @@ class ParameterListTest
             [TokenizerInterface::TOKEN_IDENTIFIER,  'a', null],
             [TokenizerInterface::OP_COMMA,          ',', null],
             [TokenizerInterface::TOKEN_IDENTIFIER,  'b', null],
-            [TokenizerInterface::OP_RIGHT_BRACKET,  ')', null],
             [TokenizerInterface::TOKEN_END,        null, null]
         ];
 

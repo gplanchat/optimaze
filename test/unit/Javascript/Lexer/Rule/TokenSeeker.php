@@ -88,7 +88,7 @@ class TokenSeeker
      * @param RecursiveGrammarInterface $parent
      * @param BaseTokenizerInterface $tokenizer
      */
-    public function parse(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
+    public function __invoke(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
     {
         /** @var Token $token */
         $token = $this->currentToken($tokenizer);
