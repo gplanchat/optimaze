@@ -66,7 +66,6 @@ abstract class AbstractTokenizerTest
     protected function baseDataProvider($globExpression)
     {
         $globExpression = preg_replace('#^(\.{1,2})/#', __DIR__ . '/', $globExpression);
-        var_dump($globExpression);
         foreach (new \GlobIterator($globExpression) as $file) {
             /** @var \SplFileInfo $file */
             $baseName = $file->getBasename('.js');
