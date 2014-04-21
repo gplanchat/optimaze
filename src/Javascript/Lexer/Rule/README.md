@@ -7,7 +7,7 @@ Program:
 ```
 ```
 Element:
-    FunctionExpression
+    FunctionExpression ;
     Statement
 ```
 

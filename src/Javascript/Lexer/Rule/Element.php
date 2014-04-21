@@ -35,8 +35,7 @@ use Gplanchat\Tokenizer\TokenizerInterface as BaseTokenizerInterface;
  * @package Gplanchat\Javascript\Lexer\Rule
  *
  * Element:
- *     function Identifier ( empty ) { StatementList }
- *     function Identifier ( ParameterList ) { StatementList }
+ *     FunctionExpression ;
  *     Statement
  */
 class Element
@@ -62,6 +61,13 @@ class Element
             /** @var FunctionExpression $functionExpressionRule */
             $functionExpressionRule = $this->rule->get('FunctionExpression');
             yield $functionExpressionRule($node, $tokenizer);
+
+            $token = $this->currentToken($tokenizer);
+            if ($token->getType() !== TokenizerInterface::OP_SEMICOLON) {
+                throw new LexicalError(static::MESSAGE_MISSING_SEMICOLON,
+                    null, $token->getLine(), $token->getLineOffset(), $token->getStart());
+            }
+            $this->nextToken($tokenizer);
         } else {
             /** @var Rule\Statement $statementRule */
             $statementRule = $this->rule->get('Statement');
