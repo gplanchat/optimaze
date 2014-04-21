@@ -341,7 +341,7 @@ class Tokenizer
             }
 
             throw new Exception\SyntaxError('Invalid number literal',
-                $this->source->getPath(), $this->line
+                $this->source->getPath(), $this->line, $this->lineOffset, $this->cursor
             );
 
         case "'":
@@ -354,7 +354,7 @@ class Tokenizer
             }
 
             throw new Exception\SyntaxError('Unterminated string literal',
-                $this->source->getPath(), $this->line
+                $this->source->getPath(), $this->line, $this->lineOffset, $this->cursor
             );
 
         case '"':
@@ -367,7 +367,7 @@ class Tokenizer
             }
 
             throw new Exception\SyntaxError('Unterminated string literal',
-                $this->source->getPath(), $this->line
+                $this->source->getPath(), $this->line, $this->lineOffset, $this->cursor
             );
 
         /** @noinspection PhpMissingBreakStatementInspection */
@@ -431,7 +431,7 @@ class Tokenizer
             }
 
             throw new Exception\SyntaxError('Illegal token',
-                $this->source->getPath(), $this->line
+                $this->source->getPath(), $this->line, $this->lineOffset, $this->cursor
             );
 
         default:
@@ -441,7 +441,7 @@ class Tokenizer
             }
 
             throw new Exception\SyntaxError('Illegal token',
-                $this->source->getPath(), $this->line
+                $this->source->getPath(), $this->line, $this->lineOffset, $this->cursor
             );
         }
     }
