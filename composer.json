@@ -16,10 +16,25 @@
     },
     "autoload": {
         "psr-4": {
-            "Gplanchat\\": [
-                "src/",
-                "test/unit/",
-                "test/integration/"
+            "Gplanchat\\Javascript\\": [
+                "src/Javascript/",
+                "test/unit/Javascript/",
+                "test/integration/Javascript/"
+            ],
+            "Gplanchat\\Lexer\\": [
+                "src/Lexer/",
+                "test/unit/Lexer/",
+                "test/integration/Lexer/"
+            ],
+            "Gplanchat\\Tokenizer\\": [
+                "src/Tokenizer/",
+                "test/unit/Tokenizer/",
+                "test/integration/Tokenizer/"
+            ],
+            "Gplanchat\\CodeOptimizer\\": [
+                "src/CodeOptimizer/",
+                "test/unit/CodeOptimizer/",
+                "test/integration/CodeOptimizer/"
             ]
         }
     }
