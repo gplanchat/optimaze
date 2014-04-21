@@ -105,28 +105,6 @@ class Lexer
             $generator($stack, $tokenizer);
         }
 
-//
-//        /** @var Grammar\Program $program */
-//        $program = $this->grammar->get('Program');
-//
-//        /** @var Rule\Element $elementRule */
-//        $elementRule = $this->rule->get('Element');
-//
-//        while ($tokenizer->valid()) {
-//            $token = $this->currentToken($tokenizer);
-//
-//            if ($token->getType() === TokenizerInterface::TOKEN_BLOCK_COMMENT ||
-//                $token->getType() === TokenizerInterface::TOKEN_LINE_COMMENT) {
-//                $this->nextToken($tokenizer);
-//                continue;
-//            }
-//
-//            if ($token->getType() === TokenizerInterface::TOKEN_END) {
-//                break;
-//            }
-//            yield $elementRule->parse($program, $tokenizer);
-//        }
-
         return $program;
     }
 }

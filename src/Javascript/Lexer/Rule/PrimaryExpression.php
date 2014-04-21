@@ -89,7 +89,7 @@ class PrimaryExpression
             $token = $this->currentToken($tokenizer);
             if ($token->getType() !== TokenizerInterface::OP_RIGHT_BRACKET) {
                 throw new LexicalError(static::MESSAGE_MISSING_RIGHT_BRACKET,
-                    null, $token->getLine(), $token->getStart());
+                    null, $token->getLine(), $token->getLineOffset(), $token->getStart());
             }
             $this->nextToken($tokenizer);
         } else if ($token->getType() === TokenizerInterface::TOKEN_IDENTIFIER) {
@@ -153,7 +153,7 @@ class PrimaryExpression
             $rule->parse($node, $tokenizer);
         } else {
             throw new LexicalError(static::MESSAGE_UNEXPECTED_TOKEN,
-                null, $token->getLine(), $token->getStart());
+                null, $token->getLine(), $token->getLineOffset(), $token->getStart());
         }
 
         $node->optimize();

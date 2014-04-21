@@ -39,14 +39,16 @@ class LexicalError
      * @param string $message
      * @param int $file
      * @param int $line
+     * @param int $lineOffset
      * @param int $offset
      */
-    public function __construct($message, $file = null, $line = null, $offset = null)
+    public function __construct($message, $file = null, $line = null, $lineOffset = null, $offset = null)
     {
         parent::__construct($message);
 
         $this->sourceFile = $file;
         $this->sourceLine = $line ?: -1;
-        $this->sourceOffset = $offset;
+        $this->sourceLineOffset = $lineOffset ?: -1;
+        $this->sourceOffset = $offset ?: -1;
     }
 }

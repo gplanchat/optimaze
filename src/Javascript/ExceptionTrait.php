@@ -31,6 +31,9 @@ trait ExceptionTrait
     private $sourceLine = null;
 
     /** @var int */
+    private $sourceLineOffset = null;
+
+    /** @var int */
     private $sourceOffset = null;
 
     /**
@@ -47,6 +50,14 @@ trait ExceptionTrait
     public function getSourceLine()
     {
         return $this->sourceLine;
+    }
+
+    /**
+     * @return int
+     */
+    public function getSourceLineOffset()
+    {
+        return $this->sourceLineOffset;
     }
 
     /**
@@ -73,11 +84,13 @@ trait ExceptionTrait
     public function __toString()
     {
         if ($this->getSourceFile() === null) {
-            return sprintf('Parse error: %s in source string on line %d', $this->getMessage(), $this->getSourceLine())
+            return sprintf('Parse error: %s in source string on line %d (offset %d)',
+                $this->getMessage(), $this->getSourceLine(), $this->getSourceOffset())
                 . PHP_EOL . $this->getTraceAsString();
         }
 
-        return sprintf('Parse error: %s in source file "%s" on line %d', $this->getMessage(), $this->getSourceFile(), $this->getSourceLine())
+        return sprintf('Parse error: %s in source file "%s" on line %d (offset %d)',
+            $this->getMessage(), $this->getSourceFile(), $this->getSourceLine(), $this->getSourceOffset())
             . PHP_EOL . $this->getTraceAsString();
     }
 }

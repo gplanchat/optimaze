@@ -58,6 +58,11 @@ class Token
     private $line = null;
 
     /**
+     * @var int
+     */
+    private $lineOffset = null;
+
+    /**
      * @var null|string
      */
     private $assignOperator = null;
@@ -68,9 +73,10 @@ class Token
      * @param int $start
      * @param int $end
      * @param int $line
+     * @param int $lineOffset
      * @param string|null $assignOperator
      */
-    public function __construct($type, $value, $start, $end, $line, $assignOperator = null)
+    public function __construct($type, $value, $start, $end, $line, $lineOffset, $assignOperator = null)
     {
         $this->setType($type);
         $this->setValue($value);
@@ -135,6 +141,25 @@ class Token
     public function getLine()
     {
         return $this->line;
+    }
+
+    /**
+     * @param mixed $lineOffset
+     * @return $this
+     */
+    public function setLineOffset($lineOffset)
+    {
+        $this->lineOffset = $lineOffset;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLineOffset()
+    {
+        return $this->lineOffset;
     }
 
     /**

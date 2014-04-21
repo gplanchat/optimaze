@@ -65,7 +65,7 @@ class Constructor
             $token = $this->nextToken($tokenizer);
             if ($token->getType() !== TokenizerInterface::OP_DOT) {
                 throw new LexicalError(static::MESSAGE_UNEXPECTED_DOT,
-                    null, $token->getLine(), $token->getStart());
+                    null, $token->getLine(), $token->getLineOffset(), $token->getStart());
             }
 
             /** @var Grammar\DotOperator $dotOperator */

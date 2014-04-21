@@ -56,7 +56,7 @@ class FunctionExpression
         $token = $this->currentToken($tokenizer);
         if ($token->getType() !== TokenizerInterface::KEYWORD_FUNCTION) {
             throw new LexicalError(static::MESSAGE_MISSING_FUNCTION_KEYWORD,
-                null, $token->getLine(), $token->getStart());
+                null, $token->getLine(), $token->getLineOffset(), $token->getStart());
         }
 
         $token = $this->nextToken($tokenizer);
@@ -73,7 +73,7 @@ class FunctionExpression
 
         if ($token->getType() !== TokenizerInterface::OP_LEFT_BRACKET) {
             throw new LexicalError(static::MESSAGE_MISSING_LEFT_BRACKET,
-                null, $token->getLine(), $token->getStart());
+                null, $token->getLine(), $token->getLineOffset(), $token->getStart());
         }
         $this->nextToken($tokenizer);
 
@@ -84,13 +84,13 @@ class FunctionExpression
         $token = $this->currentToken($tokenizer);
         if ($token->getType() !== TokenizerInterface::OP_RIGHT_BRACKET) {
             throw new LexicalError(static::MESSAGE_MISSING_RIGHT_BRACKET,
-                null, $token->getLine(), $token->getStart());
+                null, $token->getLine(), $token->getLineOffset(), $token->getStart());
         }
         $token = $this->nextToken($tokenizer);
 
         if ($token->getType() !== TokenizerInterface::OP_LEFT_CURLY) {
             throw new LexicalError(static::MESSAGE_MISSING_LEFT_CURLY_BRACE,
-                null, $token->getLine(), $token->getStart());
+                null, $token->getLine(), $token->getLineOffset(), $token->getStart());
         }
         $this->nextToken($tokenizer);
 
@@ -101,7 +101,7 @@ class FunctionExpression
         $token = $this->currentToken($tokenizer);
         if ($token->getType() !== TokenizerInterface::OP_RIGHT_CURLY) {
             throw new LexicalError(static::MESSAGE_MISSING_RIGHT_CURLY_BRACE,
-                null, $token->getLine(), $token->getStart());
+                null, $token->getLine(), $token->getLineOffset(), $token->getStart());
         }
         $this->nextToken($tokenizer);
 

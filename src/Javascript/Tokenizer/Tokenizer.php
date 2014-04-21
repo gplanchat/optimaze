@@ -142,7 +142,7 @@ class Tokenizer
     private $opRegExp = null;
 
     /**
-     * @var array
+     * @var Token[]
      */
     private $tokens = [];
 
@@ -164,7 +164,12 @@ class Tokenizer
     /**
      * @var int
      */
-    private $line;
+    private $line = 0;
+
+    /**
+     * @var int
+     */
+    private $lineOffset = 0;
 
     /**
      * @var int
@@ -252,6 +257,10 @@ class Tokenizer
         $this->tokenIndex = 0;
     }
 
+    /**
+     * @return Token|null
+     * @throws Exception\SyntaxError
+     */
     public function get()
     {
         if ($this->tokenIndex < $this->tokenCount) {
@@ -271,6 +280,10 @@ class Tokenizer
                 $this->cursor += $spacesLength;
                 if (!$this->scanNewLines) {
                     $this->line += substr_count($match[0], "\n");
+
+                    if (($pos = strrpos($match[0], "\n")) !== null) {
+                        $this->lineOffset = $spacesLength - $pos;
+                    }
                 }
 
                 if ($spacesLength == $chunkSize) {
@@ -435,11 +448,22 @@ class Tokenizer
 
     protected function push($type, $value, $assignOp = null)
     {
-        $token = new Token($type, $value, $this->cursor, $this->cursor, $this->line, $assignOp);
+        $tokenLength = strlen($value);
+
+        $token = new Token(
+            $type,
+            $value,
+            $this->cursor,
+            $this->cursor + $tokenLength,
+            $this->line,
+            $this->lineOffset,
+            $assignOp
+        );
 
         $this->tokens[] = $token;
         $this->tokenCount++;
-        $this->cursor += strlen($value);
+        $this->cursor += $tokenLength;
+        $this->lineOffset += $tokenLength;
         return $token;
     }
 }
