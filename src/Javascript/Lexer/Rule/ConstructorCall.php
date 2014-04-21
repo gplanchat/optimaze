@@ -71,7 +71,7 @@ class ConstructorCall
 
                 /** @var Rule\ArgumentList $argumentListRule */
                 $argumentListRule = $this->rule->get('ArgumentList');
-                $argumentListRule($node, $tokenizer);
+                yield $argumentListRule($node, $tokenizer);
 
                 $token = $this->currentToken($tokenizer);
                 if ($token->getType() !== TokenizerInterface::OP_RIGHT_BRACKET) {

@@ -63,7 +63,7 @@ class StatementList
                 break;
             }
 
-            $statementRule($node, $tokenizer);
+            yield $statementRule($node, $tokenizer);
         }
 
         $node->optimize();

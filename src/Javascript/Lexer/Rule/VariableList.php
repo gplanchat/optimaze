@@ -78,7 +78,7 @@ class VariableList
 
                 /** @var AssignmentExpression $assignmentExpressionRule */
                 $assignmentExpressionRule = $this->rule->get('AssignmentExpression');
-                $assignmentExpressionRule($variable, $tokenizer);
+                yield $assignmentExpressionRule($variable, $tokenizer);
                 $token = $this->currentToken($tokenizer);
             }
 

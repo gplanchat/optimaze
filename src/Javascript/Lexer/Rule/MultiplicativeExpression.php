@@ -63,7 +63,7 @@ class MultiplicativeExpression
         $unaryExpressionRule = $this->rule->get('UnaryExpression');
 
         while (true) {
-            $unaryExpressionRule($node, $tokenizer);
+            yield $unaryExpressionRule($node, $tokenizer);
 
             $token = $this->currentToken($tokenizer);
             if (!in_array($token->getType(), static::$multiplicativeOperators)) {

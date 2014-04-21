@@ -57,7 +57,7 @@ class AssignmentExpression
         $conditionalExpressionRule = $this->rule->get('ConditionalExpression');
 
         while (true) {
-            $conditionalExpressionRule($node, $tokenizer);
+            yield $conditionalExpressionRule($node, $tokenizer);
 
             $token = $this->currentToken($tokenizer);
             if ($token->getType() !== TokenizerInterface::OP_ASSIGN) {

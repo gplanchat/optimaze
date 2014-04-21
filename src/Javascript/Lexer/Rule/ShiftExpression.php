@@ -65,7 +65,7 @@ class ShiftExpression
         $additiveExpressionRule = $this->rule->get('AdditiveExpression');
 
         while (true) {
-            $additiveExpressionRule($node, $tokenizer);
+            yield $additiveExpressionRule($node, $tokenizer);
 
             $token = $this->currentToken($tokenizer);
             if (!in_array($token->getType(), static::$shiftOperators)) {

@@ -61,11 +61,11 @@ class Expression
             if ($token->getType() === TokenizerInterface::KEYWORD_FUNCTION) {
                 /** @var FunctionExpression $functionExpressionRule */
                 $functionExpressionRule = $this->rule->get('FunctionExpression');
-                $functionExpressionRule($node, $tokenizer);
+                yield $functionExpressionRule($node, $tokenizer);
                 break;
             }
 
-            $assignmentExpressionRule($node, $tokenizer);
+            yield $assignmentExpressionRule($node, $tokenizer);
 
             $token = $this->currentToken($tokenizer);
             if ($token->getType() !== TokenizerInterface::OP_COMMA) {

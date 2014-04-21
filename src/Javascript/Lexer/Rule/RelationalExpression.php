@@ -65,7 +65,7 @@ class RelationalExpression
         $shiftExpressionRule = $this->rule->get('ShiftExpression');
 
         while (true) {
-            $shiftExpressionRule($node, $tokenizer);
+            yield $shiftExpressionRule($node, $tokenizer);
 
             $token = $this->currentToken($tokenizer);
             if (!in_array($token->getType(), static::$relationalOperators)) {

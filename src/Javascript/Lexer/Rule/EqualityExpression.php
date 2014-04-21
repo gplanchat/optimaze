@@ -64,7 +64,7 @@ class EqualityExpression
         $relationalExpressionRule = $this->rule->get('RelationalExpression');
 
         while (true) {
-            $relationalExpressionRule($node, $tokenizer);
+            yield $relationalExpressionRule($node, $tokenizer);
 
             $token = $this->currentToken($tokenizer);
             if (!in_array($token->getType(), static::$equalityOperators)) {

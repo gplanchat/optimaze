@@ -109,7 +109,8 @@ class Statement
                 $this->parseCoumpoundStatement($node, $tokenizer);
                 break;
             } else {
-                $this->getVariableListOrExpressionRule()->parse($node, $tokenizer);
+                $rule = $this->getVariableListOrExpressionRule();
+                $rule($node, $tokenizer);
 
                 $token = $this->currentToken($tokenizer);
                 if ($token->getType() !== TokenizerInterface::OP_SEMICOLON) {
@@ -143,7 +144,8 @@ class Statement
             $conditionChain->addChild($ifKeyword);
 
             $this->nextToken($tokenizer);
-            $this->getConditionRule()->parse($ifKeyword, $tokenizer);
+            $rule = $this->getConditionRule();
+            $rule($ifKeyword, $tokenizer);
 
             $this->parse($ifKeyword, $tokenizer);
 
@@ -178,7 +180,8 @@ class Statement
 
         $this->nextToken($tokenizer);
 
-        $this->getConditionRule()->parse($whileKeyword, $tokenizer);
+        $rule = $this->getConditionRule();
+        $rule($whileKeyword, $tokenizer);
     }
 
     /**
@@ -206,7 +209,8 @@ class Statement
 
             $token = $this->currentToken($tokenizer);
         } else {
-            $this->getVariableListOrExpressionRule()->parse($forKeyword, $tokenizer);
+            $rule = $this->getVariableListOrExpressionRule();
+            $rule($forKeyword, $tokenizer);
             $token = $this->currentToken($tokenizer);
 
             if ($token->getType() === TokenizerInterface::OP_SEMICOLON) {
@@ -217,7 +221,8 @@ class Statement
             } else if ($token->getType() === TokenizerInterface::KEYWORD_IN) {
                 $this->nextToken($tokenizer);
 
-                $this->getExpressionRule()->parse($forKeyword, $tokenizer);
+                $rule = $this->getExpressionRule();
+                $rule($forKeyword, $tokenizer);
                 $token = $this->currentToken($tokenizer);
             } else {
                 throw new LexicalError(static::MESSAGE_MISSING_SEMICOLON_OR_IN_KEYWORD,
@@ -240,7 +245,8 @@ class Statement
      */
     protected function parseForCondition(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
     {
-        $this->getExpressionRule()->parse($parent, $tokenizer);
+        $rule = $this->getExpressionRule();
+        $rule($parent, $tokenizer);
 
         $token = $this->currentToken($tokenizer);
 
@@ -249,7 +255,8 @@ class Statement
                 null, $token->getLine(), $token->getStart());
         }
 
-        $this->getExpressionRule()->parse($parent, $tokenizer);
+        $rule = $this->getExpressionRule();
+        $rule($parent, $tokenizer);
     }
 
     /**
@@ -313,7 +320,8 @@ class Statement
         }
 
         $this->nextToken($tokenizer);
-        $this->getExpressionRule()->parse($withKeyword, $tokenizer);
+        $rule = $this->getExpressionRule();
+        $rule($withKeyword, $tokenizer);
 
         $token = $this->currentToken($tokenizer);
         if ($token->getType() !== TokenizerInterface::OP_RIGHT_BRACKET) {
@@ -336,7 +344,8 @@ class Statement
         $parent->addChild($returnKeyword);
 
         $this->nextToken($tokenizer);
-        $this->getExpressionRule()->parse($returnKeyword, $tokenizer);
+        $rule = $this->getExpressionRule();
+        $rule($returnKeyword, $tokenizer);
 
         $token = $this->currentToken($tokenizer);
         if ($token->getType() !== TokenizerInterface::OP_SEMICOLON) {
@@ -363,7 +372,7 @@ class Statement
 
         /** @var Rule\StatementList $statementListRule */
         $statementListRule = $this->rule->get('StatementListRule');
-        $statementListRule($compoundStatement, $tokenizer);
+        yield $statementListRule($compoundStatement, $tokenizer);
 
         $token = $this->currentToken($tokenizer);
         if ($token->getType() !== TokenizerInterface::OP_RIGHT_CURLY) {

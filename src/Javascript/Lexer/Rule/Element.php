@@ -61,11 +61,11 @@ class Element
         if ($token->getType() === TokenizerInterface::KEYWORD_FUNCTION) {
             /** @var FunctionExpression $functionExpressionRule */
             $functionExpressionRule = $this->rule->get('FunctionExpression');
-            $functionExpressionRule($node, $tokenizer);
+            yield $functionExpressionRule($node, $tokenizer);
         } else {
             /** @var Rule\Statement $statementRule */
             $statementRule = $this->rule->get('Statement');
-            $statementRule($node, $tokenizer);
+            yield $statementRule($node, $tokenizer);
         }
 
         $node->optimize();

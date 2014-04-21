@@ -56,7 +56,7 @@ class BitwiseXorExpression
         /** @var BitwiseAndExpression $rule */
         $rule = $this->rule->get('BitwiseAndExpression');
         while (true) {
-            $rule->parse($node, $tokenizer);
+            yield $rule($node, $tokenizer);
 
             $token = $this->currentToken($tokenizer);
             if ($token->getType() !== TokenizerInterface::OP_BITWISE_XOR) {

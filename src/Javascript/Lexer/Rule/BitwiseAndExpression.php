@@ -57,7 +57,7 @@ class BitwiseAndExpression
         /** @var EqualityExpression $rule */
         $rule = $this->rule->get('EqualityExpression');
         while (true) {
-            $rule->parse($node, $tokenizer);
+            yield $rule($node, $tokenizer);
 
             $token = $this->currentToken($tokenizer);
             if ($token->getType() !== TokenizerInterface::OP_BITWISE_AND) {

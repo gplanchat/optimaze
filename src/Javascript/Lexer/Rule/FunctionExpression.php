@@ -79,7 +79,7 @@ class FunctionExpression
 
         /** @var Rule\ParameterList $parameterListRule */
         $parameterListRule = $this->rule->get('ParameterList');
-        $parameterListRule($node, $tokenizer);
+        yield $parameterListRule($node, $tokenizer);
 
         $token = $this->currentToken($tokenizer);
         if ($token->getType() !== TokenizerInterface::OP_RIGHT_BRACKET) {
@@ -96,7 +96,7 @@ class FunctionExpression
 
         /** @var Rule\StatementList $statementListRule */
         $statementListRule = $this->rule->get('StatementList');
-        $statementListRule($node, $tokenizer);
+        yield $statementListRule($node, $tokenizer);
 
         $token = $this->currentToken($tokenizer);
         if ($token->getType() !== TokenizerInterface::OP_RIGHT_CURLY) {

@@ -62,7 +62,7 @@ class Condition
 
         /** @var Expression $expressionRule */
         $expressionRule = $this->rule->get('Expression');
-        $expressionRule($node, $tokenizer);
+        yield $expressionRule($node, $tokenizer);
 
         $token = $this->currentToken($tokenizer);
         if ($token->getType() !== TokenizerInterface::OP_RIGHT_BRACKET) {

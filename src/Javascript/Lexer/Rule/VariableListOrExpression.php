@@ -54,12 +54,12 @@ class VariableListOrExpression
         if ($token->getType() === TokenizerInterface::KEYWORD_VAR) {
             /** @var VariableList $variableListRule */
             $variableListRule = $this->rule->get('VariableList');
-            $variableListRule($parent, $tokenizer);
+            yield $variableListRule($parent, $tokenizer);
             return;
         }
 
         /** @var Expression $expressionRule */
         $expressionRule = $this->rule->get('Expression');
-        $expressionRule($parent, $tokenizer);
+        yield $expressionRule($parent, $tokenizer);
     }
 }

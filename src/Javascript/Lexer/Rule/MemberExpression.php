@@ -67,7 +67,7 @@ class MemberExpression
 
                 /** @var Expression $expressionRule */
                 $expressionRule = $this->rule->get('Expression');
-                $expressionRule($node, $tokenizer);
+                yield $expressionRule($node, $tokenizer);
 
                 $token = $this->currentToken($tokenizer);
                 if ($token->getType() !== TokenizerInterface::OP_RIGHT_SQUARE_BRACKET) {
@@ -80,7 +80,7 @@ class MemberExpression
 
                 /** @var ArgumentList $argumentListRule */
                 $argumentListRule = $this->rule->get('ArgumentList');
-                $argumentListRule($node, $tokenizer);
+                yield $argumentListRule($node, $tokenizer);
 
                 $token = $this->currentToken($tokenizer);
                 if ($token->getType() !== TokenizerInterface::OP_RIGHT_BRACKET) {

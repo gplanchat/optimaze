@@ -84,7 +84,7 @@ class PrimaryExpression
 
             /** @var Expression $rule */
             $rule = $this->rule->get('Expression');
-            $rule->parse($node, $tokenizer);
+            yield $rule($node, $tokenizer);
 
             $token = $this->currentToken($tokenizer);
             if ($token->getType() !== TokenizerInterface::OP_RIGHT_BRACKET) {

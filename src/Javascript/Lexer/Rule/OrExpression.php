@@ -56,7 +56,7 @@ class OrExpression
         /** @var AndExpression $rule */
         $rule = $this->rule->get('AndExpression');
         while (true) {
-            $rule->parse($node, $tokenizer);
+            yield $rule($node, $tokenizer);
 
             $token = $this->currentToken($tokenizer);
             if ($token->getType() !== TokenizerInterface::OP_OR) {

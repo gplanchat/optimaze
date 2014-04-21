@@ -63,7 +63,7 @@ class AdditiveExpression
         $multiplicativeExpressionRule = $this->rule->get('MultiplicativeExpression');
 
         while (true) {
-            $multiplicativeExpressionRule($node, $tokenizer);
+            yield $multiplicativeExpressionRule($node, $tokenizer);
 
             $token = $this->currentToken($tokenizer);
             if (!in_array($token->getType(), static::$additiveOperators)) {
