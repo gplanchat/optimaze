@@ -65,10 +65,8 @@ abstract class AbstractTokenizerTest
      */
     protected function baseDataProvider($globExpression)
     {
-        $data = [];
-
-        $oldPath = getcwd();
-        chdir(__DIR__);
+        $globExpression = preg_replace('#^(\.{1,2})/#', __DIR__ . '/', $globExpression);
+        var_dump($globExpression);
         foreach (new \GlobIterator($globExpression) as $file) {
             /** @var \SplFileInfo $file */
             $baseName = $file->getBasename('.js');
@@ -76,13 +74,10 @@ abstract class AbstractTokenizerTest
                 continue;
             }
 
-            $data[] = [
+            yield [
                 include $file->getPath() . DIRECTORY_SEPARATOR . $baseName . '.tok',
                 file_get_contents($file->getPathname())
             ];
         }
-        chdir($oldPath);
-
-        return $data;
     }
 }
