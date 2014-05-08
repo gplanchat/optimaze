@@ -36,12 +36,9 @@ use Gplanchat\Tokenizer\TokenizerInterface as BaseTokenizerInterface;
  *
  * Statement:
  *     ;
- *     if Condition Statement
- *     if Condition Statement else Statement
- *     while Condition Statement
- *     for ( ; Expression ; Expression ) Statement
- *     for ( VariableListOrExpression ; Expression ; Expression ) Statement
- *     for ( VariableListOrExpression in Expression ) Statement
+ *     IfExpression
+ *     WhileExpression
+ *     ForExpression
  *     break ;
  *     continue ;
  *     with ( Expression ) Statement
@@ -88,14 +85,18 @@ class Statement
                 $this->nextToken($tokenizer);
                 break;
             } else if ($token->getType() === TokenizerInterface::KEYWORD_IF) {
-                /** @var Expression $ifExpressionRule */
+                /** @var IfExpression $ifExpressionRule */
                 $ifExpressionRule = $this->rule->get('IfExpression');
                 yield $ifExpressionRule($node, $tokenizer);
                 break;
             } else if ($token->getType() === TokenizerInterface::KEYWORD_WHILE) {
-                $this->parseWhile($node, $tokenizer);
+                /** @var WhileExpression $whileExpressionRule */
+                $whileExpressionRule = $this->rule->get('WhileExpression');
+                yield $whileExpressionRule($node, $tokenizer);
             } else if ($token->getType() === TokenizerInterface::KEYWORD_FOR) {
-                $this->parseFor($node, $tokenizer);
+                /** @var ForExpression $forExpressionRule */
+                $forExpressionRule = $this->rule->get('ForExpression');
+                yield $forExpressionRule($node, $tokenizer);
             } else if ($token->getType() === TokenizerInterface::KEYWORD_BREAK) {
                 $this->parseBreak($node, $tokenizer);
                 break;
@@ -142,99 +143,6 @@ class Statement
         }
 
         $node->optimize();
-    }
-
-    /**
-     * @param RecursiveGrammarInterface $parent
-     * @param BaseTokenizerInterface $tokenizer
-     * @return void
-     * @throws LexicalError
-     */
-    protected function parseWhile(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
-    {
-        /** @var Grammar\WhileKeyword $whileKeyword */
-        $whileKeyword = $this->grammar->get('WhileKeyword');
-        $parent->addChild($whileKeyword);
-
-        $this->nextToken($tokenizer);
-
-        $rule = $this->getConditionRule();
-        $rule($whileKeyword, $tokenizer);
-    }
-
-    /**
-     * @param RecursiveGrammarInterface $parent
-     * @param BaseTokenizerInterface $tokenizer
-     * @return void
-     * @throws LexicalError
-     */
-    protected function parseFor(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
-    {
-        /** @var Grammar\ForKeyword $forKeyword */
-        $forKeyword = $this->grammar->get('ForKeyword');
-        $parent->addChild($forKeyword);
-
-        $token = $this->nextToken($tokenizer);
-        if ($token->getType() !== TokenizerInterface::OP_LEFT_BRACKET) {
-            throw new LexicalError(static::MESSAGE_MISSING_LEFT_BRACKET,
-                null, $token->getLine(), $token->getLineOffset(), $token->getStart());
-        }
-
-        $token = $this->nextToken($tokenizer);
-        if ($token->getType() === TokenizerInterface::OP_SEMICOLON) {
-            $this->nextToken($tokenizer);
-            $this->parseForCondition($forKeyword, $tokenizer);
-
-            $token = $this->currentToken($tokenizer);
-        } else {
-            $rule = $this->getVariableListOrExpressionRule();
-            $rule($forKeyword, $tokenizer);
-            $token = $this->currentToken($tokenizer);
-
-            if ($token->getType() === TokenizerInterface::OP_SEMICOLON) {
-                $this->nextToken($tokenizer);
-                $this->parseForCondition($forKeyword, $tokenizer);
-
-                $token = $this->currentToken($tokenizer);
-            } else if ($token->getType() === TokenizerInterface::KEYWORD_IN) {
-                $this->nextToken($tokenizer);
-
-                $rule = $this->getExpressionRule();
-                $rule($forKeyword, $tokenizer);
-                $token = $this->currentToken($tokenizer);
-            } else {
-                throw new LexicalError(static::MESSAGE_MISSING_SEMICOLON_OR_IN_KEYWORD,
-                    null, $token->getLine(), $token->getLineOffset(), $token->getLineOffset(), $token->getStart());
-            }
-        }
-
-        if ($token->getType() !== TokenizerInterface::OP_RIGHT_BRACKET) {
-            throw new LexicalError(static::MESSAGE_MISSING_RIGHT_BRACKET,
-                null, $token->getLine(), $token->getLineOffset(), $token->getStart());
-        }
-        $this->nextToken($tokenizer);
-    }
-
-    /**
-     * @param RecursiveGrammarInterface $parent
-     * @param BaseTokenizerInterface $tokenizer
-     * @return void
-     * @throws LexicalError
-     */
-    protected function parseForCondition(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
-    {
-        $rule = $this->getExpressionRule();
-        $rule($parent, $tokenizer);
-
-        $token = $this->currentToken($tokenizer);
-
-        if ($token->getType() !== TokenizerInterface::OP_SEMICOLON) {
-            throw new LexicalError(static::MESSAGE_MISSING_SEMICOLON,
-                null, $token->getLine(), $token->getLineOffset(), $token->getStart());
-        }
-
-        $rule = $this->getExpressionRule();
-        $rule($parent, $tokenizer);
     }
 
     /**
