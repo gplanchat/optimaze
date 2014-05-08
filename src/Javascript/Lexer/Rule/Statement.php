@@ -88,7 +88,9 @@ class Statement
                 $this->nextToken($tokenizer);
                 break;
             } else if ($token->getType() === TokenizerInterface::KEYWORD_IF) {
-                $this->parseConditionChain($node, $tokenizer);
+                /** @var Expression $ifExpressionRule */
+                $ifExpressionRule = $this->rule->get('IfExpression');
+                yield $ifExpressionRule($node, $tokenizer);
                 break;
             } else if ($token->getType() === TokenizerInterface::KEYWORD_WHILE) {
                 $this->parseWhile($node, $tokenizer);
@@ -106,7 +108,23 @@ class Statement
                 $this->parseReturn($node, $tokenizer);
                 break;
             } else if ($token->getType() === TokenizerInterface::OP_LEFT_CURLY) {
-                $this->parseCoumpoundStatement($node, $tokenizer);
+                $this->nextToken($tokenizer);
+
+                /** @var Grammar\CompoundStatement $compoundStatement */
+                $compoundStatement = $this->grammar->get('CompoundStatement');
+                $parent->addChild($compoundStatement);
+
+                /** @var Rule\StatementList $statementListRule */
+                $statementListRule = $this->rule->get('StatementListRule');
+                yield $statementListRule($compoundStatement, $tokenizer);
+
+                $token = $this->currentToken($tokenizer);
+                if ($token->getType() !== TokenizerInterface::OP_RIGHT_CURLY) {
+                    throw new LexicalError(static::MESSAGE_MISSING_RIGHT_CURLY_BRACE,
+                        null, $token->getLine(), $token->getLineOffset(), $token->getStart());
+                }
+
+                $this->nextToken($tokenizer);
                 break;
             } else {
                 $rule = $this->getVariableListOrExpressionRule();
@@ -124,46 +142,6 @@ class Statement
         }
 
         $node->optimize();
-    }
-
-    /**
-     * @param RecursiveGrammarInterface $parent
-     * @param BaseTokenizerInterface $tokenizer
-     * @return void
-     * @throws LexicalError
-     */
-    protected function parseConditionChain(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
-    {
-        /** @var Grammar\ConditionChain $conditionChain */
-        $conditionChain = $this->grammar->get('ConditionChain');
-        $parent->addChild($conditionChain);
-
-        while (true) {
-            /** @var Grammar\IfKeyword $ifKeyword */
-            $ifKeyword = $this->grammar->get('IfKeyword');
-            $conditionChain->addChild($ifKeyword);
-
-            $this->nextToken($tokenizer);
-            $rule = $this->getConditionRule();
-            $rule($ifKeyword, $tokenizer);
-
-            $this($ifKeyword, $tokenizer);
-
-            $token = $this->currentToken($tokenizer);
-            if ($token->getType() !== TokenizerInterface::KEYWORD_ELSE) {
-                break;
-            }
-
-            $token = $this->nextToken($tokenizer);
-            if ($token->getType() !== TokenizerInterface::KEYWORD_IF) {
-                /** @var Grammar\ElseKeyword $elseKeyword */
-                $elseKeyword = $this->grammar->get('ElseKeyword');
-                $conditionChain->addChild($elseKeyword);
-
-                $this($elseKeyword, $tokenizer);
-                break;
-            }
-        }
     }
 
     /**
@@ -350,33 +328,6 @@ class Statement
         $token = $this->currentToken($tokenizer);
         if ($token->getType() !== TokenizerInterface::OP_SEMICOLON) {
             throw new LexicalError(static::MESSAGE_MISSING_SEMICOLON,
-                null, $token->getLine(), $token->getLineOffset(), $token->getStart());
-        }
-
-        $this->nextToken($tokenizer);
-    }
-
-    /**
-     * @param RecursiveGrammarInterface $parent
-     * @param BaseTokenizerInterface $tokenizer
-     * @return void
-     * @throws LexicalError
-     */
-    protected function parseCoumpoundStatement(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
-    {
-        /** @var Grammar\CompoundStatement $compoundStatement */
-        $compoundStatement = $this->grammar->get('CompoundStatement');
-        $parent->addChild($compoundStatement);
-
-        $this->nextToken($tokenizer);
-
-        /** @var Rule\StatementList $statementListRule */
-        $statementListRule = $this->rule->get('StatementListRule');
-        yield $statementListRule($compoundStatement, $tokenizer);
-
-        $token = $this->currentToken($tokenizer);
-        if ($token->getType() !== TokenizerInterface::OP_RIGHT_CURLY) {
-            throw new LexicalError(static::MESSAGE_MISSING_RIGHT_CURLY_BRACE,
                 null, $token->getLine(), $token->getLineOffset(), $token->getStart());
         }
 
