@@ -104,9 +104,42 @@ class Statement
                 $this->parseContinue($node, $tokenizer);
                 break;
             } else if ($token->getType() === TokenizerInterface::KEYWORD_WITH) {
-                $this->parseWith($node, $tokenizer);
+                /** @var Grammar\WithKeyword $withKeyword */
+                $withKeyword = $this->grammar->get('WithKeyword');
+                $parent->addChild($withKeyword);
+
+                $token = $this->nextToken($tokenizer);
+                if ($token->getType() !== TokenizerInterface::OP_LEFT_BRACKET) {
+                    throw new LexicalError(static::MESSAGE_MISSING_LEFT_BRACKET,
+                        null, $token->getLine(), $token->getLineOffset(), $token->getStart());
+                }
+
+                $this->nextToken($tokenizer);
+                $rule = $this->getExpressionRule();
+                yield $rule($withKeyword, $tokenizer);
+
+                $token = $this->currentToken($tokenizer);
+                if ($token->getType() !== TokenizerInterface::OP_RIGHT_BRACKET) {
+                    throw new LexicalError(static::MESSAGE_MISSING_RIGHT_BRACKET,
+                        null, $token->getLine(), $token->getLineOffset(), $token->getStart());
+                }
+                $this->nextToken($tokenizer);
             } else if ($token->getType() === TokenizerInterface::KEYWORD_RETURN) {
-                $this->parseReturn($node, $tokenizer);
+                /** @var Grammar\ReturnKeyword $returnKeyword */
+                $returnKeyword = $this->grammar->get('ReturnKeyword');
+                $parent->addChild($returnKeyword);
+
+                $this->nextToken($tokenizer);
+                $rule = $this->getExpressionRule();
+                yield $rule($returnKeyword, $tokenizer);
+
+                $token = $this->currentToken($tokenizer);
+                if ($token->getType() !== TokenizerInterface::OP_SEMICOLON) {
+                    throw new LexicalError(static::MESSAGE_MISSING_SEMICOLON,
+                        null, $token->getLine(), $token->getLineOffset(), $token->getStart());
+                }
+
+                $this->nextToken($tokenizer);
                 break;
             } else if ($token->getType() === TokenizerInterface::OP_LEFT_CURLY) {
                 $this->nextToken($tokenizer);
@@ -179,61 +212,6 @@ class Statement
         $parent->addChild($continueKeyword);
 
         $token = $this->nextToken($tokenizer);
-        if ($token->getType() !== TokenizerInterface::OP_SEMICOLON) {
-            throw new LexicalError(static::MESSAGE_MISSING_SEMICOLON,
-                null, $token->getLine(), $token->getLineOffset(), $token->getStart());
-        }
-
-        $this->nextToken($tokenizer);
-    }
-
-    /**
-     * @param RecursiveGrammarInterface $parent
-     * @param BaseTokenizerInterface $tokenizer
-     * @return void
-     * @throws LexicalError
-     */
-    protected function parseWith(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
-    {
-        /** @var Grammar\WithKeyword $withKeyword */
-        $withKeyword = $this->grammar->get('WithKeyword');
-        $parent->addChild($withKeyword);
-
-        $token = $this->nextToken($tokenizer);
-        if ($token->getType() !== TokenizerInterface::OP_LEFT_BRACKET) {
-            throw new LexicalError(static::MESSAGE_MISSING_LEFT_BRACKET,
-                null, $token->getLine(), $token->getLineOffset(), $token->getStart());
-        }
-
-        $this->nextToken($tokenizer);
-        $rule = $this->getExpressionRule();
-        $rule($withKeyword, $tokenizer);
-
-        $token = $this->currentToken($tokenizer);
-        if ($token->getType() !== TokenizerInterface::OP_RIGHT_BRACKET) {
-            throw new LexicalError(static::MESSAGE_MISSING_RIGHT_BRACKET,
-                null, $token->getLine(), $token->getLineOffset(), $token->getStart());
-        }
-        $this->nextToken($tokenizer);
-    }
-
-    /**
-     * @param RecursiveGrammarInterface $parent
-     * @param BaseTokenizerInterface $tokenizer
-     * @return void
-     * @throws LexicalError
-     */
-    protected function parseReturn(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
-    {
-        /** @var Grammar\ReturnKeyword $returnKeyword */
-        $returnKeyword = $this->grammar->get('ReturnKeyword');
-        $parent->addChild($returnKeyword);
-
-        $this->nextToken($tokenizer);
-        $rule = $this->getExpressionRule();
-        $rule($returnKeyword, $tokenizer);
-
-        $token = $this->currentToken($tokenizer);
         if ($token->getType() !== TokenizerInterface::OP_SEMICOLON) {
             throw new LexicalError(static::MESSAGE_MISSING_SEMICOLON,
                 null, $token->getLine(), $token->getLineOffset(), $token->getStart());
