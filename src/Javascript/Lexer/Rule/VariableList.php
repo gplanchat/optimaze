@@ -48,10 +48,10 @@ class VariableList
     /**
      * @param RecursiveGrammarInterface $parent
      * @param BaseTokenizerInterface $tokenizer
-     * @return void
+     * @return \Generator|null
      * @throws LexicalError
      */
-    public function __invoke(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
+    public function run(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
     {
         /** @var Grammar\VariableList $node */
         $node = $this->grammar->get('VariableList');
@@ -78,7 +78,7 @@ class VariableList
 
                 /** @var AssignmentExpression $assignmentExpressionRule */
                 $assignmentExpressionRule = $this->rule->get('AssignmentExpression');
-                yield $assignmentExpressionRule($variable, $tokenizer);
+                yield $assignmentExpressionRule->run($variable, $tokenizer);
                 $token = $this->currentToken($tokenizer);
             }
 

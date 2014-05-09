@@ -41,10 +41,10 @@ class IfExpression
     /**
      * @param RecursiveGrammarInterface $parent
      * @param BaseTokenizerInterface $tokenizer
-     * @return void
+     * @return \Generator|null
      * @throws LexicalError
      */
-    public function __invoke(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
+    public function run(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
     {
         /** @var Grammar\ConditionChain $conditionChain */
         $conditionChain = $this->grammar->get('ConditionChain');
@@ -57,10 +57,10 @@ class IfExpression
 
             $this->nextToken($tokenizer);
             $rule = $this->getConditionRule();
-            yield $rule($ifKeyword, $tokenizer);
+            yield $rule->run($ifKeyword, $tokenizer);
 
             $rule = $this->getStatementRule();
-            yield $rule($ifKeyword, $tokenizer);
+            yield $rule->run($ifKeyword, $tokenizer);
 
             $token = $this->currentToken($tokenizer);
             if ($token->getType() !== TokenizerInterface::KEYWORD_ELSE) {
@@ -74,7 +74,7 @@ class IfExpression
                 $conditionChain->addChild($elseKeyword);
 
                 $rule = $this->getStatementRule();
-                yield $rule($elseKeyword, $tokenizer);
+                yield $rule->run($elseKeyword, $tokenizer);
                 break;
             }
         }

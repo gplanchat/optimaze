@@ -35,10 +35,10 @@ class WhileExpression
     /**
      * @param RecursiveGrammarInterface $parent
      * @param BaseTokenizerInterface $tokenizer
-     * @return void
+     * @return \Generator|null
      * @throws LexicalError
      */
-    public function __invoke(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
+    public function run(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
     {
         /** @var Grammar\WhileKeyword $whileKeyword */
         $whileKeyword = $this->grammar->get('WhileKeyword');
@@ -47,7 +47,7 @@ class WhileExpression
         $this->nextToken($tokenizer);
 
         $rule = $this->getConditionRule();
-        yield $rule($whileKeyword, $tokenizer);
+        yield $rule->run($whileKeyword, $tokenizer);
     }
 
     /**

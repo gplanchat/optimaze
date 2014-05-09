@@ -44,10 +44,10 @@ class Constructor
     /**
      * @param RecursiveGrammarInterface $parent
      * @param BaseTokenizerInterface $tokenizer
-     * @return void
+     * @return \Generator|null
      * @throws LexicalError
      */
-    public function __invoke(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
+    public function run(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
     {
         $token = $this->currentToken($tokenizer);
 
@@ -79,7 +79,7 @@ class Constructor
 
         /** @var ConstructorCall $rule */
         $rule = $this->rule->get('ConstructorCall');
-        yield $rule($node, $tokenizer);
+        yield $rule->run($node, $tokenizer);
 
         $node->optimize();
     }

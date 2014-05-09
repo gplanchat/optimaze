@@ -45,10 +45,10 @@ class StatementList
     /**
      * @param RecursiveGrammarInterface $parent
      * @param BaseTokenizerInterface $tokenizer
-     * @return void
+     * @return \Generator|null
      * @throws LexicalError
      */
-    public function __invoke(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
+    public function run(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
     {
         /** @var Grammar\StatementList $node */
         $node = $this->grammar->get('StatementList');
@@ -63,7 +63,7 @@ class StatementList
                 break;
             }
 
-            yield $statementRule($node, $tokenizer);
+            yield $statementRule->run($node, $tokenizer);
         }
 
         $node->optimize();

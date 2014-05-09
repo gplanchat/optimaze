@@ -69,10 +69,10 @@ class Statement
     /**
      * @param RecursiveGrammarInterface $parent
      * @param BaseTokenizerInterface $tokenizer
-     * @return void
+     * @return \Generator|null
      * @throws LexicalError
      */
-    public function __invoke(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
+    public function run(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
     {
         /** @var Grammar\Statement $node */
         $node = $this->grammar->get('Statement');
@@ -87,16 +87,16 @@ class Statement
             } else if ($token->getType() === TokenizerInterface::KEYWORD_IF) {
                 /** @var IfExpression $ifExpressionRule */
                 $ifExpressionRule = $this->rule->get('IfExpression');
-                yield $ifExpressionRule($node, $tokenizer);
+                yield $ifExpressionRule->run($node, $tokenizer);
                 break;
             } else if ($token->getType() === TokenizerInterface::KEYWORD_WHILE) {
                 /** @var WhileExpression $whileExpressionRule */
                 $whileExpressionRule = $this->rule->get('WhileExpression');
-                yield $whileExpressionRule($node, $tokenizer);
+                yield $whileExpressionRule->run($node, $tokenizer);
             } else if ($token->getType() === TokenizerInterface::KEYWORD_FOR) {
                 /** @var ForExpression $forExpressionRule */
                 $forExpressionRule = $this->rule->get('ForExpression');
-                yield $forExpressionRule($node, $tokenizer);
+                yield $forExpressionRule->run($node, $tokenizer);
             } else if ($token->getType() === TokenizerInterface::KEYWORD_BREAK) {
                 $this->parseBreak($node, $tokenizer);
                 break;
@@ -116,7 +116,7 @@ class Statement
 
                 $this->nextToken($tokenizer);
                 $rule = $this->getExpressionRule();
-                yield $rule($withKeyword, $tokenizer);
+                yield $rule->run($withKeyword, $tokenizer);
 
                 $token = $this->currentToken($tokenizer);
                 if ($token->getType() !== TokenizerInterface::OP_RIGHT_BRACKET) {
@@ -131,7 +131,7 @@ class Statement
 
                 $this->nextToken($tokenizer);
                 $rule = $this->getExpressionRule();
-                yield $rule($returnKeyword, $tokenizer);
+                yield $rule->run($returnKeyword, $tokenizer);
 
                 $token = $this->currentToken($tokenizer);
                 if ($token->getType() !== TokenizerInterface::OP_SEMICOLON) {
@@ -150,7 +150,7 @@ class Statement
 
                 /** @var Rule\StatementList $statementListRule */
                 $statementListRule = $this->rule->get('StatementListRule');
-                yield $statementListRule($compoundStatement, $tokenizer);
+                yield $statementListRule->run($compoundStatement, $tokenizer);
 
                 $token = $this->currentToken($tokenizer);
                 if ($token->getType() !== TokenizerInterface::OP_RIGHT_CURLY) {
@@ -162,7 +162,7 @@ class Statement
                 break;
             } else {
                 $rule = $this->getVariableListOrExpressionRule();
-                $rule($node, $tokenizer);
+                $rule->run($node, $tokenizer);
 
                 $token = $this->currentToken($tokenizer);
                 if ($token->getType() !== TokenizerInterface::OP_SEMICOLON) {

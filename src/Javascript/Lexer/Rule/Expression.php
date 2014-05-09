@@ -45,10 +45,10 @@ class Expression
     /**
      * @param RecursiveGrammarInterface $parent
      * @param BaseTokenizerInterface $tokenizer
-     * @return void
+     * @return \Generator|null
      * @throws LexicalError
      */
-    public function __invoke(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
+    public function run(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
     {
         /** @var Grammar\Expression $node */
         $node = $this->grammar->get('Expression');
@@ -61,11 +61,11 @@ class Expression
             if ($token->getType() === TokenizerInterface::KEYWORD_FUNCTION) {
                 /** @var FunctionExpression $functionExpressionRule */
                 $functionExpressionRule = $this->rule->get('FunctionExpression');
-                yield $functionExpressionRule($node, $tokenizer);
+                yield $functionExpressionRule->run($node, $tokenizer);
                 break;
             }
 
-            yield $assignmentExpressionRule($node, $tokenizer);
+            yield $assignmentExpressionRule->run($node, $tokenizer);
 
             $token = $this->currentToken($tokenizer);
             if ($token->getType() !== TokenizerInterface::OP_COMMA) {

@@ -45,10 +45,10 @@ class ArgumentList
     /**
      * @param RecursiveGrammarInterface $parent
      * @param BaseTokenizerInterface $tokenizer
-     * @return void
+     * @return \Generator|null
      * @throws LexicalError
      */
-    public function __invoke(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
+    public function run(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
     {
         /** @var Grammar\ArgumentList $node */
         $node = $this->grammar->get('ArgumentList');
@@ -57,7 +57,7 @@ class ArgumentList
         /** @var AssignmentExpression $rule */
         $rule = $this->rule->get('AssignmentExpression');
         while (true) {
-            yield $rule($node, $tokenizer);
+            yield $rule->run($node, $tokenizer);
 
             $token = $this->currentToken($tokenizer);
             if ($token->getType() !== TokenizerInterface::OP_COMMA) {

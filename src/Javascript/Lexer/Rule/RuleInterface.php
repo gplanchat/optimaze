@@ -23,7 +23,7 @@
 namespace Gplanchat\Javascript\Lexer\Rule;
 
 use Gplanchat\Lexer\Grammar\RecursiveGrammarInterface;
-use Gplanchat\Tokenizer\TokenizerInterface as BaseTokenizerInterface;
+use Gplanchat\Tokenizer\TokenizerInterface;
 
 interface RuleInterface
 {
@@ -43,8 +43,16 @@ interface RuleInterface
 
     /**
      * @param RecursiveGrammarInterface $parent
-     * @param BaseTokenizerInterface $tokenizer
-     * @return void
+     * @param TokenizerInterface $tokenizer
+     * @return \Generator|null
      */
-    public function __invoke(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer);
+    public function __invoke(RecursiveGrammarInterface $parent, TokenizerInterface $tokenizer);
+
+    /**
+     * @see self::run
+     * @param RecursiveGrammarInterface $parent
+     * @param TokenizerInterface $tokenizer
+     * @return \Generator|null
+     */
+    public function run(RecursiveGrammarInterface $parent, TokenizerInterface $tokenizer);
 }

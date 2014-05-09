@@ -34,9 +34,20 @@ class TokenNullSeeker
     /**
      * @param RecursiveGrammarInterface $parent
      * @param BaseTokenizerInterface $tokenizer
+     * @return \Generator|null
+     */
+    public function run(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
+    {
+        // no operation
+    }
+
+    /**
+     * @param RecursiveGrammarInterface $parent
+     * @param BaseTokenizerInterface $tokenizer
+     * @return \Generator|null
      */
     public function __invoke(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
     {
-        // no operation
+        return $this->run($parent, $tokenizer);
     }
 }

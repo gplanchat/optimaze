@@ -23,7 +23,9 @@
 namespace Gplanchat\Javascript\Lexer\Rule;
 
 use Gplanchat\Javascript\Lexer\TokenizerNavigationAwareTrait;
+use Gplanchat\Lexer\Grammar\RecursiveGrammarInterface;
 use Gplanchat\ServiceManager\ServiceManagerInterface;
+use Gplanchat\Tokenizer\TokenizerInterface;
 
 trait RuleTrait
 {
@@ -47,5 +49,23 @@ trait RuleTrait
     {
         $this->rule = $ruleServiceManager;
         $this->grammar = $grammarServiceManager;
+    }
+
+    /**
+     * @param RecursiveGrammarInterface $parent
+     * @param TokenizerInterface $tokenizer
+     * @return \Generator|null
+     */
+    abstract public function run(RecursiveGrammarInterface $parent, TokenizerInterface $tokenizer);
+
+    /**
+     * @see self::run
+     * @param RecursiveGrammarInterface $parent
+     * @param TokenizerInterface $tokenizer
+     * @return \Generator|null
+     */
+    public function __invoke(RecursiveGrammarInterface $parent, TokenizerInterface $tokenizer)
+    {
+        return $this->run($parent, $tokenizer);
     }
 }

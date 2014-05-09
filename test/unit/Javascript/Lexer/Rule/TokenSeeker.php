@@ -31,7 +31,7 @@ use Gplanchat\Tokenizer\TokenizerInterface as BaseTokenizerInterface;
 class TokenSeeker
     implements RuleInterface
 {
-    use TokenizerNavigationAwareTrait;
+    use RuleTrait;
 
     /**
      * @var int|string
@@ -87,8 +87,9 @@ class TokenSeeker
     /**
      * @param RecursiveGrammarInterface $parent
      * @param BaseTokenizerInterface $tokenizer
+     * @return \Generator|null
      */
-    public function __invoke(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
+    public function run(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
     {
         /** @var Token $token */
         $token = $this->currentToken($tokenizer);

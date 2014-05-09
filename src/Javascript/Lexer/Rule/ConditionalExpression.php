@@ -44,10 +44,10 @@ class ConditionalExpression
     /**
      * @param RecursiveGrammarInterface $parent
      * @param BaseTokenizerInterface $tokenizer
-     * @return void
+     * @return \Generator|null
      * @throws LexicalError
      */
-    public function __invoke(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
+    public function run(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
     {
         /** @var Grammar\Expression $node */
         $node = $this->grammar->get('ConditionalExpression');
@@ -55,7 +55,7 @@ class ConditionalExpression
 
         /** @var OrExpression $orExpressionRule */
         $orExpressionRule = $this->rule->get('OrExpression');
-        yield $orExpressionRule($node, $tokenizer);
+        yield $orExpressionRule->run($node, $tokenizer);
 
         $token = $this->currentToken($tokenizer);
         if ($token->getType() !== TokenizerInterface::OP_HOOK) {
@@ -66,7 +66,7 @@ class ConditionalExpression
 
         /** @var AssignmentExpression $assignmentExpressionRule */
         $assignmentExpressionRule = $this->rule->get('AssignmentExpression');
-        yield $assignmentExpressionRule($node, $tokenizer);
+        yield $assignmentExpressionRule->run($node, $tokenizer);
 
         $token = $this->currentToken($tokenizer);
         if ($token->getType() !== TokenizerInterface::OP_COLON) {
@@ -75,7 +75,7 @@ class ConditionalExpression
         }
         $this->nextToken($tokenizer);
 
-        yield $assignmentExpressionRule($node, $tokenizer);
+        yield $assignmentExpressionRule->run($node, $tokenizer);
 
         $node->optimize();
     }

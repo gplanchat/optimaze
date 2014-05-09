@@ -44,10 +44,10 @@ class AssignmentExpression
     /**
      * @param RecursiveGrammarInterface $parent
      * @param BaseTokenizerInterface $tokenizer
-     * @return void
+     * @return \Generator|null
      * @throws LexicalError
      */
-    public function __invoke(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
+    public function run(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
     {
         /** @var Grammar\AssignmentExpression $node */
         $node = $this->grammar->get('AssignmentExpression');
@@ -57,7 +57,7 @@ class AssignmentExpression
         $conditionalExpressionRule = $this->rule->get('ConditionalExpression');
 
         while (true) {
-            yield $conditionalExpressionRule($node, $tokenizer);
+            yield $conditionalExpressionRule->run($node, $tokenizer);
 
             $token = $this->currentToken($tokenizer);
             if ($token->getType() !== TokenizerInterface::OP_ASSIGN) {

@@ -65,10 +65,10 @@ class PrimaryExpression
     /**
      * @param RecursiveGrammarInterface $parent
      * @param BaseTokenizerInterface $tokenizer
-     * @return void
+     * @return \Generator|null
      * @throws LexicalError
      */
-    public function __invoke(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
+    public function run(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
     {
         $token = $this->currentToken($tokenizer);
         if (!in_array($token->getType(), static::$validTokenTypes)) {
@@ -84,7 +84,7 @@ class PrimaryExpression
 
             /** @var Expression $rule */
             $rule = $this->rule->get('Expression');
-            yield $rule($node, $tokenizer);
+            yield $rule->run($node, $tokenizer);
 
             $token = $this->currentToken($tokenizer);
             if ($token->getType() !== TokenizerInterface::OP_RIGHT_BRACKET) {
@@ -151,7 +151,7 @@ class PrimaryExpression
         } else if ($token->getType() === TokenizerInterface::KEYWORD_FUNCTION) {
             /** @var RuleInterface $rule */
             $rule = $this->rule->get('FunctionExpression');
-            $rule($node, $tokenizer);
+            $rule->run($node, $tokenizer);
         } else {
             throw new LexicalError(static::MESSAGE_UNEXPECTED_TOKEN,
                 null, $token->getLine(), $token->getLineOffset(), $token->getStart());

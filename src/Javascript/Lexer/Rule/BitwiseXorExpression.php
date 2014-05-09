@@ -44,10 +44,10 @@ class BitwiseXorExpression
     /**
      * @param RecursiveGrammarInterface $parent
      * @param BaseTokenizerInterface $tokenizer
-     * @return void
+     * @return \Generator|null
      * @throws LexicalError
      */
-    public function __invoke(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
+    public function run(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
     {
         /** @var Grammar\BitwiseXorExpression $node */
         $node = $this->grammar->get('BitwiseXorExpression');
@@ -56,7 +56,7 @@ class BitwiseXorExpression
         /** @var BitwiseAndExpression $rule */
         $rule = $this->rule->get('BitwiseAndExpression');
         while (true) {
-            yield $rule($node, $tokenizer);
+            yield $rule->run($node, $tokenizer);
 
             $token = $this->currentToken($tokenizer);
             if ($token->getType() !== TokenizerInterface::OP_BITWISE_XOR) {

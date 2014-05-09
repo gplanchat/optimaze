@@ -44,10 +44,10 @@ class AndExpression
     /**
      * @param RecursiveGrammarInterface $parent
      * @param BaseTokenizerInterface $tokenizer
-     * @return void
+     * @return \Generator|null
      * @throws LexicalError
      */
-    public function __invoke(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
+    public function run(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
     {
         /** @var Grammar\AndExpression $node */
         $node = $this->grammar->get('AndExpression');
@@ -56,7 +56,7 @@ class AndExpression
         /** @var BitwiseOrExpression $rule */
         $rule = $this->rule->get('BitwiseOrExpression');
         while (true) {
-            yield $rule($node, $tokenizer);
+            yield $rule->run($node, $tokenizer);
 
             $token = $this->currentToken($tokenizer);
             if ($token->getType() !== TokenizerInterface::OP_AND) {

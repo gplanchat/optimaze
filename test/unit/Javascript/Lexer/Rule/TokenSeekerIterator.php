@@ -62,9 +62,10 @@ class TokenSeekerIterator
     /**
      * @param RecursiveGrammarInterface $parent
      * @param BaseTokenizerInterface $tokenizer
+     * @return \Generator|null
      * @throws \RuntimeException
      */
-    public function __invoke(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
+    public function run(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
     {
         if (!$this->iterator->valid()) {
             if ($this->getLoops() <= 0) {
@@ -80,5 +81,15 @@ class TokenSeekerIterator
             $current($parent, $tokenizer);
         }
         $this->iterator->next();
+    }
+
+    /**
+     * @param RecursiveGrammarInterface $parent
+     * @param BaseTokenizerInterface $tokenizer
+     * @return \Generator|null
+     */
+    public function __invoke(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
+    {
+        return $this->run($parent, $tokenizer);
     }
 }

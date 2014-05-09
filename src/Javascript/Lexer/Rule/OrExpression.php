@@ -44,10 +44,10 @@ class OrExpression
     /**
      * @param RecursiveGrammarInterface $parent
      * @param BaseTokenizerInterface $tokenizer
-     * @return void
+     * @return \Generator|null
      * @throws LexicalError
      */
-    public function __invoke(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
+    public function run(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
     {
         /** @var Grammar\OrExpression $node */
         $node = $this->grammar->get('OrExpression');
@@ -56,7 +56,7 @@ class OrExpression
         /** @var AndExpression $rule */
         $rule = $this->rule->get('AndExpression');
         while (true) {
-            yield $rule($node, $tokenizer);
+            yield $rule->run($node, $tokenizer);
 
             $token = $this->currentToken($tokenizer);
             if ($token->getType() !== TokenizerInterface::OP_OR) {
