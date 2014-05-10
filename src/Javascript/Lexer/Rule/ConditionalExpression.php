@@ -77,7 +77,7 @@ class ConditionalExpression
         $token = $this->currentToken($tokenizer);
         if ($token->getType() !== TokenizerInterface::OP_COLON) {
             throw new LexicalError(static::MESSAGE_MISSING_COLON,
-                null, $token->getLine(), $token->getLineOffset(), $token->getStart());
+                $token->getPath(), $token->getLine(), $token->getLineOffset(), $token->getStart());
         }
         $this->nextToken($tokenizer);
 

@@ -64,7 +64,7 @@ class ConstructorCall
         while (true) {
             if ($token->getType() !== TokenizerInterface::TOKEN_IDENTIFIER) {
                 throw new LexicalError(static::MESSAGE_MISSING_IDENTIFIER,
-                    null, $token->getLine(), $token->getLineOffset(), $token->getStart());
+                    $token->getPath(), $token->getLine(), $token->getLineOffset(), $token->getStart());
             }
             /** @var Grammar\Identifier $identifier */
             $identifier = $this->grammar->get('Identifier', [$token->getValue()]);
@@ -79,7 +79,7 @@ class ConstructorCall
                 $token = $this->currentToken($tokenizer);
                 if ($token->getType() !== TokenizerInterface::OP_RIGHT_BRACKET) {
                     throw new LexicalError(static::MESSAGE_MISSING_RIGHT_BRACKET,
-                        null, $token->getLine(), $token->getLineOffset(), $token->getStart());
+                        $token->getPath(), $token->getLine(), $token->getLineOffset(), $token->getStart());
                 }
 
                 $this->nextToken($tokenizer);

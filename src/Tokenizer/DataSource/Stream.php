@@ -138,7 +138,7 @@ class Stream
 
         if (!$this->emptiedSource && $this->offset + $length > $this->bufferLength) {
             $data = stream_get_contents($this->stream, $this->readLength, $offset);
-            $readLength = strlen($this->buffer);
+            $readLength = strlen($data);
             if ($readLength > 0) {
                 $this->buffer .= $data;
                 $this->bufferLength += strlen($this->buffer);

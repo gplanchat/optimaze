@@ -59,7 +59,7 @@ class ForExpression
         $token = $this->nextToken($tokenizer);
         if ($token->getType() !== TokenizerInterface::OP_LEFT_BRACKET) {
             throw new LexicalError(static::MESSAGE_MISSING_LEFT_BRACKET,
-                null, $token->getLine(), $token->getLineOffset(), $token->getStart());
+                $token->getPath(), $token->getLine(), $token->getLineOffset(), $token->getStart());
         }
 
         $token = $this->nextToken($tokenizer);
@@ -72,7 +72,7 @@ class ForExpression
 
             if ($token->getType() !== TokenizerInterface::OP_SEMICOLON) {
                 throw new LexicalError(static::MESSAGE_MISSING_SEMICOLON,
-                    null, $token->getLine(), $token->getLineOffset(), $token->getStart());
+                    $token->getPath(), $token->getLine(), $token->getLineOffset(), $token->getStart());
             }
 
             yield $this->getExpressionRule()->run($parent, $tokenizer);
@@ -91,7 +91,7 @@ class ForExpression
 
                 if ($token->getType() !== TokenizerInterface::OP_SEMICOLON) {
                     throw new LexicalError(static::MESSAGE_MISSING_SEMICOLON,
-                        null, $token->getLine(), $token->getLineOffset(), $token->getStart());
+                        $token->getPath(), $token->getLine(), $token->getLineOffset(), $token->getStart());
                 }
 
                 yield $this->getExpressionRule()->run($parent, $tokenizer);
@@ -104,13 +104,13 @@ class ForExpression
                 $token = $this->currentToken($tokenizer);
             } else {
                 throw new LexicalError(static::MESSAGE_MISSING_SEMICOLON_OR_IN_KEYWORD,
-                    null, $token->getLine(), $token->getLineOffset(), $token->getLineOffset(), $token->getStart());
+                    $token->getPath(), $token->getLine(), $token->getLineOffset(), $token->getLineOffset(), $token->getStart());
             }
         }
 
         if ($token->getType() !== TokenizerInterface::OP_RIGHT_BRACKET) {
             throw new LexicalError(static::MESSAGE_MISSING_RIGHT_BRACKET,
-                null, $token->getLine(), $token->getLineOffset(), $token->getStart());
+                $token->getPath(), $token->getLine(), $token->getLineOffset(), $token->getStart());
         }
         $this->nextToken($tokenizer);
     }

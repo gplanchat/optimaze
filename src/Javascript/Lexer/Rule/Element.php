@@ -73,7 +73,7 @@ class Element
             $token = $this->currentToken($tokenizer);
             if ($token->getType() !== TokenizerInterface::OP_SEMICOLON) {
                 throw new LexicalError(static::MESSAGE_MISSING_SEMICOLON,
-                    null, $token->getLine(), $token->getLineOffset(), $token->getStart());
+                    $token->getPath(), $token->getLine(), $token->getLineOffset(), $token->getStart());
             }
             $this->nextToken($tokenizer);
         } else {

@@ -54,6 +54,7 @@ class Constructor
      */
     public function run(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
     {
+        echo $this->currentToken($tokenizer);
         $token = $this->currentToken($tokenizer);
 
         /** @var Grammar\Constructor $node */
@@ -70,7 +71,7 @@ class Constructor
             $token = $this->nextToken($tokenizer);
             if ($token->getType() !== TokenizerInterface::OP_DOT) {
                 throw new LexicalError(static::MESSAGE_UNEXPECTED_DOT,
-                    null, $token->getLine(), $token->getLineOffset(), $token->getStart());
+                    $token->getPath(), $token->getLine(), $token->getLineOffset(), $token->getStart());
             }
 
             /** @var Grammar\DotOperator $dotOperator */

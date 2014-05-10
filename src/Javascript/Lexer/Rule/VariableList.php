@@ -65,7 +65,7 @@ class VariableList
 
             if ($token->getType() !== TokenizerInterface::TOKEN_IDENTIFIER) {
                 throw new LexicalError(static::MESSAGE_MISSING_IDENTIFIER,
-                    null, $token->getLine(), $token->getLineOffset(), $token->getStart());
+                    $token->getPath(), $token->getLine(), $token->getLineOffset(), $token->getStart());
             }
 
             /** @var Grammar\Identifier $identifier */

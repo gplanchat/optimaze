@@ -443,6 +443,7 @@ class Tokenizer
             $value,
             $this->cursor,
             $this->cursor + $tokenLength,
+            $this->source->getPath(),
             $this->line,
             $this->lineOffset,
             $assignOp

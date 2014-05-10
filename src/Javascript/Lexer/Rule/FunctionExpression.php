@@ -66,10 +66,11 @@ class FunctionExpression
         $token = $this->currentToken($tokenizer);
         if ($token->getType() !== TokenizerInterface::KEYWORD_FUNCTION) {
             throw new LexicalError(static::MESSAGE_MISSING_FUNCTION_KEYWORD,
-                null, $token->getLine(), $token->getLineOffset(), $token->getStart());
+                $token->getPath(), $token->getLine(), $token->getLineOffset(), $token->getStart());
         }
 
         $token = $this->nextToken($tokenizer);
+        echo $token;
         if ($token->getType() === TokenizerInterface::TOKEN_IDENTIFIER) {
             /** @var Grammar\FunctionExpression $node */
             $node = $this->grammar->get('FunctionExpression', [$token->getValue()]);
@@ -81,9 +82,10 @@ class FunctionExpression
         }
         $parent->addChild($node);
 
+        echo $token;
         if ($token->getType() !== TokenizerInterface::OP_LEFT_BRACKET) {
             throw new LexicalError(static::MESSAGE_MISSING_LEFT_BRACKET,
-                null, $token->getLine(), $token->getLineOffset(), $token->getStart());
+                $token->getPath(), $token->getLine(), $token->getLineOffset(), $token->getStart());
         }
         $this->nextToken($tokenizer);
 
@@ -92,13 +94,13 @@ class FunctionExpression
         $token = $this->currentToken($tokenizer);
         if ($token->getType() !== TokenizerInterface::OP_RIGHT_BRACKET) {
             throw new LexicalError(static::MESSAGE_MISSING_RIGHT_BRACKET,
-                null, $token->getLine(), $token->getLineOffset(), $token->getStart());
+                $token->getPath(), $token->getLine(), $token->getLineOffset(), $token->getStart());
         }
         $token = $this->nextToken($tokenizer);
 
         if ($token->getType() !== TokenizerInterface::OP_LEFT_CURLY) {
             throw new LexicalError(static::MESSAGE_MISSING_LEFT_CURLY_BRACE,
-                null, $token->getLine(), $token->getLineOffset(), $token->getStart());
+                $token->getPath(), $token->getLine(), $token->getLineOffset(), $token->getStart());
         }
         $this->nextToken($tokenizer);
 
@@ -107,7 +109,7 @@ class FunctionExpression
         $token = $this->currentToken($tokenizer);
         if ($token->getType() !== TokenizerInterface::OP_RIGHT_CURLY) {
             throw new LexicalError(static::MESSAGE_MISSING_RIGHT_CURLY_BRACE,
-                null, $token->getLine(), $token->getLineOffset(), $token->getStart());
+                $token->getPath(), $token->getLine(), $token->getLineOffset(), $token->getStart());
         }
         $this->nextToken($tokenizer);
 

@@ -53,6 +53,11 @@ class Token
     private $end = null;
 
     /**
+     * @var string
+     */
+    private $path = null;
+
+    /**
      * @var int
      */
     private $line = null;
@@ -72,16 +77,18 @@ class Token
      * @param string $value
      * @param int $start
      * @param int $end
+     * @param string $path
      * @param int $line
      * @param int $lineOffset
      * @param string|null $assignOperator
      */
-    public function __construct($type, $value, $start, $end, $line, $lineOffset, $assignOperator = null)
+    public function __construct($type, $value, $start, $end, $path, $line, $lineOffset, $assignOperator = null)
     {
         $this->setType($type);
         $this->setValue($value);
         $this->setStart($start);
         $this->setEnd($end);
+        $this->setPath($path);
         $this->setLine($line);
         $this->setLineOffset($lineOffset);
         $this->setAssignOperator($assignOperator);
@@ -118,7 +125,7 @@ class Token
     }
 
     /**
-     * @return mixed
+     * @return int
      */
     public function getEnd()
     {
@@ -126,7 +133,26 @@ class Token
     }
 
     /**
-     * @param mixed $line
+     * @param string $path
+     * @return $this
+     */
+    public function setPath($path)
+    {
+        $this->path = $path;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPath()
+    {
+        return $this->path;
+    }
+
+    /**
+     * @param int $line
      * @return $this
      */
     public function setLine($line)
