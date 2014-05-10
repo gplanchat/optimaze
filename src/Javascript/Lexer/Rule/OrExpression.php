@@ -42,6 +42,11 @@ class OrExpression
     use RuleTrait;
 
     /**
+     * @var AndExpression
+     */
+    protected $andExpressionRule = null;
+
+    /**
      * @param RecursiveGrammarInterface $parent
      * @param BaseTokenizerInterface $tokenizer
      * @return \Generator|null
@@ -53,10 +58,8 @@ class OrExpression
         $node = $this->grammar->get('OrExpression');
         $parent->addChild($node);
 
-        /** @var AndExpression $rule */
-        $rule = $this->rule->get('AndExpression');
         while (true) {
-            yield $rule->run($node, $tokenizer);
+            yield $this->getAndExpressionRule()->run($node, $tokenizer);
 
             $token = $this->currentToken($tokenizer);
             if ($token->getType() !== TokenizerInterface::OP_OR) {
@@ -65,5 +68,17 @@ class OrExpression
         }
 
         $node->optimize();
+    }
+
+    /**
+     * @return AndExpression
+     */
+    public function getAndExpressionRule()
+    {
+        if ($this->andExpressionRule === null) {
+            $this->andExpressionRule = $this->rule->get('AndExpression');
+        }
+
+        return $this->andExpressionRule;
     }
 }

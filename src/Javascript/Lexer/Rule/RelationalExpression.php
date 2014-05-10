@@ -41,6 +41,14 @@ class RelationalExpression
 {
     use RuleTrait;
 
+    /**
+     * @var ShiftExpression
+     */
+    protected $shiftExpressionRule = null;
+
+    /**
+     * @var array
+     */
     protected static $relationalOperators = [
         TokenizerInterface::OP_GT,
         TokenizerInterface::OP_GE,
@@ -61,11 +69,8 @@ class RelationalExpression
         $node = $this->grammar->get('RelationalExpression');
         $parent->addChild($node);
 
-        /** @var ShiftExpression $shiftExpressionRule */
-        $shiftExpressionRule = $this->rule->get('ShiftExpression');
-
         while (true) {
-            yield $shiftExpressionRule->run($node, $tokenizer);
+            yield $this->getShiftExpressionRule()->run($node, $tokenizer);
 
             $token = $this->currentToken($tokenizer);
             if (!in_array($token->getType(), static::$relationalOperators)) {
@@ -81,5 +86,17 @@ class RelationalExpression
         }
 
         $node->optimize();
+    }
+
+    /**
+     * @return ShiftExpression
+     */
+    public function getShiftExpressionRule()
+    {
+        if ($this->shiftExpressionRule === null) {
+            $this->shiftExpressionRule = $this->rule->get('ShiftExpression');
+        }
+
+        return $this->shiftExpressionRule;
     }
 }

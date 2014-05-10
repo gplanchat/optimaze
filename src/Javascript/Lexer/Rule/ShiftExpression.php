@@ -41,6 +41,14 @@ class ShiftExpression
 {
     use RuleTrait;
 
+    /**
+     * @var AdditiveExpression
+     */
+    protected $additiveExpressionRule = null;
+
+    /**
+     * @var array
+     */
     protected static $shiftOperators = [
         TokenizerInterface::OP_RSH,
         TokenizerInterface::OP_LSH,
@@ -55,17 +63,14 @@ class ShiftExpression
      */
     public function run(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
     {
-        $token = $this->currentToken($tokenizer);
+        $this->currentToken($tokenizer);
 
         /** @var Grammar\ShiftExpression $node */
         $node = $this->grammar->get('ShiftExpression');
         $parent->addChild($node);
 
-        /** @var AdditiveExpression $additiveExpressionRule */
-        $additiveExpressionRule = $this->rule->get('AdditiveExpression');
-
         while (true) {
-            yield $additiveExpressionRule->run($node, $tokenizer);
+            yield $this->getAdditiveExpressionRule()->run($node, $tokenizer);
 
             $token = $this->currentToken($tokenizer);
             if (!in_array($token->getType(), static::$shiftOperators)) {
@@ -81,5 +86,17 @@ class ShiftExpression
         }
 
         $node->optimize();
+    }
+
+    /**
+     * @return AdditiveExpression
+     */
+    public function getAdditiveExpressionRule()
+    {
+        if ($this->additiveExpressionRule === null) {
+            $this->additiveExpressionRule = $this->rule->get('AdditiveExpression');
+        }
+
+        return $this->additiveExpressionRule;
     }
 }

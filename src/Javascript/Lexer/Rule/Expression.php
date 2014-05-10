@@ -48,6 +48,11 @@ class Expression
     protected $assignmentExpressionRule = null;
 
     /**
+     * @var FunctionExpression
+     */
+    protected $functionExpressionRule = null;
+
+    /**
      * @param RecursiveGrammarInterface $parent
      * @param BaseTokenizerInterface $tokenizer
      * @return \Generator|null
@@ -62,7 +67,7 @@ class Expression
         while (true) {
             $token = $this->currentToken($tokenizer);
             if ($token->getType() === TokenizerInterface::KEYWORD_FUNCTION) {
-                yield $this->rule->get('FunctionExpression')->run($node, $tokenizer);
+                yield $this->getFunctionExpressionRule()->run($node, $tokenizer);
                 break;
             }
 
@@ -87,5 +92,17 @@ class Expression
         }
 
         return $this->assignmentExpressionRule;
+    }
+
+    /**
+     * @return FunctionExpression
+     */
+    public function getFunctionExpressionRule()
+    {
+        if ($this->functionExpressionRule === null) {
+            $this->functionExpressionRule = $this->rule->get('FunctionExpression');
+        }
+
+        return $this->functionExpressionRule;
     }
 }

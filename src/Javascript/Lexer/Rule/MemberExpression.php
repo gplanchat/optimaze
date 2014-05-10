@@ -44,6 +44,11 @@ class MemberExpression
     use RuleTrait;
 
     /**
+     * @var PrimaryExpression
+     */
+    protected $primaryExpressionRule = null;
+
+    /**
      * @var Expression
      */
     protected $expressionRule = null;
@@ -65,11 +70,8 @@ class MemberExpression
         $node = $this->grammar->get('MemberExpression');
         $parent->addChild($node);
 
-        /** @var PrimaryExpression $rule */
-        $rule = $this->rule->get('PrimaryExpression');
-
         while (true) {
-            yield $rule->run($node, $tokenizer);
+            yield $this->getPrimaryExpressionRule()->run($node, $tokenizer);
 
             $token = $this->currentToken($tokenizer);
             if ($token->getType() === TokenizerInterface::OP_LEFT_SQUARE_BRACKET) {
@@ -107,6 +109,18 @@ class MemberExpression
         }
 
         $node->optimize();
+    }
+
+    /**
+     * @return PrimaryExpression
+     */
+    public function getPrimaryExpressionRule()
+    {
+        if ($this->primaryExpressionRule === null) {
+            $this->primaryExpressionRule = $this->rule->get('PrimaryExpression');
+        }
+
+        return $this->primaryExpressionRule;
     }
 
     /**

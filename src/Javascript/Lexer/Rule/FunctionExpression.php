@@ -46,6 +46,16 @@ class FunctionExpression
     use RuleTrait;
 
     /**
+     * @var ParameterList
+     */
+    protected $parameterListRule = null;
+
+    /**
+     * @var StatementList
+     */
+    protected $statementListRule = null;
+
+    /**
      * @param RecursiveGrammarInterface $parent
      * @param BaseTokenizerInterface $tokenizer
      * @return \Generator|null
@@ -79,7 +89,7 @@ class FunctionExpression
         }
         $this->nextToken($tokenizer);
 
-        yield $this->rule->get('ParameterList')->run($node, $tokenizer);
+        yield $this->getParameterListRule()->run($node, $tokenizer);
 
         $token = $this->currentToken($tokenizer);
         if ($token->getType() !== TokenizerInterface::OP_RIGHT_BRACKET) {
@@ -94,7 +104,7 @@ class FunctionExpression
         }
         $this->nextToken($tokenizer);
 
-        yield $this->rule->get('StatementList')->run($node, $tokenizer);
+        yield $this->getStatementListRule()->run($node, $tokenizer);
 
         $token = $this->currentToken($tokenizer);
         if ($token->getType() !== TokenizerInterface::OP_RIGHT_CURLY) {
@@ -104,5 +114,29 @@ class FunctionExpression
         $this->nextToken($tokenizer);
 
         $node->optimize();
+    }
+
+    /**
+     * @return ParameterList
+     */
+    public function getParameterListRule()
+    {
+        if ($this->parameterListRule === null) {
+            $this->parameterListRule = $this->rule->get('ParameterList');
+        }
+
+        return $this->parameterListRule;
+    }
+
+    /**
+     * @return StatementList
+     */
+    public function getStatementListRule()
+    {
+        if ($this->statementListRule === null) {
+            $this->statementListRule = $this->rule->get('StatementList');
+        }
+
+        return $this->statementListRule;
     }
 }
