@@ -70,7 +70,6 @@ class FunctionExpression
         }
 
         $token = $this->nextToken($tokenizer);
-        echo $token;
         if ($token->getType() === TokenizerInterface::TOKEN_IDENTIFIER) {
             /** @var Grammar\FunctionExpression $node */
             $node = $this->grammar->get('FunctionExpression', [$token->getValue()]);
@@ -82,7 +81,6 @@ class FunctionExpression
         }
         $parent->addChild($node);
 
-        echo $token;
         if ($token->getType() !== TokenizerInterface::OP_LEFT_BRACKET) {
             throw new LexicalError(static::MESSAGE_MISSING_LEFT_BRACKET,
                 $token->getPath(), $token->getLine(), $token->getLineOffset(), $token->getStart());

@@ -54,7 +54,6 @@ class Constructor
      */
     public function run(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
     {
-        echo $this->currentToken($tokenizer);
         $token = $this->currentToken($tokenizer);
 
         /** @var Grammar\Constructor $node */
