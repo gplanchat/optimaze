@@ -44,6 +44,16 @@ class MemberExpression
     use RuleTrait;
 
     /**
+     * @var Expression
+     */
+    protected $expressionRule = null;
+
+    /**
+     * @var ArgumentList
+     */
+    protected $argumentListRule = null;
+
+    /**
      * @param RecursiveGrammarInterface $parent
      * @param BaseTokenizerInterface $tokenizer
      * @return \Generator|null
@@ -59,15 +69,13 @@ class MemberExpression
         $rule = $this->rule->get('PrimaryExpression');
 
         while (true) {
-            $rule->run($node, $tokenizer);
+            yield $rule->run($node, $tokenizer);
 
             $token = $this->currentToken($tokenizer);
             if ($token->getType() === TokenizerInterface::OP_LEFT_SQUARE_BRACKET) {
                 $this->nextToken($tokenizer);
 
-                /** @var Expression $expressionRule */
-                $expressionRule = $this->rule->get('Expression');
-                yield $expressionRule->run($node, $tokenizer);
+                yield $this->getExpressionRule()->run($node, $tokenizer);
 
                 $token = $this->currentToken($tokenizer);
                 if ($token->getType() !== TokenizerInterface::OP_RIGHT_SQUARE_BRACKET) {
@@ -78,9 +86,7 @@ class MemberExpression
             } else if ($token->getType() === TokenizerInterface::OP_LEFT_BRACKET) {
                 $this->nextToken($tokenizer);
 
-                /** @var ArgumentList $argumentListRule */
-                $argumentListRule = $this->rule->get('ArgumentList');
-                yield $argumentListRule->run($node, $tokenizer);
+                yield $this->getArgumentListrule()->run($node, $tokenizer);
 
                 $token = $this->currentToken($tokenizer);
                 if ($token->getType() !== TokenizerInterface::OP_RIGHT_BRACKET) {
@@ -101,5 +107,29 @@ class MemberExpression
         }
 
         $node->optimize();
+    }
+
+    /**
+     * @return Expression
+     */
+    public function getExpressionRule()
+    {
+        if ($this->expressionRule === null) {
+            $this->expressionRule = $this->rule->get('Expression');
+        }
+
+        return $this->expressionRule;
+    }
+
+    /**
+     * @return ArgumentList
+     */
+    public function getArgumentListRule()
+    {
+        if ($this->argumentListRule === null) {
+            $this->argumentListRule = $this->rule->get('ArgumentList');
+        }
+
+        return $this->argumentListRule;
     }
 }

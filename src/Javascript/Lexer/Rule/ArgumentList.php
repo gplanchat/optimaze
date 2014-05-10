@@ -43,6 +43,11 @@ class ArgumentList
     use RuleTrait;
 
     /**
+     * @var AssignmentExpression
+     */
+    protected $assignmentExpressionRule = null;
+
+    /**
      * @param RecursiveGrammarInterface $parent
      * @param BaseTokenizerInterface $tokenizer
      * @return \Generator|null
@@ -54,10 +59,8 @@ class ArgumentList
         $node = $this->grammar->get('ArgumentList');
         $parent->addChild($node);
 
-        /** @var AssignmentExpression $rule */
-        $rule = $this->rule->get('AssignmentExpression');
         while (true) {
-            yield $rule->run($node, $tokenizer);
+            yield $this->getAssignmentExpressionRule()->run($node, $tokenizer);
 
             $token = $this->currentToken($tokenizer);
             if ($token->getType() !== TokenizerInterface::OP_COMMA) {
@@ -73,5 +76,17 @@ class ArgumentList
         }
 
         $node->optimize();
+    }
+
+    /**
+     * @return AssignmentExpression
+     */
+    public function getAssignmentExpressionRule()
+    {
+        if ($this->assignmentExpressionRule === null) {
+            $this->assignmentExpressionRule = $this->rule->get('AssignmentExpression');
+        }
+
+        return $this->assignmentExpressionRule;
     }
 }

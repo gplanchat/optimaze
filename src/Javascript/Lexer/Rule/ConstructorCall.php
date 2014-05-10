@@ -44,6 +44,11 @@ class ConstructorCall
     use RuleTrait;
 
     /**
+     * @var ArgumentList
+     */
+    protected $argumentListRule = null;
+
+    /**
      * @param RecursiveGrammarInterface $parent
      * @param BaseTokenizerInterface $tokenizer
      * @return \Generator|null
@@ -69,9 +74,7 @@ class ConstructorCall
             if ($token->getType() === TokenizerInterface::OP_LEFT_BRACKET) {
                 $this->nextToken($tokenizer);
 
-                /** @var Rule\ArgumentList $argumentListRule */
-                $argumentListRule = $this->rule->get('ArgumentList');
-                yield $argumentListRule->run($node, $tokenizer);
+                yield $this->getArgumentListrule()->run($node, $tokenizer);
 
                 $token = $this->currentToken($tokenizer);
                 if ($token->getType() !== TokenizerInterface::OP_RIGHT_BRACKET) {
@@ -91,5 +94,17 @@ class ConstructorCall
         }
 
         $node->optimize();
+    }
+
+    /**
+     * @return Expression
+     */
+    public function getArgumentListRule()
+    {
+        if ($this->argumentListRule === null) {
+            $this->argumentListRule = $this->rule->get('ArgumentList');
+        }
+
+        return $this->argumentListRule;
     }
 }

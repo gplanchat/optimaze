@@ -42,6 +42,11 @@ class BitwiseAndExpression
     use RuleTrait;
 
     /**
+     * @var EqualityExpression
+     */
+    protected $equalityExpressionRule = null;
+
+    /**
      * @param RecursiveGrammarInterface $parent
      * @param BaseTokenizerInterface $tokenizer
      * @return \Generator|null
@@ -54,10 +59,8 @@ class BitwiseAndExpression
         $node = $this->grammar->get('BitwiseAndExpression');
         $parent->addChild($node);
 
-        /** @var EqualityExpression $rule */
-        $rule = $this->rule->get('EqualityExpression');
         while (true) {
-            yield $rule->run($node, $tokenizer);
+            yield $this->getEqualityExpressionRule()->run($node, $tokenizer);
 
             $token = $this->currentToken($tokenizer);
             if ($token->getType() !== TokenizerInterface::OP_BITWISE_AND) {
@@ -66,5 +69,17 @@ class BitwiseAndExpression
         }
 
         $node->optimize();
+    }
+
+    /**
+     * @return EqualityExpression
+     */
+    public function getEqualityExpressionRule()
+    {
+        if ($this->equalityExpressionRule === null) {
+            $this->equalityExpressionRule = $this->rule->get('EqualityExpression');
+        }
+
+        return $this->equalityExpressionRule;
     }
 }

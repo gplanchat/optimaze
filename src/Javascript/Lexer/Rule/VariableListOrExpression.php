@@ -42,6 +42,16 @@ class VariableListOrExpression
     use RuleTrait;
 
     /**
+     * @var Expression
+     */
+    protected $expressionRule = null;
+
+    /**
+     * @var VariableList
+     */
+    protected $variableListRule = null;
+
+    /**
      * @param RecursiveGrammarInterface $parent
      * @param BaseTokenizerInterface $tokenizer
      * @return \Generator|null
@@ -52,14 +62,33 @@ class VariableListOrExpression
         $token = $this->currentToken($tokenizer);
 
         if ($token->getType() === TokenizerInterface::KEYWORD_VAR) {
-            /** @var VariableList $variableListRule */
-            $variableListRule = $this->rule->get('VariableList');
-            yield $variableListRule->run($parent, $tokenizer);
-            return;
+            yield $this->getVariableListRule()->run($parent, $tokenizer);
+        } else {
+            yield $this->getExpressionRule()->run($parent, $tokenizer);
+        }
+    }
+
+    /**
+     * @return Expression
+     */
+    public function getExpressionRule()
+    {
+        if ($this->expressionRule === null) {
+            $this->expressionRule = $this->rule->get('Expression');
         }
 
-        /** @var Expression $expressionRule */
-        $expressionRule = $this->rule->get('Expression');
-        yield $expressionRule->run($parent, $tokenizer);
+        return $this->expressionRule;
+    }
+
+    /**
+     * @return VariableList
+     */
+    public function getVariableListRule()
+    {
+        if ($this->variableListRule === null) {
+            $this->variableListRule = $this->rule->get('VariableList');
+        }
+
+        return $this->variableListRule;
     }
 }

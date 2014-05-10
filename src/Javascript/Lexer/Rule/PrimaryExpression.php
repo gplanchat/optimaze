@@ -49,6 +49,19 @@ class PrimaryExpression
 {
     use RuleTrait;
 
+    /**
+     * @var Expression
+     */
+    protected $expressionRule = null;
+
+    /**
+     * @var FunctionExpression
+     */
+    protected $functionExpressionRule = null;
+
+    /**
+     * @var array
+     */
     protected static $validTokenTypes = [
         TokenizerInterface::OP_LEFT_BRACKET,
         TokenizerInterface::TOKEN_IDENTIFIER,
@@ -82,9 +95,7 @@ class PrimaryExpression
         if ($token->getType() === TokenizerInterface::OP_LEFT_BRACKET) {
             $this->nextToken($tokenizer);
 
-            /** @var Expression $rule */
-            $rule = $this->rule->get('Expression');
-            yield $rule->run($node, $tokenizer);
+            yield $this->getExpressionRule()->run($node, $tokenizer);
 
             $token = $this->currentToken($tokenizer);
             if ($token->getType() !== TokenizerInterface::OP_RIGHT_BRACKET) {
@@ -149,14 +160,36 @@ class PrimaryExpression
             $node->addChild($child);
             $this->nextToken($tokenizer);
         } else if ($token->getType() === TokenizerInterface::KEYWORD_FUNCTION) {
-            /** @var RuleInterface $rule */
-            $rule = $this->rule->get('FunctionExpression');
-            $rule->run($node, $tokenizer);
+            yield $this->getFunctionExpressionRule()->run($node, $tokenizer);
         } else {
             throw new LexicalError(static::MESSAGE_UNEXPECTED_TOKEN,
                 null, $token->getLine(), $token->getLineOffset(), $token->getStart());
         }
 
         $node->optimize();
+    }
+
+    /**
+     * @return Expression
+     */
+    public function getExpressionRule()
+    {
+        if ($this->expressionRule === null) {
+            $this->expressionRule = $this->rule->get('Expression');
+        }
+
+        return $this->expressionRule;
+    }
+
+    /**
+     * @return FunctionExpression
+     */
+    public function getFunctionExpressionRule()
+    {
+        if ($this->functionExpressionRule === null) {
+            $this->functionExpressionRule = $this->rule->get('FunctionExpression');
+        }
+
+        return $this->functionExpressionRule;
     }
 }

@@ -42,6 +42,11 @@ class AndExpression
     use RuleTrait;
 
     /**
+     * @var BitwiseOrExpression
+     */
+    protected $bitwiseOrExpressionRule = null;
+
+    /**
      * @param RecursiveGrammarInterface $parent
      * @param BaseTokenizerInterface $tokenizer
      * @return \Generator|null
@@ -53,10 +58,8 @@ class AndExpression
         $node = $this->grammar->get('AndExpression');
         $parent->addChild($node);
 
-        /** @var BitwiseOrExpression $rule */
-        $rule = $this->rule->get('BitwiseOrExpression');
         while (true) {
-            yield $rule->run($node, $tokenizer);
+            yield $this->getBitwiseOrExpressionRule()->run($node, $tokenizer);
 
             $token = $this->currentToken($tokenizer);
             if ($token->getType() !== TokenizerInterface::OP_AND) {
@@ -65,5 +68,17 @@ class AndExpression
         }
 
         $node->optimize();
+    }
+
+    /**
+     * @return OrExpression
+     */
+    public function getBitwiseOrExpressionRule()
+    {
+        if ($this->bitwiseOrExpressionRule === null) {
+            $this->bitwiseOrExpressionRule = $this->rule->get('BitwiseOrExpression');
+        }
+
+        return $this->bitwiseOrExpressionRule;
     }
 }

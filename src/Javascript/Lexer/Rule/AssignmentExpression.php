@@ -42,6 +42,11 @@ class AssignmentExpression
     use RuleTrait;
 
     /**
+     * @var ConditionalExpression
+     */
+    protected $conditionalExpressionRule = null;
+
+    /**
      * @param RecursiveGrammarInterface $parent
      * @param BaseTokenizerInterface $tokenizer
      * @return \Generator|null
@@ -53,11 +58,8 @@ class AssignmentExpression
         $node = $this->grammar->get('AssignmentExpression');
         $parent->addChild($node);
 
-        /** @var AssignmentExpression $conditionalExpressionRule */
-        $conditionalExpressionRule = $this->rule->get('ConditionalExpression');
-
         while (true) {
-            yield $conditionalExpressionRule->run($node, $tokenizer);
+            yield $this->getConditionalExpressionRule()->run($node, $tokenizer);
 
             $token = $this->currentToken($tokenizer);
             if ($token->getType() !== TokenizerInterface::OP_ASSIGN) {
@@ -74,5 +76,17 @@ class AssignmentExpression
         }
 
         $node->optimize();
+    }
+
+    /**
+     * @return ConditionalExpression
+     */
+    public function getConditionalExpressionRule()
+    {
+        if ($this->conditionalExpressionRule === null) {
+            $this->conditionalExpressionRule = $this->rule->get('ConditionalExpression');
+        }
+
+        return $this->conditionalExpressionRule;
     }
 }

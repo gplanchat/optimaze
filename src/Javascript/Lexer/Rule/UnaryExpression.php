@@ -126,11 +126,8 @@ class UnaryExpression
                 ;
                 $node->addChild($newKeyword);
 
-                /** @var Constructor $constructorRule */
-                $constructorRule = $this->rule->get('Constructor');
-
                 $this->nextToken($tokenizer);
-                yield $constructorRule->run($node, $tokenizer);
+                yield $this->rule->get('Constructor')->run($node, $tokenizer);
                 break;
             } else {
                 yield $memberExpressionRule->run($node, $tokenizer);

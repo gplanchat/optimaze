@@ -41,6 +41,14 @@ class EqualityExpression
 {
     use RuleTrait;
 
+    /**
+     * @var RelationalExpression
+     */
+    protected $relationalExpressionRule = null;
+
+    /**
+     * @var array
+     */
     protected static $equalityOperators = [
         TokenizerInterface::OP_STRICT_EQ,
         TokenizerInterface::OP_EQ,
@@ -60,11 +68,8 @@ class EqualityExpression
         $node = $this->grammar->get('EqualityExpression');
         $parent->addChild($node);
 
-        /** @var RelationalExpression $relationalExpressionRule */
-        $relationalExpressionRule = $this->rule->get('RelationalExpression');
-
         while (true) {
-            yield $relationalExpressionRule->run($node, $tokenizer);
+            yield $this->getRelationalExpressionRule()->run($node, $tokenizer);
 
             $token = $this->currentToken($tokenizer);
             if (!in_array($token->getType(), static::$equalityOperators)) {
@@ -80,5 +85,17 @@ class EqualityExpression
         }
 
         $node->optimize();
+    }
+
+    /**
+     * @return RelationalExpression
+     */
+    public function getRelationalExpressionRule()
+    {
+        if ($this->relationalExpressionRule === null) {
+            $this->relationalExpressionRule = $this->rule->get('RelationalExpression');
+        }
+
+        return $this->relationalExpressionRule;
     }
 }

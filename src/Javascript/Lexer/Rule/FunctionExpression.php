@@ -53,6 +53,8 @@ class FunctionExpression
      */
     public function run(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
     {
+        var_dump([__FILE__ => __LINE__]);
+        echo $this->currentToken($tokenizer);
         $token = $this->currentToken($tokenizer);
         if ($token->getType() !== TokenizerInterface::KEYWORD_FUNCTION) {
             throw new LexicalError(static::MESSAGE_MISSING_FUNCTION_KEYWORD,
@@ -77,9 +79,7 @@ class FunctionExpression
         }
         $this->nextToken($tokenizer);
 
-        /** @var Rule\ParameterList $parameterListRule */
-        $parameterListRule = $this->rule->get('ParameterList');
-        yield $parameterListRule->run($node, $tokenizer);
+        yield $this->rule->get('ParameterList')->run($node, $tokenizer);
 
         $token = $this->currentToken($tokenizer);
         if ($token->getType() !== TokenizerInterface::OP_RIGHT_BRACKET) {
@@ -94,9 +94,7 @@ class FunctionExpression
         }
         $this->nextToken($tokenizer);
 
-        /** @var Rule\StatementList $statementListRule */
-        $statementListRule = $this->rule->get('StatementList');
-        yield $statementListRule->run($node, $tokenizer);
+        yield $this->rule->get('StatementList')->run($node, $tokenizer);
 
         $token = $this->currentToken($tokenizer);
         if ($token->getType() !== TokenizerInterface::OP_RIGHT_CURLY) {

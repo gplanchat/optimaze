@@ -41,6 +41,11 @@ class Condition
     use RuleTrait;
 
     /**
+     * @var Expression
+     */
+    protected $expressionRule = null;
+
+    /**
      * @param RecursiveGrammarInterface $parent
      * @param BaseTokenizerInterface $tokenizer
      * @return \Generator|null
@@ -60,9 +65,7 @@ class Condition
 
         $this->nextToken($tokenizer);
 
-        /** @var Expression $expressionRule */
-        $expressionRule = $this->rule->get('Expression');
-        yield $expressionRule->run($node, $tokenizer);
+        yield $this->getExpressionRule()->run($node, $tokenizer);
 
         $token = $this->currentToken($tokenizer);
         if ($token->getType() !== TokenizerInterface::OP_RIGHT_BRACKET) {
@@ -73,5 +76,17 @@ class Condition
         $this->nextToken($tokenizer);
 
         $node->optimize();
+    }
+
+    /**
+     * @return Expression
+     */
+    public function getExpressionRule()
+    {
+        if ($this->expressionRule === null) {
+            $this->expressionRule = $this->rule->get('Expression');
+        }
+
+        return $this->expressionRule;
     }
 }

@@ -157,14 +157,9 @@ class Tokenizer
     private $tokenIndex = 0;
 
     /**
-     * @var bool
-     */
-    private $scanNewLines = false;
-
-    /**
      * @var int
      */
-    private $line = 0;
+    private $line = 1;
 
     /**
      * @var int
@@ -267,23 +262,20 @@ class Tokenizer
             return $this->tokens[$this->tokenIndex];
         }
 
-        // whitespace handling; gobble up \r as well (effectively we don't have support for MAC newlines!)
-        $newLineExpression = $this->scanNewLines ? '/^[ \r\t]+/' : '/^\s+/';
         $input = '';
         $chunkSize = 0;
         while (true) {
             $input = $this->source->get(null, $this->cursor);
             $chunkSize = strlen($input);
 
-            if (preg_match($newLineExpression, $input, $match) > 0) {
+            if (preg_match('/^\s+/', $input, $match) > 0) {
                 $spacesLength = strlen($match[0]);
                 $this->cursor += $spacesLength;
-                if (!$this->scanNewLines) {
-                    $this->line += substr_count($match[0], "\n");
 
-                    if (($pos = strrpos($match[0], "\n")) !== null) {
-                        $this->lineOffset = $spacesLength - $pos;
-                    }
+                $this->line += substr_count($match[0], "\n");
+
+                if (($pos = strrpos($match[0], "\n")) !== null) {
+                    $this->lineOffset = $spacesLength - $pos;
                 }
 
                 if ($spacesLength == $chunkSize) {
@@ -426,10 +418,6 @@ class Tokenizer
             return $this->push($input[0], $input[0]);
 
         case "\n":
-            if ($this->scanNewLines) {
-                return $this->push(TokenizerInterface::TOKEN_NEWLINE, "\n");
-            }
-
             throw new Exception\SyntaxError('Illegal token',
                 $this->source->getPath(), $this->line, $this->lineOffset, $this->cursor
             );

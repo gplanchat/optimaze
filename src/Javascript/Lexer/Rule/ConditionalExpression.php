@@ -42,6 +42,16 @@ class ConditionalExpression
     use RuleTrait;
 
     /**
+     * @var OrExpression
+     */
+    protected $orExpressionRule = null;
+
+    /**
+     * @var AssignmentExpression
+     */
+    protected $assignmentExpressionRule = null;
+
+    /**
      * @param RecursiveGrammarInterface $parent
      * @param BaseTokenizerInterface $tokenizer
      * @return \Generator|null
@@ -53,9 +63,7 @@ class ConditionalExpression
         $node = $this->grammar->get('ConditionalExpression');
         $parent->addChild($node);
 
-        /** @var OrExpression $orExpressionRule */
-        $orExpressionRule = $this->rule->get('OrExpression');
-        yield $orExpressionRule->run($node, $tokenizer);
+        yield $this->getOrExpressionRule()->run($node, $tokenizer);
 
         $token = $this->currentToken($tokenizer);
         if ($token->getType() !== TokenizerInterface::OP_HOOK) {
@@ -64,9 +72,7 @@ class ConditionalExpression
         }
         $this->nextToken($tokenizer);
 
-        /** @var AssignmentExpression $assignmentExpressionRule */
-        $assignmentExpressionRule = $this->rule->get('AssignmentExpression');
-        yield $assignmentExpressionRule->run($node, $tokenizer);
+        yield $this->getAssignmentExpressionRule()->run($node, $tokenizer);
 
         $token = $this->currentToken($tokenizer);
         if ($token->getType() !== TokenizerInterface::OP_COLON) {
@@ -75,8 +81,34 @@ class ConditionalExpression
         }
         $this->nextToken($tokenizer);
 
-        yield $assignmentExpressionRule->run($node, $tokenizer);
+        yield $this->getAssignmentExpressionRule()->run($node, $tokenizer);
 
         $node->optimize();
     }
+
+    /**
+     * @return OrExpression
+     */
+    public function getOrExpressionRule()
+    {
+        if ($this->orExpressionRule === null) {
+            $this->orExpressionRule = $this->rule->get('OrExpression');
+        }
+
+        return $this->orExpressionRule;
+    }
+
+
+    /**
+     * @return AssignmentExpression
+     */
+    public function getAssignmentExpressionRule()
+    {
+        if ($this->assignmentExpressionRule === null) {
+            $this->assignmentExpressionRule = $this->rule->get('AssignmentExpression');
+        }
+
+        return $this->assignmentExpressionRule;
+    }
+
 }

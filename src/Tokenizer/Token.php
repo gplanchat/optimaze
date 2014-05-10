@@ -83,6 +83,7 @@ class Token
         $this->setStart($start);
         $this->setEnd($end);
         $this->setLine($line);
+        $this->setLineOffset($lineOffset);
         $this->setAssignOperator($assignOperator);
     }
 
@@ -228,9 +229,9 @@ class Token
         $constants = $re->getConstants();
 
         $key = array_search($this->getType(), $constants);
-        return sprintf("\n%s [%s]",
+        return sprintf("\n%s [%s] - line %d, offset %d",
             str_pad($key, 25, ' ', STR_PAD_RIGHT),
-            $this->getValue()
+            $this->getValue(), $this->getLine(), $this->getLineOffset()
         );
     }
 

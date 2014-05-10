@@ -42,6 +42,11 @@ class Constructor
     use RuleTrait;
 
     /**
+     * @var ConstructorCall
+     */
+    protected $constructorCallRule = null;
+
+    /**
      * @param RecursiveGrammarInterface $parent
      * @param BaseTokenizerInterface $tokenizer
      * @return \Generator|null
@@ -77,10 +82,20 @@ class Constructor
             $this->nextToken($tokenizer);
         }
 
-        /** @var ConstructorCall $rule */
-        $rule = $this->rule->get('ConstructorCall');
-        yield $rule->run($node, $tokenizer);
+        yield $this->getConstructorCallRule()->run($node, $tokenizer);
 
         $node->optimize();
+    }
+
+    /**
+     * @return Expression
+     */
+    public function getConstructorCallRule()
+    {
+        if ($this->constructorCallRule === null) {
+            $this->constructorCallRule = $this->rule->get('ConstructorCall');
+        }
+
+        return $this->constructorCallRule;
     }
 }

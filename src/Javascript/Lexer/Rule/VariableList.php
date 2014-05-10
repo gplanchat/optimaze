@@ -76,9 +76,7 @@ class VariableList
             if ($token->getType() === TokenizerInterface::OP_ASSIGN) {
                 $this->nextToken($tokenizer);
 
-                /** @var AssignmentExpression $assignmentExpressionRule */
-                $assignmentExpressionRule = $this->rule->get('AssignmentExpression');
-                yield $assignmentExpressionRule->run($variable, $tokenizer);
+                yield $this->rule->get('AssignmentExpression')->run($variable, $tokenizer);
                 $token = $this->currentToken($tokenizer);
             }
 

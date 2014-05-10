@@ -42,6 +42,11 @@ class BitwiseOrExpression
     use RuleTrait;
 
     /**
+     * @var BitwiseXorExpression
+     */
+    protected $bitwiseXorExpressionRule = null;
+
+    /**
      * @param RecursiveGrammarInterface $parent
      * @param BaseTokenizerInterface $tokenizer
      * @return \Generator|null
@@ -53,10 +58,8 @@ class BitwiseOrExpression
         $node = $this->grammar->get('BitwiseOrExpression');
         $parent->addChild($node);
 
-        /** @var BitwiseXorExpression $rule */
-        $rule = $this->rule->get('BitwiseXorExpression');
         while (true) {
-            yield $rule->run($node, $tokenizer);
+            yield $this->getBitwiseXorExpressionRule()->run($node, $tokenizer);
 
             $token = $this->currentToken($tokenizer);
             if ($token->getType() !== TokenizerInterface::OP_BITWISE_OR) {
@@ -65,5 +68,17 @@ class BitwiseOrExpression
         }
 
         $node->optimize();
+    }
+
+    /**
+     * @return BitwiseXorExpression
+     */
+    public function getBitwiseXorExpressionRule()
+    {
+        if ($this->bitwiseXorExpressionRule === null) {
+            $this->bitwiseXorExpressionRule = $this->rule->get('BitwiseXorExpression');
+        }
+
+        return $this->bitwiseXorExpressionRule;
     }
 }

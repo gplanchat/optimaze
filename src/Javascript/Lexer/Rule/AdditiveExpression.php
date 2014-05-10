@@ -42,6 +42,14 @@ class AdditiveExpression
 {
     use RuleTrait;
 
+    /**
+     * @var MultiplicativeExpression
+     */
+    protected $multiplicativeExpressionRule = null;
+
+    /**
+     * @var array
+     */
     protected static $additiveOperators = [
         TokenizerInterface::OP_PLUS,
         TokenizerInterface::OP_MINUS
@@ -59,11 +67,8 @@ class AdditiveExpression
         $node = $this->grammar->get('AdditiveExpression');
         $parent->addChild($node);
 
-        /** @var MultiplicativeExpression $multiplicativeExpressionRule */
-        $multiplicativeExpressionRule = $this->rule->get('MultiplicativeExpression');
-
         while (true) {
-            yield $multiplicativeExpressionRule->run($node, $tokenizer);
+            yield $this->getMultiplicativeExpressionRule()->run($node, $tokenizer);
 
             $token = $this->currentToken($tokenizer);
             if (!in_array($token->getType(), static::$additiveOperators)) {
@@ -79,5 +84,17 @@ class AdditiveExpression
         }
 
         $node->optimize();
+    }
+
+    /**
+     * @return MultiplicativeExpression
+     */
+    public function getMultiplicativeExpressionRule()
+    {
+        if ($this->multiplicativeExpressionRule === null) {
+            $this->multiplicativeExpressionRule = $this->rule->get('MultiplicativeExpression');
+        }
+
+        return $this->multiplicativeExpressionRule;
     }
 }

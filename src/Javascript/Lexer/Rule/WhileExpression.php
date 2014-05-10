@@ -46,8 +46,7 @@ class WhileExpression
 
         $this->nextToken($tokenizer);
 
-        $rule = $this->getConditionRule();
-        yield $rule->run($whileKeyword, $tokenizer);
+        yield $this->getConditionRule()->run($whileKeyword, $tokenizer);
     }
 
     /**

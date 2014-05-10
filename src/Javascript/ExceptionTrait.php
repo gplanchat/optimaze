@@ -85,12 +85,12 @@ trait ExceptionTrait
     {
         if ($this->getSourceFile() === null) {
             return sprintf('Parse error: %s in source string on line %d (offset %d)',
-                $this->getMessage(), $this->getSourceLine(), $this->getSourceOffset())
+                $this->getMessage(), $this->getSourceLine(), $this->getSourceLineOffset())
                 . PHP_EOL . $this->getTraceAsString();
         }
 
         return sprintf('Parse error: %s in source file "%s" on line %d (offset %d)',
-            $this->getMessage(), $this->getSourceFile(), $this->getSourceLine(), $this->getSourceOffset())
+            $this->getMessage(), $this->getSourceFile(), $this->getSourceLine(), $this->getSourceLineOffset())
             . PHP_EOL . $this->getTraceAsString();
     }
 }

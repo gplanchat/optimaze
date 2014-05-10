@@ -56,11 +56,9 @@ class IfExpression
             $conditionChain->addChild($ifKeyword);
 
             $this->nextToken($tokenizer);
-            $rule = $this->getConditionRule();
-            yield $rule->run($ifKeyword, $tokenizer);
+            yield $this->getConditionRule()->run($ifKeyword, $tokenizer);
 
-            $rule = $this->getStatementRule();
-            yield $rule->run($ifKeyword, $tokenizer);
+            yield $this->getStatementRule()->run($ifKeyword, $tokenizer);
 
             $token = $this->currentToken($tokenizer);
             if ($token->getType() !== TokenizerInterface::KEYWORD_ELSE) {
@@ -73,8 +71,7 @@ class IfExpression
                 $elseKeyword = $this->grammar->get('ElseKeyword');
                 $conditionChain->addChild($elseKeyword);
 
-                $rule = $this->getStatementRule();
-                yield $rule->run($elseKeyword, $tokenizer);
+                yield $this->getStatementRule()->run($elseKeyword, $tokenizer);
                 break;
             }
         }

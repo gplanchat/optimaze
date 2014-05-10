@@ -43,6 +43,11 @@ class Expression
     use RuleTrait;
 
     /**
+     * @var AssignmentExpression
+     */
+    protected $assignmentExpressionRule = null;
+
+    /**
      * @param RecursiveGrammarInterface $parent
      * @param BaseTokenizerInterface $tokenizer
      * @return \Generator|null
@@ -54,18 +59,14 @@ class Expression
         $node = $this->grammar->get('Expression');
         $parent->addChild($node);
 
-        /** @var AssignmentExpression $assignmentExpressionRule */
-        $assignmentExpressionRule = $this->rule->get('AssignmentExpression');
         while (true) {
             $token = $this->currentToken($tokenizer);
             if ($token->getType() === TokenizerInterface::KEYWORD_FUNCTION) {
-                /** @var FunctionExpression $functionExpressionRule */
-                $functionExpressionRule = $this->rule->get('FunctionExpression');
-                yield $functionExpressionRule->run($node, $tokenizer);
+                yield $this->rule->get('FunctionExpression')->run($node, $tokenizer);
                 break;
             }
 
-            yield $assignmentExpressionRule->run($node, $tokenizer);
+            yield $this->getAssignmentExpressionRule()->run($node, $tokenizer);
 
             $token = $this->currentToken($tokenizer);
             if ($token->getType() !== TokenizerInterface::OP_COMMA) {
@@ -74,5 +75,17 @@ class Expression
         }
 
         $node->optimize();
+    }
+
+    /**
+     * @return AssignmentExpression
+     */
+    public function getAssignmentExpressionRule()
+    {
+        if ($this->assignmentExpressionRule === null) {
+            $this->assignmentExpressionRule = $this->rule->get('AssignmentExpression');
+        }
+
+        return $this->assignmentExpressionRule;
     }
 }

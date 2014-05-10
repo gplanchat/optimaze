@@ -44,6 +44,16 @@ class Element
     use RuleTrait;
 
     /**
+     * @var FunctionExpression
+     */
+    protected $functionExpressionRule = null;
+
+    /**
+     * @var Statement
+     */
+    protected $statementRule = null;
+
+    /**
      * @param RecursiveGrammarInterface $parent
      * @param BaseTokenizerInterface $tokenizer
      * @return \Generator|null
@@ -58,9 +68,7 @@ class Element
         $token = $this->currentToken($tokenizer);
 
         if ($token->getType() === TokenizerInterface::KEYWORD_FUNCTION) {
-            /** @var FunctionExpression $functionExpressionRule */
-            $functionExpressionRule = $this->rule->get('FunctionExpression');
-            yield $functionExpressionRule->run($node, $tokenizer);
+            yield $this->getFunctionExpressionRule()->run($node, $tokenizer);
 
             $token = $this->currentToken($tokenizer);
             if ($token->getType() !== TokenizerInterface::OP_SEMICOLON) {
@@ -69,11 +77,33 @@ class Element
             }
             $this->nextToken($tokenizer);
         } else {
-            /** @var Rule\Statement $statementRule */
-            $statementRule = $this->rule->get('Statement');
-            yield $statementRule->run($node, $tokenizer);
+            yield $this->getStatementRule()->run($node, $tokenizer);
         }
 
         $node->optimize();
+    }
+
+    /**
+     * @return FunctionExpression
+     */
+    public function getFunctionExpressionRule()
+    {
+        if ($this->functionExpressionRule === null) {
+            $this->functionExpressionRule = $this->rule->get('FunctionExpression');
+        }
+
+        return $this->functionExpressionRule;
+    }
+
+    /**
+     * @return Statement
+     */
+    public function getStatementRule()
+    {
+        if ($this->statementRule === null) {
+            $this->statementRule = $this->rule->get('Statement');
+        }
+
+        return $this->statementRule;
     }
 }
