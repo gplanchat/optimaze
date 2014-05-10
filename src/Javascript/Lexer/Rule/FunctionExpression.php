@@ -63,8 +63,6 @@ class FunctionExpression
      */
     public function run(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
     {
-        var_dump([__FILE__ => __LINE__]);
-        echo $this->currentToken($tokenizer);
         $token = $this->currentToken($tokenizer);
         if ($token->getType() !== TokenizerInterface::KEYWORD_FUNCTION) {
             throw new LexicalError(static::MESSAGE_MISSING_FUNCTION_KEYWORD,
