@@ -195,7 +195,7 @@ class StatementTest
         ];
 
         $ruleServices = [
-            ['StatementListRule', new Rule\TokenSeeker(TokenizerInterface::TOKEN_IDENTIFIER, 'a', true)]
+            ['StatementList', new Rule\TokenSeeker(TokenizerInterface::TOKEN_IDENTIFIER, 'a', true)]
         ];
 
         $grammarServices = [
@@ -230,7 +230,7 @@ class StatementTest
         ];
 
         $ruleServices = [
-            ['StatementListRule', new Rule\TokenSeeker(TokenizerInterface::TOKEN_IDENTIFIER, 'a', true)]
+            ['StatementList', new Rule\TokenSeeker(TokenizerInterface::TOKEN_IDENTIFIER, 'a', true)]
         ];
 
         $grammarServices = [

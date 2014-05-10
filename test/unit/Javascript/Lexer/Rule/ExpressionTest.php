@@ -88,7 +88,6 @@ class ExpressionTest
         ];
 
         $ruleServices = [
-            ['AssignmentExpression', new Rule\TokenNullSeeker()],
             ['FunctionExpression', new Rule\TokenSeeker(TokenizerInterface::OP_RIGHT_CURLY, '}', true)]
         ];
 
