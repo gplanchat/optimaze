@@ -129,6 +129,9 @@ class UnaryExpression
                 $this->nextToken($tokenizer);
                 yield $this->rule->get('Constructor')->run($node, $tokenizer);
                 break;
+            } else if ($token->getType() === TokenizerInterface::KEYWORD_THIS) {
+                yield $this->rule->get('Constructor')->run($node, $tokenizer);
+                break;
             } else {
                 yield $memberExpressionRule->run($node, $tokenizer);
 

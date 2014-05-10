@@ -145,6 +145,7 @@ UnaryExpression:
     IncrementOperator MemberExpression
     MemberExpression IncrementOperator
     new Constructor
+    Constructor
     delete MemberExpression
 ```
 ```

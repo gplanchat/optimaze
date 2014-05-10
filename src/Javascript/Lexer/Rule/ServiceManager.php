@@ -39,7 +39,9 @@ class ServiceManager
             'Element'                  => Element::class,
             'EqualityExpression'       => EqualityExpression::class,
             'Expression'               => Expression::class,
+            'ForExpression'            => ForExpression::class,
             'FunctionExpression'       => FunctionExpression::class,
+            'IfExpression'             => IfExpression::class,
             'MemberExpression'         => MemberExpression::class,
             'MultiplicativeExpression' => MultiplicativeExpression::class,
             'OrExpression'             => OrExpression::class,
@@ -51,7 +53,8 @@ class ServiceManager
             'StatementList'            => StatementList::class,
             'UnaryExpression'          => UnaryExpression::class,
             'VariableList'             => VariableList::class,
-            'VariableListOrExpression' => VariableListOrExpression::class
+            'VariableListOrExpression' => VariableListOrExpression::class,
+            'WhileExpression'          => WhileExpression::class
         ];
 
         foreach ($services as $serviceName => $className) {
