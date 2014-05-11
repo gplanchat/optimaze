@@ -41,6 +41,7 @@ interface TokenizerInterface
     const TOKEN_NEWLINE               = 0x7;
     const TOKEN_LINE_COMMENT          = 0x8;
     const TOKEN_BLOCK_COMMENT         = 0x9;
+    const TOKEN_DOC_COMMENT           = 0xA;
 
     const JS_SCRIPT        = 0x100;
     const JS_BLOCK         = 0x101;

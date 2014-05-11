@@ -292,7 +292,10 @@ class Tokenizer
                 break;
             }
 
-            if (strpos($match[0], '/*') === 0) {
+            if (strpos($match[0], '/**') === 0) {
+                $this->push(TokenizerInterface::TOKEN_DOC_COMMENT, $match[0]);
+                continue;
+            } else if (strpos($match[0], '/*') === 0) {
                 $this->push(TokenizerInterface::TOKEN_BLOCK_COMMENT, $match[0]);
                 continue;
             } else if (strpos($match[0], '//') === 0) {
