@@ -8,6 +8,9 @@ Program:
 ```
 Element:
     FunctionExpression ;
+    DocComment
+    BlockComment
+    LineComment
     Statement
 ```
 

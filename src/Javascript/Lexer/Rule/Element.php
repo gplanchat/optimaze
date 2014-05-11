@@ -36,6 +36,9 @@ use Gplanchat\Tokenizer\TokenizerInterface as BaseTokenizerInterface;
  *
  * Element:
  *     FunctionExpression ;
+ *     DocComment
+ *     BlockComment
+ *     LineComment
  *     Statement
  */
 class Element
@@ -67,7 +70,22 @@ class Element
 
         $token = $this->currentToken($tokenizer);
 
-        if ($token->getType() === TokenizerInterface::KEYWORD_FUNCTION) {
+        if ($token->getType() === TokenizerInterface::TOKEN_BLOCK_COMMENT) {
+            /** @var Grammar\BlockComment $blockComment */
+            $blockComment = $this->grammar->get('BlockComment');
+            $node->addChild($blockComment);
+            $this->nextToken($tokenizer);
+        } else if ($token->getType() === TokenizerInterface::TOKEN_LINE_COMMENT) {
+            /** @var Grammar\LineComment $lineComment */
+            $lineComment = $this->grammar->get('LineComment');
+            $node->addChild($lineComment);
+            $this->nextToken($tokenizer);
+        } else if ($token->getType() === TokenizerInterface::TOKEN_DOC_COMMENT) {
+            /** @var Grammar\DocComment $docComment */
+            $docComment = $this->grammar->get('DocComment');
+            $node->addChild($docComment);
+            $this->nextToken($tokenizer);
+        } else if ($token->getType() === TokenizerInterface::KEYWORD_FUNCTION) {
             yield $this->getFunctionExpressionRule()->run($node, $tokenizer);
 
             $token = $this->currentToken($tokenizer);
@@ -79,6 +97,7 @@ class Element
         } else {
             yield $this->getStatementRule()->run($node, $tokenizer);
         }
+
 
         $node->optimize();
     }

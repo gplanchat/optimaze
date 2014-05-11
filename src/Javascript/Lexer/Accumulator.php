@@ -57,12 +57,9 @@ class Accumulator
      */
     public function __invoke(TokenizerInterface $tokenizer)
     {
-        $rule = $this->rule;
-        $this->stack->push(new ExecutionWrapper($rule($this->grammar, $tokenizer)));
-
         while (true) {
             if ($this->stack->isEmpty()) {
-                break;
+                $this->stack->push(new ExecutionWrapper($this->rule->run($this->grammar, $tokenizer)));
             }
 
             /** @var ExecutionWrapper $generator */
