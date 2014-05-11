@@ -51,7 +51,7 @@ abstract class AbstractRuleTest
         $endOffset = 0;
         foreach ($tokenStream as list($tokenType, $tokenValue, $assignOperator)) {
             $endOffset += strlen($tokenValue);
-            $iterator->append($this->getTokenMock([$tokenType, $tokenValue, $startOffset, $endOffset, 1, $assignOperator]));
+            $iterator->append($this->getTokenMock([$tokenType, $tokenValue, $startOffset, $endOffset, '[source]', 1, $assignOperator]));
             $startOffset = $endOffset;
         }
 

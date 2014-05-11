@@ -93,7 +93,7 @@ class TokenList extends \PHPUnit_Framework_Constraint
             if (isset($tokenSpec[2])) {
                 $token = new Token($tokenSpec[0], $tokenSpec[1], 0, 0, 0, 0, $tokenSpec[2]);
             } else {
-                $token = new Token($tokenSpec[0], $tokenSpec[1], 0, 0, 0, 0);
+                $token = new Token($tokenSpec[0], $tokenSpec[1], 0, 0, '[source]', 0, 0);
             }
             $this->tokenList->enqueue($token);
         }
