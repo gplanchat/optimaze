@@ -35,6 +35,8 @@ use Gplanchat\Tokenizer\TokenizerInterface as BaseTokenizerInterface;
  * PrimaryExpression:
  *     FunctionExpression
  *     ( Expression )
+ *     ArrayExpression
+ *     ObjectExpression
  *     Identifier
  *     IntegerLiteral
  *     FloatingPointLiteral
@@ -60,10 +62,22 @@ class PrimaryExpression
     protected $functionExpressionRule = null;
 
     /**
+     * @var ArrayExpression
+     */
+    protected $arrayExpressionRule = null;
+
+    /**
+     * @var ObjectExpression
+     */
+    protected $objectExpressionRule = null;
+
+    /**
      * @var array
      */
     protected static $validTokenTypes = [
         TokenizerInterface::OP_LEFT_BRACKET,
+        TokenizerInterface::OP_LEFT_CURLY,
+        TokenizerInterface::OP_LEFT_SQUARE_BRACKET,
         TokenizerInterface::TOKEN_IDENTIFIER,
         TokenizerInterface::TOKEN_NUMBER_INTEGER,
         TokenizerInterface::TOKEN_NUMBER_FLOATING_POINT,
@@ -103,6 +117,10 @@ class PrimaryExpression
                     $token->getPath(), $token->getLine(), $token->getLineOffset(), $token->getStart());
             }
             $this->nextToken($tokenizer);
+        } else if ($token->getType() === TokenizerInterface::OP_LEFT_CURLY) {
+            yield $this->getObjectExpressionRule()->run($node, $tokenizer);
+        } else if ($token->getType() === TokenizerInterface::OP_LEFT_SQUARE_BRACKET) {
+            yield $this->getArrayExpressionRule()->run($node, $tokenizer);
         } else if ($token->getType() === TokenizerInterface::TOKEN_IDENTIFIER) {
             /** @var Grammar\Identifier $child */
             $child = $this->grammar
@@ -191,5 +209,29 @@ class PrimaryExpression
         }
 
         return $this->functionExpressionRule;
+    }
+
+    /**
+     * @return ArrayExpression
+     */
+    public function getArrayExpressionRule()
+    {
+        if ($this->arrayExpressionRule === null) {
+            $this->arrayExpressionRule = $this->rule->get('ArrayExpression');
+        }
+
+        return $this->arrayExpressionRule;
+    }
+
+    /**
+     * @return ObjectExpression
+     */
+    public function getObjectExpressionRule()
+    {
+        if ($this->objectExpressionRule === null) {
+            $this->objectExpressionRule = $this->rule->get('ObjectExpression');
+        }
+
+        return $this->objectExpressionRule;
     }
 }

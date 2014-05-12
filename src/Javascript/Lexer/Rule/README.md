@@ -7,7 +7,7 @@ Program:
 ```
 ```
 Element:
-    FunctionExpression ;
+    FunctionExpression
     DocComment
     BlockComment
     LineComment
@@ -179,6 +179,8 @@ ArgumentList:
 PrimaryExpression:
     FunctionExpression
     ( Expression )
+    ArrayExpression
+    ObjectExpression
     Identifier
     IntegerLiteral
     FloatingPointLiteral
@@ -187,4 +189,22 @@ PrimaryExpression:
     true
     null
     this
+```
+```
+ArrayExpression:
+    [ Expression ]
+```
+```
+ObjectExpression:
+    { empty }
+    { ObjectEntryList }
+```
+```
+ObjectEntry:
+    Identifier : Expression
+```
+```
+ObjectEntryList:
+    ObjectEntry
+    ObjectEntry , ObjectEntryList
 ```

@@ -255,10 +255,10 @@ class Token
         $constants = $re->getConstants();
 
         $key = array_search($this->getType(), $constants);
-        return sprintf("\n%s [%s] - line %d, offset %d",
+        return sprintf("%s [%s] - line %d, offset %d",
             str_pad($key, 25, ' ', STR_PAD_RIGHT),
             $this->getValue(), $this->getLine(), $this->getLineOffset()
-        );
+        ) . PHP_EOL;
     }
 
     /**

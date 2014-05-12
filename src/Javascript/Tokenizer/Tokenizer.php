@@ -198,7 +198,8 @@ class Tokenizer
      */
     public function current()
     {
-        return $this->tokens[$this->tokenIndex];
+        /** @var Token $token */
+        return $this->get();
     }
 
     /**
