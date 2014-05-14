@@ -22,7 +22,7 @@
 
 namespace Gplanchat\Javascript\Lexer;
 
-use Gplanchat\Javascript\Lexer\TokenizerNavigationAwaretrait;
+use Gplanchat\Javascript\Lexer\TokenizerNavigationAwareTrait;
 use Gplanchat\Lexer\Grammar\GrammarInterface;
 use Gplanchat\Javascript\Tokenizer\TokenizerInterface;
 use Gplanchat\Lexer\LexerInterface;
@@ -38,7 +38,7 @@ use Gplanchat\Lexer\Grammar;
 class Lexer
     implements LexerInterface
 {
-    use TokenizerNavigationAwaretrait;
+    use TokenizerNavigationAwareTrait;
 
     /**
      * @var ServiceManagerInterface
