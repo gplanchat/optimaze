@@ -108,6 +108,7 @@ class UnaryExpression
 
                 $this->nextToken($tokenizer);
                 yield $memberExpressionRule->run($node, $tokenizer);
+                $node->optimize();
                 break;
             } else if ($token->getType() === TokenizerInterface::KEYWORD_DELETE) {
                 /** @var Grammar\DeleteKeyword $deleteKeyword */
@@ -131,6 +132,7 @@ class UnaryExpression
                 break;
             } else if ($token->getType() === TokenizerInterface::KEYWORD_THIS) {
                 yield $this->rule->get('Constructor')->run($node, $tokenizer);
+                $node->optimize();
                 break;
             } else {
                 yield $memberExpressionRule->run($node, $tokenizer);
@@ -145,10 +147,9 @@ class UnaryExpression
 
                     $this->nextToken($tokenizer);
                 }
+                $node->optimize();
                 break;
             }
         }
-
-        $node->optimize();
     }
 }

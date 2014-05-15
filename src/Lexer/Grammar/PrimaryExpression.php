@@ -26,6 +26,6 @@ class PrimaryExpression
     implements RecursiveGrammarInterface
 {
     use LeftAssociativeGrammarTrait;
-    use Optimization\MandatoryGrammarTrait;
+    use Optimization\OptionalGrammarTrait;
     use GrammarRecursiveDumpTrait;
 }

@@ -26,6 +26,6 @@ class UnaryExpression
     implements RecursiveGrammarInterface
 {
     use RightAssociativeGrammarTrait;
-    use Optimization\MandatoryGrammarTrait;
+    use Optimization\OptionalGrammarTrait;
     use GrammarRecursiveDumpTrait;
 }

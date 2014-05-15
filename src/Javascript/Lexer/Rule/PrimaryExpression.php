@@ -119,8 +119,10 @@ class PrimaryExpression
             $this->nextToken($tokenizer);
         } else if ($token->getType() === TokenizerInterface::OP_LEFT_CURLY) {
             yield $this->getObjectExpressionRule()->run($node, $tokenizer);
+            $node->optimize();
         } else if ($token->getType() === TokenizerInterface::OP_LEFT_SQUARE_BRACKET) {
             yield $this->getArrayExpressionRule()->run($node, $tokenizer);
+            $node->optimize();
         } else if ($token->getType() === TokenizerInterface::TOKEN_IDENTIFIER) {
             /** @var Grammar\Identifier $child */
             $child = $this->grammar
@@ -128,6 +130,7 @@ class PrimaryExpression
             ;
             $node->addChild($child);
             $this->nextToken($tokenizer);
+            $node->optimize();
         } else if ($token->getType() === TokenizerInterface::TOKEN_NUMBER_INTEGER) {
             /** @var Grammar\IntegerLiteral $child */
             $child = $this->grammar
@@ -135,6 +138,7 @@ class PrimaryExpression
             ;
             $node->addChild($child);
             $this->nextToken($tokenizer);
+            $node->optimize();
         } else if ($token->getType() === TokenizerInterface::TOKEN_NUMBER_FLOATING_POINT) {
             /** @var Grammar\FloatingPointLiteral $child */
             $child = $this->grammar
@@ -142,6 +146,7 @@ class PrimaryExpression
             ;
             $node->addChild($child);
             $this->nextToken($tokenizer);
+            $node->optimize();
         } else if ($token->getType() === TokenizerInterface::TOKEN_STRING) {
             /** @var Grammar\StringLiteral $child */
             $child = $this->grammar
@@ -149,6 +154,7 @@ class PrimaryExpression
             ;
             $node->addChild($child);
             $this->nextToken($tokenizer);
+            $node->optimize();
         } else if ($token->getType() === TokenizerInterface::KEYWORD_FALSE) {
             /** @var Grammar\BooleanLiteral $child */
             $child = $this->grammar
@@ -156,6 +162,7 @@ class PrimaryExpression
             ;
             $node->addChild($child);
             $this->nextToken($tokenizer);
+            $node->optimize();
         } else if ($token->getType() === TokenizerInterface::KEYWORD_TRUE) {
             /** @var Grammar\BooleanLiteral $child */
             $child = $this->grammar
@@ -163,6 +170,7 @@ class PrimaryExpression
             ;
             $node->addChild($child);
             $this->nextToken($tokenizer);
+            $node->optimize();
         } else if ($token->getType() === TokenizerInterface::KEYWORD_THIS) {
             /** @var Grammar\ThisKeyword $child */
             $child = $this->grammar
@@ -170,6 +178,7 @@ class PrimaryExpression
             ;
             $node->addChild($child);
             $this->nextToken($tokenizer);
+            $node->optimize();
         } else if ($token->getType() === TokenizerInterface::KEYWORD_NULL) {
             /** @var Grammar\NullKeyword $child */
             $child = $this->grammar
@@ -177,14 +186,14 @@ class PrimaryExpression
             ;
             $node->addChild($child);
             $this->nextToken($tokenizer);
+            $node->optimize();
         } else if ($token->getType() === TokenizerInterface::KEYWORD_FUNCTION) {
             yield $this->getClosureExpressionRule()->run($node, $tokenizer);
+            $node->optimize();
         } else {
             throw new LexicalError(static::MESSAGE_UNEXPECTED_TOKEN,
                 $token->getPath(), $token->getLine(), $token->getLineOffset(), $token->getStart());
         }
-
-        $node->optimize();
     }
 
     /**

@@ -66,12 +66,6 @@ class ArgumentList
             if ($token->getType() !== TokenizerInterface::OP_COMMA) {
                 break;
             }
-
-            /** @var Grammar\CommaOperator $commaOperator */
-            $commaOperator = $this->grammar
-                ->get('CommaOperator')
-            ;
-            $node->addChild($commaOperator);
             $this->nextToken($tokenizer);
         }
 
