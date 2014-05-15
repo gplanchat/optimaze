@@ -87,6 +87,11 @@ class Statement
     protected $statementListRule = null;
 
     /**
+     * @var FunctionExpression
+     */
+    protected $functionExpressionRule = null;
+
+    /**
      * @param RecursiveGrammarInterface $parent
      * @param BaseTokenizerInterface $tokenizer
      * @return \Generator|null
@@ -169,6 +174,9 @@ class Statement
                 }
 
                 $this->nextToken($tokenizer);
+                break;
+            } else if ($token->getType() === TokenizerInterface::KEYWORD_FUNCTION) {
+                yield $this->getFunctionExpressionRule()->run($node, $tokenizer);
                 break;
             } else {
                 yield $this->getVariableListOrExpressionRule()->run($node, $tokenizer);
@@ -308,5 +316,17 @@ class Statement
         }
 
         return $this->statementListRule;
+    }
+
+    /**
+     * @return FunctionExpression
+     */
+    public function getFunctionExpressionRule()
+    {
+        if ($this->functionExpressionRule === null) {
+            $this->functionExpressionRule = $this->rule->get('FunctionExpression');
+        }
+
+        return $this->functionExpressionRule;
     }
 }

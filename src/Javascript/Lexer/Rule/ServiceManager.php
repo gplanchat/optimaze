@@ -33,6 +33,7 @@ class ServiceManager
             'BitwiseAndExpression'     => BitwiseAndExpression::class,
             'BitwiseOrExpression'      => BitwiseOrExpression::class,
             'BitwiseXorExpression'     => BitwiseXorExpression::class,
+            'ClosureExpression'        => ClosureExpression::class,
             'Condition'                => Condition::class,
             'ConditionalExpression'    => ConditionalExpression::class,
             'Constructor'              => Constructor::class,

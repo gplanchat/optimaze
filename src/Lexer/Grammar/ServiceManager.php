@@ -26,6 +26,7 @@ class ServiceManager
             'BlockComment'             => BlockComment::class,
             'BooleanLiteral'           => BooleanLiteral::class,
             'BreakKeyword'             => BreakKeyword::class,
+            'ClosureExpression'        => ClosureExpression::class,
             'CommaOperator'            => CommaOperator::class,
             'CompoundStatement'        => CompoundStatement::class,
             'Condition'                => Condition::class,

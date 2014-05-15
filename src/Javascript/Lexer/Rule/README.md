@@ -7,7 +7,6 @@ Program:
 ```
 ```
 Element:
-    FunctionExpression
     DocComment
     BlockComment
     LineComment
@@ -20,6 +19,8 @@ Element:
 FunctionExpression:
     function Identifier ( empty ) { StatementList }
     function Identifier ( ParameterList ) { StatementList }
+
+ClosureExpression:
     function ( empty ) { StatementList }
     function ( ParameterList ) { StatementList }
 ```
@@ -48,6 +49,7 @@ Statement:
     return Expression ;
     { StatementList }
     VariableListOrExpression ;
+    FunctionExpression
 ```
 ```
 Condition:
@@ -70,7 +72,6 @@ Variable:
 ```
 ```
 Expression:
-    FunctionExpression
     AssignmentExpression
     AssignmentExpression , Expression
 ```
@@ -177,7 +178,7 @@ ArgumentList:
 ```
 ```
 PrimaryExpression:
-    FunctionExpression
+    ClosureExpression
     ( Expression )
     ArrayExpression
     ObjectExpression

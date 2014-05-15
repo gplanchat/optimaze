@@ -33,7 +33,7 @@ use Gplanchat\Tokenizer\TokenizerInterface as BaseTokenizerInterface;
  * @package Gplanchat\Javascript\Lexer\Rule
  *
  * PrimaryExpression:
- *     FunctionExpression
+ *     ClosureExpression
  *     ( Expression )
  *     ArrayExpression
  *     ObjectExpression
@@ -57,9 +57,9 @@ class PrimaryExpression
     protected $expressionRule = null;
 
     /**
-     * @var FunctionExpression
+     * @var ClosureExpression
      */
-    protected $functionExpressionRule = null;
+    protected $closureExpressionRule = null;
 
     /**
      * @var ArrayExpression
@@ -178,7 +178,7 @@ class PrimaryExpression
             $node->addChild($child);
             $this->nextToken($tokenizer);
         } else if ($token->getType() === TokenizerInterface::KEYWORD_FUNCTION) {
-            yield $this->getFunctionExpressionRule()->run($node, $tokenizer);
+            yield $this->getClosureExpressionRule()->run($node, $tokenizer);
         } else {
             throw new LexicalError(static::MESSAGE_UNEXPECTED_TOKEN,
                 $token->getPath(), $token->getLine(), $token->getLineOffset(), $token->getStart());
@@ -200,15 +200,15 @@ class PrimaryExpression
     }
 
     /**
-     * @return FunctionExpression
+     * @return ClosureExpression
      */
-    public function getFunctionExpressionRule()
+    public function getClosureExpressionRule()
     {
-        if ($this->functionExpressionRule === null) {
-            $this->functionExpressionRule = $this->rule->get('FunctionExpression');
+        if ($this->closureExpressionRule === null) {
+            $this->closureExpressionRule = $this->rule->get('ClosureExpression');
         }
 
-        return $this->functionExpressionRule;
+        return $this->closureExpressionRule;
     }
 
     /**

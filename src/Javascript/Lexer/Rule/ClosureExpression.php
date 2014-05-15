@@ -31,16 +31,14 @@ use Gplanchat\Javascript\Lexer\Rule;
 use Gplanchat\Tokenizer\TokenizerInterface as BaseTokenizerInterface;
 
 /**
- * Class Element
+ * Class ClosureExpression
  * @package Gplanchat\Javascript\Lexer\Rule
  *
- * FunctionExpression:
- *     function Identifier ( empty ) { StatementList }
- *     function Identifier ( ParameterList ) { StatementList }
+ * ClosureExpression:
  *     function ( empty ) { StatementList }
  *     function ( ParameterList ) { StatementList }
  */
-class FunctionExpression
+class ClosureExpression
     implements RuleInterface
 {
     use RuleTrait;
@@ -69,14 +67,7 @@ class FunctionExpression
                 $token->getPath(), $token->getLine(), $token->getLineOffset(), $token->getStart());
         }
 
-        $token = $this->nextToken($tokenizer);
-        if ($token->getType() !== TokenizerInterface::TOKEN_IDENTIFIER) {
-            throw new LexicalError(static::MESSAGE_MISSING_IDENTIFIER,
-                $token->getPath(), $token->getLine(), $token->getLineOffset(), $token->getStart());
-        }
-
-        /** @var Grammar\FunctionExpression $node */
-        $node = $this->grammar->get('FunctionExpression', [$token->getValue()]);
+        $node = $this->grammar->get('ClosureExpression');
         $parent->addChild($node);
 
         $token = $this->nextToken($tokenizer);

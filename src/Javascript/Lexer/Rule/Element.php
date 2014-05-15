@@ -47,11 +47,6 @@ class Element
     use RuleTrait;
 
     /**
-     * @var FunctionExpression
-     */
-    protected $functionExpressionRule = null;
-
-    /**
      * @var Statement
      */
     protected $statementRule = null;
@@ -85,33 +80,12 @@ class Element
             $docComment = $this->grammar->get('DocComment');
             $node->addChild($docComment);
             $this->nextToken($tokenizer);
-        } else if ($token->getType() === TokenizerInterface::KEYWORD_FUNCTION) {
-            yield $this->getFunctionExpressionRule()->run($node, $tokenizer);
-
-            $token = $this->currentToken($tokenizer);
-            if ($token->getType() !== TokenizerInterface::OP_SEMICOLON) {
-                throw new LexicalError(static::MESSAGE_MISSING_SEMICOLON,
-                    $token->getPath(), $token->getLine(), $token->getLineOffset(), $token->getStart());
-            }
-            $this->nextToken($tokenizer);
         } else {
             yield $this->getStatementRule()->run($node, $tokenizer);
         }
 
 
         $node->optimize();
-    }
-
-    /**
-     * @return FunctionExpression
-     */
-    public function getFunctionExpressionRule()
-    {
-        if ($this->functionExpressionRule === null) {
-            $this->functionExpressionRule = $this->rule->get('FunctionExpression');
-        }
-
-        return $this->functionExpressionRule;
     }
 
     /**
