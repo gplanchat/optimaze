@@ -392,13 +392,6 @@ class Tokenizer
                 }
             }
 
-            if ($this->scanOperand) {
-                if ($match[0] == TokenizerInterface::OP_PLUS) {
-                    return $this->push(TokenizerInterface::OP_UNARY_PLUS, $match[0], TokenizerInterface::OP_PLUS);
-                } else if ($match[0] == TokenizerInterface::OP_MINUS) {
-                    return $this->push(TokenizerInterface::OP_UNARY_MINUS, $match[0], TokenizerInterface::OP_MINUS);
-                }
-            }
             return $this->push($match[0], $match[0]);
 
         /** @noinspection PhpMissingBreakStatementInspection */

@@ -99,9 +99,6 @@ interface TokenizerInterface
     const OP_RIGHT_BRACKET        = ')';
     const OP_CONDCOMMENT_END      = '@*/';
 
-    const OP_UNARY_PLUS = 'U+';
-    const OP_UNARY_MINUS = 'U-';
-
     /* Keywords {{{*/
     const KEYWORD_BREAK      = 'break';
     const KEYWORD_CASE       = 'case';
