@@ -13,7 +13,9 @@ use Generator;
 use Gplanchat\Lexer\Grammar;
 use Gplanchat\Lexer\Grammar\GrammarInterface;
 use Gplanchat\Javascript\Lexer\Rule\RuleInterface;
-use Gplanchat\Tokenizer\TokenizerInterface;
+use Gplanchat\Tokenizer\Token;
+use Gplanchat\Tokenizer\TokenizerInterface as BaseTokenizerInterface;
+use Gplanchat\Javascript\Tokenizer\TokenizerInterface;
 use SplDoublyLinkedList;
 use SplStack;
 
@@ -52,12 +54,17 @@ class Accumulator
     }
 
     /**
-     * @param TokenizerInterface $tokenizer
+     * @param BaseTokenizerInterface $tokenizer
      * @return GrammarInterface
      */
-    public function __invoke(TokenizerInterface $tokenizer)
+    public function __invoke(BaseTokenizerInterface $tokenizer)
     {
         while (true) {
+            /** @var Token $token */
+            $token = $tokenizer->current();
+            if ($token->getType() === TokenizerInterface::TOKEN_END) {
+                break;
+            }
             if ($this->stack->isEmpty()) {
                 $this->stack->push(new ExecutionWrapper($this->rule->run($this->grammar, $tokenizer)));
             }

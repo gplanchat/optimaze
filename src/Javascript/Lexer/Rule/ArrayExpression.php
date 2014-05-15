@@ -78,6 +78,7 @@ class ArrayExpression
             throw new LexicalError(RuleInterface::MESSAGE_MISSING_RIGHT_SQUARE_BRACKET,
                 $token->getPath(), $token->getLine(), $token->getLineOffset(), $token->getStart());
         }
+        $this->nextToken($tokenizer);
 
         $node->optimize();
     }

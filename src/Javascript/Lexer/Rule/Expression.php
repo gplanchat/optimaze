@@ -66,6 +66,7 @@ class Expression
             if ($token->getType() !== TokenizerInterface::OP_COMMA) {
                 break;
             }
+            $this->nextToken($tokenizer);
         }
 
         $node->optimize();
