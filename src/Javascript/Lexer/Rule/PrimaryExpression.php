@@ -98,9 +98,6 @@ class PrimaryExpression
     public function run(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
     {
         $token = $this->currentToken($tokenizer);
-        if (!in_array($token->getType(), static::$validTokenTypes)) {
-            return;
-        }
 
         /** @var Grammar\PrimaryExpression $node */
         $node = $this->grammar->get('PrimaryExpression');

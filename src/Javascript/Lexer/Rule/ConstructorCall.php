@@ -74,12 +74,14 @@ class ConstructorCall
             if ($token->getType() === TokenizerInterface::OP_LEFT_BRACKET) {
                 $this->nextToken($tokenizer);
 
-                yield $this->getArgumentListrule()->run($node, $tokenizer);
-
-                $token = $this->currentToken($tokenizer);
                 if ($token->getType() !== TokenizerInterface::OP_RIGHT_BRACKET) {
-                    throw new LexicalError(static::MESSAGE_MISSING_RIGHT_BRACKET,
-                        $token->getPath(), $token->getLine(), $token->getLineOffset(), $token->getStart());
+                    yield $this->getArgumentListRule()->run($node, $tokenizer);
+
+                    $token = $this->currentToken($tokenizer);
+                    if ($token->getType() !== TokenizerInterface::OP_RIGHT_BRACKET) {
+                        throw new LexicalError(static::MESSAGE_MISSING_RIGHT_BRACKET,
+                            $token->getPath(), $token->getLine(), $token->getLineOffset(), $token->getStart());
+                    }
                 }
 
                 $this->nextToken($tokenizer);
