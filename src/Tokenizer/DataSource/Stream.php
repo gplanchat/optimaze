@@ -38,7 +38,7 @@ class Stream
     /**
      * @var int
      */
-    private $defaultLength = 500;
+    private $defaultLength = 20;
 
     /**
      * @var int
@@ -77,7 +77,7 @@ class Stream
      * @param int $readLength
      * @param resource $context
      */
-    public function __construct($stream = null, $defaultLength = 500, $offset = 0, $readLength = 1000, $context = null)
+    public function __construct($stream = null, $defaultLength = 20, $offset = 0, $readLength = 1000, $context = null)
     {
         $this->defaultLength = $defaultLength;
         $this->offset = $offset;
@@ -100,6 +100,23 @@ class Stream
     {
         $this->path = $path;
         $this->stream = fopen($path, 'r', $context);
+
+        return $this;
+    }
+
+    /**
+     * @param resource $stream
+     * @return $this
+     * @throws \RuntimeException
+     */
+    public function using($stream)
+    {
+        if (!is_resource($stream)) {
+            throw new \RuntimeException('Stream expected.');
+        }
+
+        $this->path = (string) $stream;
+        $this->stream = $stream;
 
         return $this;
     }
@@ -129,15 +146,33 @@ class Stream
      */
     public function get($length = null, $offset = null)
     {
+        if (feof($this->stream)) {
+            return '';
+        }
+
         if ($length === null) {
             $length = $this->defaultLength;
         }
-        if ($offset === null) {
-            $offset = $this->offset;
+
+        if ($length > $this->bufferLength) {
+            $read = stream_get_contents($this->stream, max($length - $this->bufferLength, $this->readLength));
+            $this->buffer .= $read;
+            $this->bufferLength += strlen($read);
         }
 
-        if (!$this->emptiedSource && $this->offset + $length > $this->bufferLength) {
-            $data = stream_get_contents($this->stream, $this->readLength, $offset);
+        if ($length === null) {
+            return substr($this->buffer, $offset);
+        } else {
+            return substr($this->buffer, $offset, $length);
+        }
+
+
+
+
+
+
+        if (!$this->emptiedSource && ($this->offset + $length) > $this->bufferLength) {
+            $data = stream_get_contents($this->stream, $this->readLength);
             $readLength = strlen($data);
             if ($readLength > 0) {
                 $this->buffer .= $data;
