@@ -65,6 +65,7 @@ class BitwiseOrExpression
             if ($token->getType() !== TokenizerInterface::OP_BITWISE_OR) {
                 break;
             }
+            $this->nextToken($tokenizer);
         }
 
         $node->optimize();

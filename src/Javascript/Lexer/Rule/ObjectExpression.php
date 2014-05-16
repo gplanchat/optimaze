@@ -37,7 +37,7 @@ use Gplanchat\Tokenizer\TokenizerInterface as BaseTokenizerInterface;
  *     { ObjectEntryList }
  *
  * ObjectEntry:
- *     Identifier : Expression
+ *     Identifier : AssignmentExpression
  *
  * ObjectEntryList:
  *     ObjectEntry
@@ -49,9 +49,9 @@ class ObjectExpression
     use RuleTrait;
 
     /**
-     * @var Expression
+     * @var AssignmentExpression
      */
-    protected $expressionRule = null;
+    protected $assignmentExpressionRule = null;
 
     /**
      * @param RecursiveGrammarInterface $parent
@@ -85,13 +85,14 @@ class ObjectExpression
                 $objectEntry = $this->grammar->get('ObjectEntry', [$token->getValue()]);
                 $node->addChild($objectEntry);
 
+                $token = $this->nextToken($tokenizer);
                 if ($token->getType() !== TokenizerInterface::OP_COLON) {
                     throw new LexicalError(RuleInterface::MESSAGE_MISSING_COLON,
                         $token->getPath(), $token->getLine(), $token->getLineOffset(), $token->getStart());
                 }
 
                 $this->nextToken($tokenizer);
-                yield $this->getExpressionRule()->run($objectEntry, $tokenizer);
+                yield $this->getAssignmentExpressionRule()->run($objectEntry, $tokenizer);
 
                 $token = $this->currentToken($tokenizer);
                 if ($token->getType() !== TokenizerInterface::OP_COMMA) {
@@ -113,12 +114,12 @@ class ObjectExpression
     /**
      * @return Expression
      */
-    public function getExpressionRule()
+    public function getAssignmentExpressionRule()
     {
-        if ($this->expressionRule === null) {
-            $this->expressionRule = $this->rule->get('Expression');
+        if ($this->assignmentExpressionRule === null) {
+            $this->assignmentExpressionRule = $this->rule->get('AssignmentExpression');
         }
 
-        return $this->expressionRule;
+        return $this->assignmentExpressionRule;
     }
 }

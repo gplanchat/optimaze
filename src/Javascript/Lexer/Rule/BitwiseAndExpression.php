@@ -52,7 +52,6 @@ class BitwiseAndExpression
      * @return \Generator|null
      * @throws LexicalError
      */
-
     public function run(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
     {
         /** @var Grammar\BitwiseAndExpression $node */
@@ -66,6 +65,7 @@ class BitwiseAndExpression
             if ($token->getType() !== TokenizerInterface::OP_BITWISE_AND) {
                 break;
             }
+            $this->nextToken($tokenizer);
         }
 
         $node->optimize();

@@ -65,6 +65,7 @@ class OrExpression
             if ($token->getType() !== TokenizerInterface::OP_OR) {
                 break;
             }
+            $this->nextToken($tokenizer);
         }
 
         $node->optimize();

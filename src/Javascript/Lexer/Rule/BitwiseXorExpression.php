@@ -65,6 +65,7 @@ class BitwiseXorExpression
             if ($token->getType() !== TokenizerInterface::OP_BITWISE_XOR) {
                 break;
             }
+            $this->nextToken($tokenizer);
         }
 
         $node->optimize();

@@ -65,6 +65,7 @@ class AndExpression
             if ($token->getType() !== TokenizerInterface::OP_AND) {
                 break;
             }
+            $this->nextToken($tokenizer);
         }
 
         $node->optimize();

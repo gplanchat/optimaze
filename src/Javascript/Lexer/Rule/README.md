@@ -202,7 +202,7 @@ ObjectExpression:
 ```
 ```
 ObjectEntry:
-    Identifier : Expression
+    Identifier : AssignmentExpression
 ```
 ```
 ObjectEntryList:
