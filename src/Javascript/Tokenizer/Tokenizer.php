@@ -274,9 +274,10 @@ class Tokenizer
                 $this->cursor += $spacesLength;
 
                 $this->line += substr_count($match[0], "\n");
-
-                if (($pos = strrpos($match[0], "\n")) !== null) {
+                if (($pos = strrpos($match[0], "\n")) !== false) {
                     $this->lineOffset = $spacesLength - $pos;
+                } else {
+                    $this->lineOffset += $spacesLength;
                 }
 
                 if ($spacesLength == $chunkSize) {
