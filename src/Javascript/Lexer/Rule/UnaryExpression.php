@@ -47,9 +47,10 @@ class UnaryExpression
     use RuleTrait;
 
     protected static $unaryOperators = [
-        TokenizerInterface::OP_BITWISE_NOT,
+        TokenizerInterface::OP_NOT,
         TokenizerInterface::KEYWORD_TYPEOF,
         TokenizerInterface::KEYWORD_VOID,
+        TokenizerInterface::OP_PLUS,
         TokenizerInterface::OP_MINUS
     ];
 
