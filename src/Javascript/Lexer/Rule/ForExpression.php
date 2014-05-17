@@ -74,6 +74,7 @@ class ForExpression
                 throw new LexicalError(static::MESSAGE_MISSING_SEMICOLON,
                     $token->getPath(), $token->getLine(), $token->getLineOffset(), $token->getStart());
             }
+            $this->nextToken($tokenizer);
 
             yield $this->getExpressionRule()->run($parent, $tokenizer);
 
@@ -93,6 +94,7 @@ class ForExpression
                     throw new LexicalError(static::MESSAGE_MISSING_SEMICOLON,
                         $token->getPath(), $token->getLine(), $token->getLineOffset(), $token->getStart());
                 }
+                $this->nextToken($tokenizer);
 
                 yield $this->getExpressionRule()->run($parent, $tokenizer);
 

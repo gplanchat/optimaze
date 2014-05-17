@@ -135,7 +135,7 @@ class UnaryExpression
                 yield $this->rule->get('Constructor')->run($node, $tokenizer);
                 $node->optimize();
                 break;
-            } else {
+            } else if ($token->getType() !== TokenizerInterface::OP_SEMICOLON) {
                 yield $memberExpressionRule->run($node, $tokenizer);
 
                 $token = $this->currentToken($tokenizer);
@@ -149,6 +149,8 @@ class UnaryExpression
                     $this->nextToken($tokenizer);
                 }
                 $node->optimize();
+                break;
+            } else {
                 break;
             }
         }

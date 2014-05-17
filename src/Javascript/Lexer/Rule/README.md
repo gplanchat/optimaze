@@ -154,14 +154,8 @@ UnaryExpression:
 ```
 ```
 Constructor:
-    this . ConstructorCall
-    ConstructorCall
-```
-```
-ConstructorCall:
-    Identifier
-    Identifier ( ArgumentListOpt )
-    Identifier . ConstructorCall
+    this . MemberExpression
+    MemberExpression
 ```
 ```
 MemberExpression:

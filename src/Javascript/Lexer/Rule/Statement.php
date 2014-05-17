@@ -183,7 +183,8 @@ class Statement
 
                 $token = $this->currentToken($tokenizer);
                 if ($token->getType() !== TokenizerInterface::OP_SEMICOLON &&
-                    $token->getType() !== TokenizerInterface::OP_RIGHT_BRACKET) {
+                    $token->getType() !== TokenizerInterface::OP_RIGHT_BRACKET &&
+                    $token->getType() !== TokenizerInterface::OP_RIGHT_CURLY) {
                     throw new LexicalError(static::MESSAGE_MISSING_SEMICOLON_OR_RIGHT_BRACKET,
                         $token->getPath(), $token->getLine(), $token->getLineOffset(), $token->getStart());
                 }

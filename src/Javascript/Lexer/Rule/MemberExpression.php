@@ -84,17 +84,21 @@ class MemberExpression
                     throw new LexicalError(static::MESSAGE_MISSING_RIGHT_SQUARE_BRACKET,
                         $token->getPath(), $token->getLine(), $token->getLineOffset(), $token->getStart());
                 }
+                $this->nextToken($tokenizer);
                 break;
             } else if ($token->getType() === TokenizerInterface::OP_LEFT_BRACKET) {
-                $this->nextToken($tokenizer);
+                $token = $this->nextToken($tokenizer);
 
-                yield $this->getArgumentListrule()->run($node, $tokenizer);
+                if ($token->getType() !== TokenizerInterface::OP_RIGHT_BRACKET) {
+                    yield $this->getArgumentListrule()->run($node, $tokenizer);
+                }
 
                 $token = $this->currentToken($tokenizer);
                 if ($token->getType() !== TokenizerInterface::OP_RIGHT_BRACKET) {
                     throw new LexicalError(static::MESSAGE_MISSING_RIGHT_BRACKET,
                         $token->getPath(), $token->getLine(), $token->getLineOffset(), $token->getStart());
                 }
+                $this->nextToken($tokenizer);
                 break;
             } else if ($token->getType() === TokenizerInterface::OP_DOT) {
                 /** @var Grammar\DotOperator $dotOperator */

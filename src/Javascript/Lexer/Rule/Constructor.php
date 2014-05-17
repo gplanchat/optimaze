@@ -33,8 +33,8 @@ use Gplanchat\Tokenizer\TokenizerInterface as BaseTokenizerInterface;
  * @package Gplanchat\Javascript\Lexer\Rule
  *
  * Constructor:
- *     this . ConstructorCall
- *     ConstructorCall
+ *     this . MemberExpression
+ *     MemberExpression
  */
 class Constructor
     implements RuleInterface
@@ -42,9 +42,9 @@ class Constructor
     use RuleTrait;
 
     /**
-     * @var ConstructorCall
+     * @var MemberExpression
      */
-    protected $constructorCallRule = null;
+    protected $memberExpressionRule = null;
 
     /**
      * @param RecursiveGrammarInterface $parent
@@ -82,7 +82,7 @@ class Constructor
             $this->nextToken($tokenizer);
         }
 
-        yield $this->getConstructorCallRule()->run($node, $tokenizer);
+        yield $this->getMemberExpressionRule()->run($node, $tokenizer);
 
         $node->optimize();
     }
@@ -90,12 +90,12 @@ class Constructor
     /**
      * @return Expression
      */
-    public function getConstructorCallRule()
+    public function getMemberExpressionRule()
     {
-        if ($this->constructorCallRule === null) {
-            $this->constructorCallRule = $this->rule->get('ConstructorCall');
+        if ($this->memberExpressionRule === null) {
+            $this->memberExpressionRule = $this->rule->get('MemberExpression');
         }
 
-        return $this->constructorCallRule;
+        return $this->memberExpressionRule;
     }
 }
