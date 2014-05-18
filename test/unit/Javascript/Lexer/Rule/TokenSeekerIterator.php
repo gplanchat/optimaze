@@ -22,11 +22,8 @@
 
 namespace Gplanchat\Javascript\Lexer\Rule;
 
-use Gplanchat\Javascript\Lexer\TokenizerNavigationAwareTrait;
+use Gplanchat\Javascript\Tokenizer\TokenizerNavigationAwareTrait;
 use Gplanchat\Lexer\Grammar\RecursiveGrammarInterface;
-use Gplanchat\Javascript\Tokenizer\TokenizerInterface;
-use Gplanchat\Tokenizer\Token;
-use Traversable;
 use Gplanchat\Tokenizer\TokenizerInterface as BaseTokenizerInterface;
 
 class TokenSeekerIterator

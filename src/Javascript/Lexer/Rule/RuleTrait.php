@@ -22,7 +22,7 @@
 
 namespace Gplanchat\Javascript\Lexer\Rule;
 
-use Gplanchat\Javascript\Lexer\TokenizerNavigationAwareTrait;
+use Gplanchat\Javascript\Tokenizer\TokenizerNavigationAwareTrait;
 use Gplanchat\Lexer\Grammar\RecursiveGrammarInterface;
 use Gplanchat\ServiceManager\ServiceManagerInterface;
 use Gplanchat\Tokenizer\TokenizerInterface;

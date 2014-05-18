@@ -20,9 +20,9 @@
  * @package Gplanchat\Javascript\Lexer
  */
 
-namespace Gplanchat\Javascript\Lexer;
+namespace Gplanchat\Javascript\Tokenizer;
 
-use Gplanchat\Tokenizer\TokenizerInterface;
+use Gplanchat\Tokenizer\TokenizerInterface as BaseTokenizerInterface;
 use Gplanchat\Javascript\Lexer\Exception\LexicalError;
 use Gplanchat\Tokenizer\Token;
 
@@ -34,26 +34,31 @@ use Gplanchat\Tokenizer\Token;
 trait TokenizerNavigationAwareTrait
 {
     /**
-     * @param TokenizerInterface $tokenizer
+     * @param BaseTokenizerInterface $tokenizer
+     * @param bool $ignoreNewLine
      * @return Token
      * @throws LexicalError
      */
-    protected function nextToken(TokenizerInterface $tokenizer)
+    protected function nextToken(BaseTokenizerInterface $tokenizer, $ignoreNewLine = true)
     {
         $tokenizer->next();
         $token = $this->currentToken($tokenizer);
+        while ($ignoreNewLine || $token->getType() !== TokenizerInterface::TOKEN_NEWLINE) {
+            $tokenizer->next();
+            $token = $this->currentToken($tokenizer);
+        }
 
         return $token;
     }
 
     /**
-     * @param TokenizerInterface $tokenizer
+     * @param BaseTokenizerInterface $tokenizer
      * @return Token
      * @throws LexicalError
      */
-    protected function currentToken(TokenizerInterface $tokenizer)
+    protected function currentToken(BaseTokenizerInterface $tokenizer)
     {
-        if (!$valid = $tokenizer->valid()) {
+        if (!$tokenizer->valid()) {
             throw new LexicalError('Invalid $end reached');
         }
         $token = $tokenizer->current();
