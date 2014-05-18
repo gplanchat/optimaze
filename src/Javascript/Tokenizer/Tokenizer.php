@@ -274,13 +274,14 @@ class Tokenizer
                 while (($pos = strpos($spaces, "\n")) !== false) {
                     $this->cursor += $pos;
                     $this->line++;
+                    $this->lineOffset = 0;
 
                     $spaces = substr($spaces, $pos + 1);
                     $this->push(TokenizerInterface::TOKEN_NEWLINE, "\n", null, true);
                 }
                 $spacesLength = strlen($spaces);
                 $this->cursor += $spacesLength;
-                $this->lineOffset = $spacesLength + 1;
+                $this->lineOffset += $spacesLength + 1;
                 continue;
             }
 
