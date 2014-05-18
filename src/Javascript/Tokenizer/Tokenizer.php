@@ -295,7 +295,14 @@ class Tokenizer
             }
 
             if (strpos($match[0], '/**') === 0) {
-                $this->push(TokenizerInterface::TOKEN_DOC_COMMENT, $match[0]);
+                $commentLength = strlen($match[0]);
+                $this->line += substr_count($match[0], "\n");
+                if (($pos = strrpos($match[0], "\n")) !== false) {
+                    $this->lineOffset = $commentLength - $pos;
+                } else {
+                    $this->lineOffset += $commentLength;
+                }
+                $this->push(TokenizerInterface::TOKEN_DOC_COMMENT, $match[0], null, true);
                 continue;
             } else if (strpos($match[0], '/*') === 0) {
                 $this->push(TokenizerInterface::TOKEN_BLOCK_COMMENT, $match[0]);
@@ -432,7 +439,7 @@ class Tokenizer
         }
     }
 
-    protected function push($type, $value, $assignOp = null)
+    protected function push($type, $value, $assignOp = null, $ignoreOffsetUpdate = false)
     {
         $tokenLength = strlen($value);
 
@@ -450,7 +457,9 @@ class Tokenizer
         $this->tokens[] = $token;
         $this->tokenCount++;
         $this->cursor += $tokenLength;
-        $this->lineOffset += $tokenLength;
+        if ($ignoreOffsetUpdate !== true) {
+            $this->lineOffset += $tokenLength;
+        }
         return $token;
     }
 }
