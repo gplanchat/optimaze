@@ -270,24 +270,18 @@ class Tokenizer
             $chunkSize = strlen($input);
 
             if (preg_match('/^\s+/', $input, $match) > 0) {
-                $spacesLength = strlen($match[0]);
+                $spaces = $match[0];
+                while (($pos = strpos($spaces, "\n")) !== false) {
+                    $this->cursor += $pos;
+                    $this->line++;
+
+                    $spaces = substr($spaces, $pos + 1);
+                    $this->push(TokenizerInterface::TOKEN_NEWLINE, "\n", null, true);
+                }
+                $spacesLength = strlen($spaces);
                 $this->cursor += $spacesLength;
-
-                $this->line += substr_count($match[0], "\n");
-                if (($pos = strrpos($match[0], "\n")) !== false) {
-                    $this->lineOffset = $spacesLength - $pos;
-                } else {
-                    $this->lineOffset += $spacesLength;
-                }
-
-                if ($spacesLength == $chunkSize) {
-                    continue; // complete chunk contained whitespace
-                }
-
-                $input = $this->source->get($chunkSize, $this->cursor);
-                if ($input == '' || $input[0] != '/') {
-                    break;
-                }
+                $this->lineOffset = $spacesLength + 1;
+                continue;
             }
 
             if (!preg_match('/^\/(?:\*.*?\*\/|\/[^\n]*)/s', $input, $match)) {
