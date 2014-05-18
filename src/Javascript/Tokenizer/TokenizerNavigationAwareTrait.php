@@ -42,26 +42,36 @@ trait TokenizerNavigationAwareTrait
     protected function nextToken(BaseTokenizerInterface $tokenizer, $ignoreNewLine = true)
     {
         $tokenizer->next();
-        $token = $this->currentToken($tokenizer);
-        while ($ignoreNewLine || $token->getType() !== TokenizerInterface::TOKEN_NEWLINE) {
-            $tokenizer->next();
-            $token = $this->currentToken($tokenizer);
-        }
+        $token = $this->currentToken($tokenizer, $ignoreNewLine);
 
         return $token;
     }
 
     /**
      * @param BaseTokenizerInterface $tokenizer
+     * @param bool $ignoreNewLine
      * @return Token
      * @throws LexicalError
      */
-    protected function currentToken(BaseTokenizerInterface $tokenizer)
+    protected function currentToken(BaseTokenizerInterface $tokenizer, $ignoreNewLine = true)
     {
         if (!$tokenizer->valid()) {
             throw new LexicalError('Invalid $end reached');
         }
         $token = $tokenizer->current();
+
+        while (true) {
+
+            if ($ignoreNewLine === false || $token->getType() !== TokenizerInterface::TOKEN_NEWLINE) {
+                break;
+            }
+            $tokenizer->next();
+
+            if (!$tokenizer->valid()) {
+                throw new LexicalError('Invalid $end reached');
+            }
+            $token = $tokenizer->current();
+        }
 
         return $token;
     }
