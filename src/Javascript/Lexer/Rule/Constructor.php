@@ -69,21 +69,20 @@ class Constructor
             $node->addChild($thisKeyword);
 
             $token = $this->nextToken($tokenizer);
-            if ($token->getType() !== TokenizerInterface::OP_DOT) {
-                throw new LexicalError(static::MESSAGE_UNEXPECTED_DOT,
-                    $token->getPath(), $token->getLine(), $token->getLineOffset(), $token->getStart());
+            if ($token->getType() === TokenizerInterface::OP_DOT) {
+                /** @var Grammar\DotOperator $dotOperator */
+                $dotOperator = $this->grammar
+                    ->get('DotOperator')
+                ;
+                $node->addChild($dotOperator);
+
+                $this->nextToken($tokenizer);
+
+                yield $this->getMemberExpressionRule()->run($node, $tokenizer, $level + 1);
             }
-
-            /** @var Grammar\DotOperator $dotOperator */
-            $dotOperator = $this->grammar
-                ->get('DotOperator')
-            ;
-            $node->addChild($dotOperator);
-
-            $this->nextToken($tokenizer);
+        } else {
+            yield $this->getMemberExpressionRule()->run($node, $tokenizer, $level + 1);
         }
-
-        yield $this->getMemberExpressionRule()->run($node, $tokenizer, $level + 1);
 
         $node->optimize();
     }

@@ -71,6 +71,14 @@ class UnaryExpression
         TokenizerInterface::KEYWORD_THIS
     ];
 
+    protected static $excludedTokens = [
+        TokenizerInterface::OP_SEMICOLON,
+        TokenizerInterface::OP_STRICT_EQ,
+        TokenizerInterface::OP_STRICT_NE,
+        TokenizerInterface::OP_EQ,
+        TokenizerInterface::OP_NE
+    ];
+
     /**
      * @param RecursiveGrammarInterface $parent
      * @param BaseTokenizerInterface $tokenizer
@@ -136,7 +144,7 @@ class UnaryExpression
                 yield $this->rule->get('Constructor')->run($node, $tokenizer, $level + 1);
                 $node->optimize();
                 break;
-            } else if ($token->getType() !== TokenizerInterface::OP_SEMICOLON) {
+            } else if (!in_array($token->getType(), static::$excludedTokens)) {
                 yield $memberExpressionRule->run($node, $tokenizer, $level + 1);
 
                 $token = $this->currentToken($tokenizer);
