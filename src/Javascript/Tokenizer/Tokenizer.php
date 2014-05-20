@@ -34,11 +34,6 @@ class Tokenizer
     implements TokenizerInterface
 {
     /**
-     * @var bool
-     */
-    public $scanOperand = true;
-
-    /**
      * @var array
      */
     private $keywords = [
@@ -134,6 +129,68 @@ class Tokenizer
         TokenizerInterface::OP_MUL,
         TokenizerInterface::OP_DIV,
         TokenizerInterface::OP_MOD
+    ];
+
+    /**
+     * @var array
+     */
+    private $precedingRegexTokens = [
+        TokenizerInterface::OP_NOT,
+        TokenizerInterface::OP_NE,
+        TokenizerInterface::OP_STRICT_NE,
+        TokenizerInterface::OP_MOD,
+        TokenizerInterface::OP_ASSIGN,
+        TokenizerInterface::OP_AND,
+        TokenizerInterface::OP_BITWISE_AND,
+        TokenizerInterface::OP_LEFT_BRACKET,
+        TokenizerInterface::OP_MUL,
+        TokenizerInterface::OP_PLUS,
+        TokenizerInterface::OP_COMMA,
+        TokenizerInterface::OP_MINUS,
+        TokenizerInterface::OP_DOT,
+        TokenizerInterface::OP_DIV,
+        TokenizerInterface::OP_COLON,
+        TokenizerInterface::OP_SEMICOLON,
+        TokenizerInterface::OP_LT,
+        TokenizerInterface::OP_LE,
+        TokenizerInterface::OP_GT,
+        TokenizerInterface::OP_GE,
+        TokenizerInterface::OP_RSH,
+        TokenizerInterface::OP_LSH,
+        TokenizerInterface::OP_URSH,
+        TokenizerInterface::OP_HOOK,
+        TokenizerInterface::OP_LEFT_SQUARE_BRACKET,
+        TokenizerInterface::OP_BITWISE_XOR,
+        TokenizerInterface::OP_LEFT_CURLY,
+        TokenizerInterface::OP_BITWISE_OR,
+        TokenizerInterface::OP_OR,
+        TokenizerInterface::OP_BITWISE_NOT,
+        TokenizerInterface::KEYWORD_BREAK,
+        TokenizerInterface::KEYWORD_CASE,
+        TokenizerInterface::KEYWORD_CATCH,
+        TokenizerInterface::KEYWORD_CONST,
+        TokenizerInterface::KEYWORD_CONTINUE,
+        TokenizerInterface::KEYWORD_DEBUGGER,
+        TokenizerInterface::KEYWORD_DEFAULT,
+        TokenizerInterface::KEYWORD_DELETE,
+        TokenizerInterface::KEYWORD_DO,
+        TokenizerInterface::KEYWORD_ELSE,
+        TokenizerInterface::KEYWORD_ENUM,
+        TokenizerInterface::KEYWORD_FINALLY,
+        TokenizerInterface::KEYWORD_FOR,
+        TokenizerInterface::KEYWORD_FUNCTION,
+        TokenizerInterface::KEYWORD_IF,
+        TokenizerInterface::KEYWORD_IN,
+        TokenizerInterface::KEYWORD_INSTANCEOF,
+        TokenizerInterface::KEYWORD_NEW,
+        TokenizerInterface::KEYWORD_RETURN,
+        TokenizerInterface::KEYWORD_SWITCH,
+        TokenizerInterface::KEYWORD_THROW,
+        TokenizerInterface::KEYWORD_TRY,
+        TokenizerInterface::KEYWORD_TYPEOF,
+        TokenizerInterface::KEYWORD_VAR,
+        TokenizerInterface::KEYWORD_WHILE,
+        TokenizerInterface::KEYWORD_WITH
     ];
 
     /**
@@ -371,7 +428,8 @@ class Tokenizer
 
         /** @noinspection PhpMissingBreakStatementInspection */
         case '/':
-            if ($this->scanOperand && preg_match('/^\/((?:\\\\.|\[(?:\\\\.|[^\]])*\]|[^\/])+)\/([gimy]*)/', $input, $match)) {
+            if ($this->isPreviousTokenType($this->precedingRegexTokens)) {
+                preg_match('/^\/((?:\\\\.|\[(?:\\\\.|[^\]])*\]|[^\/])+)\/([gimy]*)/', $input, $match);
                 return $this->push(TokenizerInterface::TOKEN_REGEXP, $match[0]);
             }
 
@@ -456,5 +514,18 @@ class Tokenizer
             $this->lineOffset += $tokenLength;
         }
         return $token;
+    }
+
+    /**
+     * @param array $typeList
+     * @return bool|null
+     */
+    protected function isPreviousTokenType(array $typeList)
+    {
+        if (isset($this->tokens[$this->tokenIndex - 1])) {
+            return in_array($this->tokens[$this->tokenIndex - 1]->getType(), $typeList);
+        }
+
+        return null;
     }
 }

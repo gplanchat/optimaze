@@ -61,8 +61,11 @@ trait TokenizerNavigationAwareTrait
         $token = $tokenizer->current();
 
         while (true) {
-
-            if ($ignoreNewLine === false || $token->getType() !== TokenizerInterface::TOKEN_NEWLINE) {
+            if ($token->getType() !== TokenizerInterface::TOKEN_BLOCK_COMMENT &&
+                $token->getType() !== TokenizerInterface::TOKEN_LINE_COMMENT &&
+                $token->getType() !== TokenizerInterface::TOKEN_DOC_COMMENT &&
+                ($ignoreNewLine === false || $token->getType() !== TokenizerInterface::TOKEN_NEWLINE)
+            ) {
                 break;
             }
             $tokenizer->next();
