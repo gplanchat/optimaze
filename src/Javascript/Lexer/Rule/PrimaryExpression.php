@@ -92,10 +92,11 @@ class PrimaryExpression
     /**
      * @param RecursiveGrammarInterface $parent
      * @param BaseTokenizerInterface $tokenizer
+     * @param int $level
      * @return \Generator|null
      * @throws LexicalError
      */
-    public function run(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
+    public function run(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer, $level = 0)
     {
         $token = $this->currentToken($tokenizer);
 
@@ -106,7 +107,7 @@ class PrimaryExpression
         if ($token->getType() === TokenizerInterface::OP_LEFT_BRACKET) {
             $this->nextToken($tokenizer);
 
-            yield $this->getExpressionRule()->run($node, $tokenizer);
+            yield $this->getExpressionRule()->run($node, $tokenizer, $level + 1);
 
             $token = $this->currentToken($tokenizer);
             if ($token->getType() !== TokenizerInterface::OP_RIGHT_BRACKET) {
@@ -115,10 +116,10 @@ class PrimaryExpression
             }
             $this->nextToken($tokenizer);
         } else if ($token->getType() === TokenizerInterface::OP_LEFT_CURLY) {
-            yield $this->getObjectExpressionRule()->run($node, $tokenizer);
+            yield $this->getObjectExpressionRule()->run($node, $tokenizer, $level + 1);
             $node->optimize();
         } else if ($token->getType() === TokenizerInterface::OP_LEFT_SQUARE_BRACKET) {
-            yield $this->getArrayExpressionRule()->run($node, $tokenizer);
+            yield $this->getArrayExpressionRule()->run($node, $tokenizer, $level + 1);
             $node->optimize();
         } else if ($token->getType() === TokenizerInterface::TOKEN_IDENTIFIER) {
             /** @var Grammar\Identifier $child */
@@ -185,7 +186,7 @@ class PrimaryExpression
             $this->nextToken($tokenizer);
             $node->optimize();
         } else if ($token->getType() === TokenizerInterface::KEYWORD_FUNCTION) {
-            yield $this->getClosureExpressionRule()->run($node, $tokenizer);
+            yield $this->getClosureExpressionRule()->run($node, $tokenizer, $level + 1);
             $node->optimize();
         } else {
             throw new LexicalError(static::MESSAGE_UNEXPECTED_TOKEN,

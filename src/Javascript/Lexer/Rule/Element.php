@@ -54,10 +54,11 @@ class Element
     /**
      * @param RecursiveGrammarInterface $parent
      * @param BaseTokenizerInterface $tokenizer
+     * @param int $level
      * @return \Generator|null
      * @throws LexicalError
      */
-    public function run(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
+    public function run(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer, $level = 0)
     {
         /** @var Grammar\Element $node */
         $node = $this->grammar->get('Element');
@@ -81,7 +82,7 @@ class Element
             $node->addChild($docComment);
             $this->nextToken($tokenizer);
         } else {
-            yield $this->getStatementRule()->run($node, $tokenizer);
+            yield $this->getStatementRule()->run($node, $tokenizer, $level + 1);
         }
 
 

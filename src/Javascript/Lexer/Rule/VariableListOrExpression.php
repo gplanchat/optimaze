@@ -54,19 +54,20 @@ class VariableListOrExpression
     /**
      * @param RecursiveGrammarInterface $parent
      * @param BaseTokenizerInterface $tokenizer
+     * @param int $level
      * @return \Generator|null
      * @throws LexicalError
      */
-    public function run(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
+    public function run(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer, $level = 0)
     {
         $token = $this->currentToken($tokenizer);
 
         if ($token->getType() === TokenizerInterface::KEYWORD_VAR) {
             $this->nextToken($tokenizer);
 
-            yield $this->getVariableListRule()->run($parent, $tokenizer);
+            yield $this->getVariableListRule()->run($parent, $tokenizer, $level + 1);
         } else {
-            yield $this->getExpressionRule()->run($parent, $tokenizer);
+            yield $this->getExpressionRule()->run($parent, $tokenizer, $level + 1);
         }
     }
 

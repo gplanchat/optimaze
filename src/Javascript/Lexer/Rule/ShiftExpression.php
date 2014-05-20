@@ -58,10 +58,11 @@ class ShiftExpression
     /**
      * @param RecursiveGrammarInterface $parent
      * @param BaseTokenizerInterface $tokenizer
+     * @param int $level
      * @return \Generator|null
      * @throws LexicalError
      */
-    public function run(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
+    public function run(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer, $level = 0)
     {
         $this->currentToken($tokenizer);
 
@@ -70,7 +71,7 @@ class ShiftExpression
         $parent->addChild($node);
 
         while (true) {
-            yield $this->getAdditiveExpressionRule()->run($node, $tokenizer);
+            yield $this->getAdditiveExpressionRule()->run($node, $tokenizer, $level + 1);
 
             $token = $this->currentToken($tokenizer);
             if (!in_array($token->getType(), static::$shiftOperators)) {

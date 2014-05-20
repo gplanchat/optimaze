@@ -47,10 +47,11 @@ class ForExpression
     /**
      * @param RecursiveGrammarInterface $parent
      * @param BaseTokenizerInterface $tokenizer
+     * @param int $level
      * @return \Generator|null
      * @throws LexicalError
      */
-    public function run(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
+    public function run(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer, $level = 0)
     {
         /** @var Grammar\ForKeyword $forKeyword */
         $forKeyword = $this->grammar->get('ForKeyword');
@@ -66,7 +67,7 @@ class ForExpression
         if ($token->getType() === TokenizerInterface::OP_SEMICOLON) {
             $this->nextToken($tokenizer);
 
-            yield $this->getExpressionRule()->run($parent, $tokenizer);
+            yield $this->getExpressionRule()->run($parent, $tokenizer, $level + 1);
 
             $token = $this->currentToken($tokenizer);
 
@@ -76,17 +77,17 @@ class ForExpression
             }
             $this->nextToken($tokenizer);
 
-            yield $this->getExpressionRule()->run($parent, $tokenizer);
+            yield $this->getExpressionRule()->run($parent, $tokenizer, $level + 1);
 
             $token = $this->currentToken($tokenizer);
         } else {
-            yield $this->getVariableListOrExpressionRule()->run($forKeyword, $tokenizer);
+            yield $this->getVariableListOrExpressionRule()->run($forKeyword, $tokenizer, $level + 1);
             $token = $this->currentToken($tokenizer);
 
             if ($token->getType() === TokenizerInterface::OP_SEMICOLON) {
                 $this->nextToken($tokenizer);
 
-                yield $this->getExpressionRule()->run($parent, $tokenizer);
+                yield $this->getExpressionRule()->run($parent, $tokenizer, $level + 1);
 
                 $token = $this->currentToken($tokenizer);
 
@@ -96,13 +97,13 @@ class ForExpression
                 }
                 $this->nextToken($tokenizer);
 
-                yield $this->getExpressionRule()->run($parent, $tokenizer);
+                yield $this->getExpressionRule()->run($parent, $tokenizer, $level + 1);
 
                 $token = $this->currentToken($tokenizer);
             } else if ($token->getType() === TokenizerInterface::KEYWORD_IN) {
                 $this->nextToken($tokenizer);
 
-                yield $this->getExpressionRule()->run($forKeyword, $tokenizer);
+                yield $this->getExpressionRule()->run($forKeyword, $tokenizer, $level + 1);
                 $token = $this->currentToken($tokenizer);
             } else {
                 throw new LexicalError(static::MESSAGE_MISSING_SEMICOLON_OR_IN_KEYWORD,

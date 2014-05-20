@@ -74,10 +74,11 @@ class UnaryExpression
     /**
      * @param RecursiveGrammarInterface $parent
      * @param BaseTokenizerInterface $tokenizer
+     * @param int $level
      * @return \Generator|null
      * @throws LexicalError
      */
-    public function run(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
+    public function run(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer, $level = 0)
     {
         $token = $this->currentToken($tokenizer);
 
@@ -97,7 +98,7 @@ class UnaryExpression
                 $node->addChild($unaryOperator);
                 $this->nextToken($tokenizer);
 
-                yield $memberExpressionRule->run($node, $tokenizer);
+                yield $memberExpressionRule->run($node, $tokenizer, $level + 1);
 
                 $token = $this->currentToken($tokenizer);
             } else if (in_array($token->getType(), static::$incrementOperators)) {
@@ -108,7 +109,7 @@ class UnaryExpression
                 $node->addChild($incrementOperator);
 
                 $this->nextToken($tokenizer);
-                yield $memberExpressionRule->run($node, $tokenizer);
+                yield $memberExpressionRule->run($node, $tokenizer, $level + 1);
                 $node->optimize();
                 break;
             } else if ($token->getType() === TokenizerInterface::KEYWORD_DELETE) {
@@ -119,7 +120,7 @@ class UnaryExpression
                 $node->addChild($deleteKeyword);
 
                 $this->nextToken($tokenizer);
-                yield $memberExpressionRule->run($node, $tokenizer);
+                yield $memberExpressionRule->run($node, $tokenizer, $level + 1);
                 break;
             } else if ($token->getType() === TokenizerInterface::KEYWORD_NEW) {
                 /** @var Grammar\NewKeyword $newKeyword */
@@ -129,14 +130,14 @@ class UnaryExpression
                 $node->addChild($newKeyword);
 
                 $this->nextToken($tokenizer);
-                yield $this->rule->get('Constructor')->run($node, $tokenizer);
+                yield $this->rule->get('Constructor')->run($node, $tokenizer, $level + 1);
                 break;
             } else if ($token->getType() === TokenizerInterface::KEYWORD_THIS) {
-                yield $this->rule->get('Constructor')->run($node, $tokenizer);
+                yield $this->rule->get('Constructor')->run($node, $tokenizer, $level + 1);
                 $node->optimize();
                 break;
             } else if ($token->getType() !== TokenizerInterface::OP_SEMICOLON) {
-                yield $memberExpressionRule->run($node, $tokenizer);
+                yield $memberExpressionRule->run($node, $tokenizer, $level + 1);
 
                 $token = $this->currentToken($tokenizer);
                 if (in_array($token->getType(), static::$incrementOperators)) {

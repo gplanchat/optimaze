@@ -49,10 +49,11 @@ class Constructor
     /**
      * @param RecursiveGrammarInterface $parent
      * @param BaseTokenizerInterface $tokenizer
+     * @param int $level
      * @return \Generator|null
      * @throws LexicalError
      */
-    public function run(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
+    public function run(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer, $level = 0)
     {
         $token = $this->currentToken($tokenizer);
 
@@ -82,7 +83,7 @@ class Constructor
             $this->nextToken($tokenizer);
         }
 
-        yield $this->getMemberExpressionRule()->run($node, $tokenizer);
+        yield $this->getMemberExpressionRule()->run($node, $tokenizer, $level + 1);
 
         $node->optimize();
     }

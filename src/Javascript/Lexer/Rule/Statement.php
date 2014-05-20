@@ -94,10 +94,11 @@ class Statement
     /**
      * @param RecursiveGrammarInterface $parent
      * @param BaseTokenizerInterface $tokenizer
+     * @param int $level
      * @return \Generator|null
      * @throws LexicalError
      */
-    public function run(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
+    public function run(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer, $level = 0)
     {
         /** @var Grammar\Statement $node */
         $node = $this->grammar->get('Statement');
@@ -110,12 +111,12 @@ class Statement
                 $this->nextToken($tokenizer);
                 break;
             } else if ($token->getType() === TokenizerInterface::KEYWORD_IF) {
-                yield $this->getIfExpressionRule()->run($node, $tokenizer);
+                yield $this->getIfExpressionRule()->run($node, $tokenizer, $level + 1);
                 break;
             } else if ($token->getType() === TokenizerInterface::KEYWORD_WHILE) {
-                yield $this->getWhileExpressionRule()->run($node, $tokenizer);
+                yield $this->getWhileExpressionRule()->run($node, $tokenizer, $level + 1);
             } else if ($token->getType() === TokenizerInterface::KEYWORD_FOR) {
-                yield $this->getForExpressionRule()->run($node, $tokenizer);
+                yield $this->getForExpressionRule()->run($node, $tokenizer, $level + 1);
             } else if ($token->getType() === TokenizerInterface::KEYWORD_BREAK) {
                 $this->parseBreak($node, $tokenizer);
                 break;
@@ -134,7 +135,7 @@ class Statement
                 }
 
                 $this->nextToken($tokenizer);
-                yield $this->getExpressionRule()->run($withKeyword, $tokenizer);
+                yield $this->getExpressionRule()->run($withKeyword, $tokenizer, $level + 1);
 
                 $token = $this->currentToken($tokenizer);
                 if ($token->getType() !== TokenizerInterface::OP_RIGHT_BRACKET) {
@@ -148,15 +149,12 @@ class Statement
                 $parent->addChild($returnKeyword);
 
                 $this->nextToken($tokenizer);
-                yield $this->getExpressionRule()->run($returnKeyword, $tokenizer);
+                yield $this->getExpressionRule()->run($returnKeyword, $tokenizer, $level + 1);
 
                 $token = $this->currentToken($tokenizer);
-                if ($token->getType() !== TokenizerInterface::OP_SEMICOLON) {
-                    throw new LexicalError(static::MESSAGE_MISSING_SEMICOLON,
-                        $token->getPath(), $token->getLine(), $token->getLineOffset(), $token->getStart());
+                if ($token->getType() === TokenizerInterface::OP_SEMICOLON) {
+                    $this->nextToken($tokenizer);
                 }
-
-                $this->nextToken($tokenizer);
                 break;
             } else if ($token->getType() === TokenizerInterface::OP_LEFT_CURLY) {
                 $this->nextToken($tokenizer);
@@ -165,7 +163,7 @@ class Statement
                 $compoundStatement = $this->grammar->get('CompoundStatement');
                 $parent->addChild($compoundStatement);
 
-                yield $this->getStatementListRule()->run($compoundStatement, $tokenizer);
+                yield $this->getStatementListRule()->run($compoundStatement, $tokenizer, $level + 1);
 
                 $token = $this->currentToken($tokenizer);
                 if ($token->getType() !== TokenizerInterface::OP_RIGHT_CURLY) {
@@ -176,20 +174,15 @@ class Statement
                 $this->nextToken($tokenizer);
                 break;
             } else if ($token->getType() === TokenizerInterface::KEYWORD_FUNCTION) {
-                yield $this->getFunctionExpressionRule()->run($node, $tokenizer);
+                yield $this->getFunctionExpressionRule()->run($node, $tokenizer, $level + 1);
                 break;
             } else {
-                yield $this->getVariableListOrExpressionRule()->run($node, $tokenizer);
+                yield $this->getVariableListOrExpressionRule()->run($node, $tokenizer, $level + 1);
 
-                $token = $this->currentToken($tokenizer);
-                if ($token->getType() !== TokenizerInterface::OP_SEMICOLON &&
-                    $token->getType() !== TokenizerInterface::OP_RIGHT_BRACKET &&
-                    $token->getType() !== TokenizerInterface::OP_RIGHT_CURLY) {
-                    throw new LexicalError(static::MESSAGE_MISSING_SEMICOLON_OR_RIGHT_BRACKET,
-                        $token->getPath(), $token->getLine(), $token->getLineOffset(), $token->getStart());
+                $token = $this->currentToken($tokenizer, false);
+                if ($token->getType() === TokenizerInterface::OP_SEMICOLON) {
+                    $this->nextToken($tokenizer);
                 }
-
-                $this->nextToken($tokenizer);
                 break;
             }
         }
@@ -210,12 +203,9 @@ class Statement
         $parent->addChild($breakKeyword);
 
         $token = $this->nextToken($tokenizer);
-        if ($token->getType() !== TokenizerInterface::OP_SEMICOLON) {
-            throw new LexicalError(static::MESSAGE_MISSING_SEMICOLON,
-                $token->getPath(), $token->getLine(), $token->getLineOffset(), $token->getStart());
+        if ($token->getType() === TokenizerInterface::OP_SEMICOLON) {
+            $this->nextToken($tokenizer);
         }
-
-        $this->nextToken($tokenizer);
     }
 
     /**
@@ -231,12 +221,9 @@ class Statement
         $parent->addChild($continueKeyword);
 
         $token = $this->nextToken($tokenizer);
-        if ($token->getType() !== TokenizerInterface::OP_SEMICOLON) {
-            throw new LexicalError(static::MESSAGE_MISSING_SEMICOLON,
-                $token->getPath(), $token->getLine(), $token->getLineOffset(), $token->getStart());
+        if ($token->getType() === TokenizerInterface::OP_SEMICOLON) {
+            $this->nextToken($tokenizer);
         }
-
-        $this->nextToken($tokenizer);
     }
 
     /**

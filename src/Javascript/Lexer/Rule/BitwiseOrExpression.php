@@ -49,17 +49,18 @@ class BitwiseOrExpression
     /**
      * @param RecursiveGrammarInterface $parent
      * @param BaseTokenizerInterface $tokenizer
+     * @param int $level
      * @return \Generator|null
      * @throws LexicalError
      */
-    public function run(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
+    public function run(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer, $level = 0)
     {
         /** @var Grammar\BitwiseOrExpression $node */
         $node = $this->grammar->get('BitwiseOrExpression');
         $parent->addChild($node);
 
         while (true) {
-            yield $this->getBitwiseXorExpressionRule()->run($node, $tokenizer);
+            yield $this->getBitwiseXorExpressionRule()->run($node, $tokenizer, $level + 1);
 
             $token = $this->currentToken($tokenizer);
             if ($token->getType() !== TokenizerInterface::OP_BITWISE_OR) {

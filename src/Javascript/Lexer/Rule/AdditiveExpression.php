@@ -58,17 +58,18 @@ class AdditiveExpression
     /**
      * @param RecursiveGrammarInterface $parent
      * @param BaseTokenizerInterface $tokenizer
+     * @param int $level
      * @return \Generator|null
      * @throws LexicalError
      */
-    public function run(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
+    public function run(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer, $level = 0)
     {
         /** @var Grammar\AdditiveExpression $node */
         $node = $this->grammar->get('AdditiveExpression');
         $parent->addChild($node);
 
         while (true) {
-            yield $this->getMultiplicativeExpressionRule()->run($node, $tokenizer);
+            yield $this->getMultiplicativeExpressionRule()->run($node, $tokenizer, $level + 1);
 
             $token = $this->currentToken($tokenizer);
             if (!in_array($token->getType(), static::$additiveOperators)) {

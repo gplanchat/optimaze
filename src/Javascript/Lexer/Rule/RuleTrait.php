@@ -54,18 +54,20 @@ trait RuleTrait
     /**
      * @param RecursiveGrammarInterface $parent
      * @param TokenizerInterface $tokenizer
+     * @param int $level
      * @return \Generator|null
      */
-    abstract public function run(RecursiveGrammarInterface $parent, TokenizerInterface $tokenizer);
+    abstract public function run(RecursiveGrammarInterface $parent, TokenizerInterface $tokenizer, $level = 0);
 
     /**
      * @see self::run
      * @param RecursiveGrammarInterface $parent
      * @param TokenizerInterface $tokenizer
+     * @param int $level
      * @return \Generator|null
      */
-    public function __invoke(RecursiveGrammarInterface $parent, TokenizerInterface $tokenizer)
+    public function __invoke(RecursiveGrammarInterface $parent, TokenizerInterface $tokenizer, $level = 0)
     {
-        return $this->run($parent, $tokenizer);
+        return $this->run($parent, $tokenizer, $level + 1);
     }
 }

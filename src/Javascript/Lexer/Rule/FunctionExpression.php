@@ -58,10 +58,11 @@ class FunctionExpression
     /**
      * @param RecursiveGrammarInterface $parent
      * @param BaseTokenizerInterface $tokenizer
+     * @param int $level
      * @return \Generator|null
      * @throws LexicalError
      */
-    public function run(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
+    public function run(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer, $level = 0)
     {
         $token = $this->currentToken($tokenizer);
         if ($token->getType() !== TokenizerInterface::KEYWORD_FUNCTION) {
@@ -87,7 +88,7 @@ class FunctionExpression
         }
         $this->nextToken($tokenizer);
 
-        yield $this->getParameterListRule()->run($node, $tokenizer);
+        yield $this->getParameterListRule()->run($node, $tokenizer, $level + 1);
 
         $token = $this->currentToken($tokenizer);
         if ($token->getType() !== TokenizerInterface::OP_RIGHT_BRACKET) {
@@ -102,7 +103,7 @@ class FunctionExpression
         }
         $this->nextToken($tokenizer);
 
-        yield $this->getStatementListRule()->run($node, $tokenizer);
+        yield $this->getStatementListRule()->run($node, $tokenizer, $level + 1);
 
         $token = $this->currentToken($tokenizer);
         if ($token->getType() !== TokenizerInterface::OP_RIGHT_CURLY) {

@@ -61,23 +61,24 @@ class MemberExpression
     /**
      * @param RecursiveGrammarInterface $parent
      * @param BaseTokenizerInterface $tokenizer
+     * @param int $level
      * @return \Generator|null
      * @throws LexicalError
      */
-    public function run(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
+    public function run(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer, $level = 0)
     {
         /** @var Grammar\MemberExpression $node */
         $node = $this->grammar->get('MemberExpression');
         $parent->addChild($node);
 
         while (true) {
-            yield $this->getPrimaryExpressionRule()->run($node, $tokenizer);
+            yield $this->getPrimaryExpressionRule()->run($node, $tokenizer, $level + 1);
 
             $token = $this->currentToken($tokenizer);
             if ($token->getType() === TokenizerInterface::OP_LEFT_SQUARE_BRACKET) {
                 $this->nextToken($tokenizer);
 
-                yield $this->getExpressionRule()->run($node, $tokenizer);
+                yield $this->getExpressionRule()->run($node, $tokenizer, $level + 1);
 
                 $token = $this->currentToken($tokenizer);
                 if ($token->getType() !== TokenizerInterface::OP_RIGHT_SQUARE_BRACKET) {
@@ -90,7 +91,7 @@ class MemberExpression
                 $token = $this->nextToken($tokenizer);
 
                 if ($token->getType() !== TokenizerInterface::OP_RIGHT_BRACKET) {
-                    yield $this->getArgumentListrule()->run($node, $tokenizer);
+                    yield $this->getArgumentListrule()->run($node, $tokenizer, $level + 1);
                 }
 
                 $token = $this->currentToken($tokenizer);

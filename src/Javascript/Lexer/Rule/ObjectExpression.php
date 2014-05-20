@@ -56,10 +56,11 @@ class ObjectExpression
     /**
      * @param RecursiveGrammarInterface $parent
      * @param BaseTokenizerInterface $tokenizer
+     * @param int $level
      * @return \Generator|null
      * @throws LexicalError
      */
-    public function run(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
+    public function run(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer, $level = 0)
     {
         /** @var Grammar\ObjectExpression $node */
         $node = $this->grammar->get('ObjectExpression');
@@ -92,7 +93,7 @@ class ObjectExpression
                 }
 
                 $this->nextToken($tokenizer);
-                yield $this->getAssignmentExpressionRule()->run($objectEntry, $tokenizer);
+                yield $this->getAssignmentExpressionRule()->run($objectEntry, $tokenizer, $level + 1);
 
                 $token = $this->currentToken($tokenizer);
                 if ($token->getType() !== TokenizerInterface::OP_COMMA) {

@@ -60,17 +60,18 @@ class RelationalExpression
     /**
      * @param RecursiveGrammarInterface $parent
      * @param BaseTokenizerInterface $tokenizer
+     * @param int $level
      * @return \Generator|null
      * @throws LexicalError
      */
-    public function run(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
+    public function run(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer, $level = 0)
     {
         /** @var Grammar\RelationalExpression $node */
         $node = $this->grammar->get('RelationalExpression');
         $parent->addChild($node);
 
         while (true) {
-            yield $this->getShiftExpressionRule()->run($node, $tokenizer);
+            yield $this->getShiftExpressionRule()->run($node, $tokenizer, $level + 1);
 
             $token = $this->currentToken($tokenizer);
             if (!in_array($token->getType(), static::$relationalOperators)) {

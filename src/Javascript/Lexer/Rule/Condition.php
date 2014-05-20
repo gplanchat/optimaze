@@ -48,10 +48,11 @@ class Condition
     /**
      * @param RecursiveGrammarInterface $parent
      * @param BaseTokenizerInterface $tokenizer
+     * @param int $level
      * @return \Generator|null
      * @throws LexicalError
      */
-    public function run(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer)
+    public function run(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer, $level = 0)
     {
         /** @var Grammar\Condition $node */
         $node = $this->grammar->get('Condition');
@@ -65,7 +66,7 @@ class Condition
 
         $this->nextToken($tokenizer);
 
-        yield $this->getExpressionRule()->run($node, $tokenizer);
+        yield $this->getExpressionRule()->run($node, $tokenizer, $level + 1);
 
         $token = $this->currentToken($tokenizer);
         if ($token->getType() !== TokenizerInterface::OP_RIGHT_BRACKET) {
