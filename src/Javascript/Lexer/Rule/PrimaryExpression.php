@@ -41,6 +41,7 @@ use Gplanchat\Tokenizer\TokenizerInterface as BaseTokenizerInterface;
  *     IntegerLiteral
  *     FloatingPointLiteral
  *     StringLiteral
+ *     RegularExpressionLiteral
  *     false
  *     true
  *     null
@@ -75,18 +76,7 @@ class PrimaryExpression
      * @var array
      */
     protected static $validTokenTypes = [
-        TokenizerInterface::OP_LEFT_BRACKET,
-        TokenizerInterface::OP_LEFT_CURLY,
-        TokenizerInterface::OP_LEFT_SQUARE_BRACKET,
-        TokenizerInterface::TOKEN_IDENTIFIER,
-        TokenizerInterface::TOKEN_NUMBER_INTEGER,
-        TokenizerInterface::TOKEN_NUMBER_FLOATING_POINT,
-        TokenizerInterface::TOKEN_STRING,
-        TokenizerInterface::KEYWORD_TRUE,
-        TokenizerInterface::KEYWORD_FALSE,
-        TokenizerInterface::KEYWORD_NULL,
-        TokenizerInterface::KEYWORD_THIS,
-        TokenizerInterface::KEYWORD_FUNCTION
+        TokenizerInterface::OP_ASSIGN
     ];
 
     /**
@@ -153,6 +143,14 @@ class PrimaryExpression
             $node->addChild($child);
             $this->nextToken($tokenizer);
             $node->optimize();
+        } else if ($token->getType() === TokenizerInterface::TOKEN_REGEXP) {
+            /** @var Grammar\RegularExpressionLiteral $child */
+            $child = $this->grammar
+                ->get('RegularExpressionLiteral', [$token->getValue()])
+            ;
+            $node->addChild($child);
+            $this->nextToken($tokenizer);
+            $node->optimize();
         } else if ($token->getType() === TokenizerInterface::KEYWORD_FALSE) {
             /** @var Grammar\BooleanLiteral $child */
             $child = $this->grammar
@@ -188,7 +186,7 @@ class PrimaryExpression
         } else if ($token->getType() === TokenizerInterface::KEYWORD_FUNCTION) {
             yield $this->getClosureExpressionRule()->run($node, $tokenizer, $level + 1);
             $node->optimize();
-        } else {
+        } else if (!in_array($token->getType(), static::$validTokenTypes)) {
             throw new LexicalError(static::MESSAGE_UNEXPECTED_TOKEN,
                 $token->getPath(), $token->getLine(), $token->getLineOffset(), $token->getStart());
         }

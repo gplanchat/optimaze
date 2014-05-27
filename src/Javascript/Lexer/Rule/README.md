@@ -180,6 +180,7 @@ PrimaryExpression:
     IntegerLiteral
     FloatingPointLiteral
     StringLiteral
+    RegularExpressionLiteral
     false
     true
     null

@@ -62,6 +62,7 @@ class ServiceManager
             'ParameterList'            => ParameterList::class,
             'PrimaryExpression'        => PrimaryExpression::class,
             'Program'                  => Program::class,
+            'RegularExpressionLiteral' => RegularExpressionLiteral::class,
             'RelationalExpression'     => RelationalExpression::class,
             'RelationalOperator'       => RelationalOperator::class,
             'ReturnKeyword'            => ReturnKeyword::class,
