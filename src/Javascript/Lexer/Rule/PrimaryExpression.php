@@ -73,13 +73,6 @@ class PrimaryExpression
     protected $objectExpressionRule = null;
 
     /**
-     * @var array
-     */
-    protected static $validTokenTypes = [
-        TokenizerInterface::OP_ASSIGN
-    ];
-
-    /**
      * @param RecursiveGrammarInterface $parent
      * @param BaseTokenizerInterface $tokenizer
      * @param int $level
@@ -94,18 +87,7 @@ class PrimaryExpression
         $node = $this->grammar->get('PrimaryExpression');
         $parent->addChild($node);
 
-        if ($token->getType() === TokenizerInterface::OP_LEFT_BRACKET) {
-            $this->nextToken($tokenizer);
-
-            yield $this->getExpressionRule()->run($node, $tokenizer, $level + 1);
-
-            $token = $this->currentToken($tokenizer);
-            if ($token->getType() !== TokenizerInterface::OP_RIGHT_BRACKET) {
-                throw new LexicalError(static::MESSAGE_MISSING_RIGHT_BRACKET,
-                    $token->getPath(), $token->getLine(), $token->getLineOffset(), $token->getStart());
-            }
-            $this->nextToken($tokenizer);
-        } else if ($token->getType() === TokenizerInterface::OP_LEFT_CURLY) {
+        if ($token->getType() === TokenizerInterface::OP_LEFT_CURLY) {
             yield $this->getObjectExpressionRule()->run($node, $tokenizer, $level + 1);
             $node->optimize();
         } else if ($token->getType() === TokenizerInterface::OP_LEFT_SQUARE_BRACKET) {
@@ -186,9 +168,6 @@ class PrimaryExpression
         } else if ($token->getType() === TokenizerInterface::KEYWORD_FUNCTION) {
             yield $this->getClosureExpressionRule()->run($node, $tokenizer, $level + 1);
             $node->optimize();
-        } else if (!in_array($token->getType(), static::$validTokenTypes)) {
-            throw new LexicalError(static::MESSAGE_UNEXPECTED_TOKEN,
-                $token->getPath(), $token->getLine(), $token->getLineOffset(), $token->getStart());
         }
     }
 

@@ -74,6 +74,11 @@ class Statement
     /**
      * @var Rule\RuleInterface
      */
+    protected $assignmentExpressionRule = null;
+
+    /**
+     * @var Rule\RuleInterface
+     */
     protected $variableListOrExpressionRule = null;
 
     /**
@@ -149,7 +154,7 @@ class Statement
                 $parent->addChild($returnKeyword);
 
                 $this->nextToken($tokenizer);
-                yield $this->getExpressionRule()->run($returnKeyword, $tokenizer, $level + 1);
+                yield $this->getAssignmentExpressionRule()->run($returnKeyword, $tokenizer, $level + 1);
 
                 $token = $this->currentToken($tokenizer);
                 if ($token->getType() === TokenizerInterface::OP_SEMICOLON) {
@@ -268,6 +273,17 @@ class Statement
             $this->expressionRule = $this->rule->get('Expression');
         }
         return $this->expressionRule;
+    }
+
+    /**
+     * @return Rule\RuleInterface|Rule\AssignmentExpression
+     */
+    public function getAssignmentExpressionRule()
+    {
+        if ($this->assignmentExpressionRule === null) {
+            $this->assignmentExpressionRule = $this->rule->get('AssignmentExpression');
+        }
+        return $this->assignmentExpressionRule;
     }
 
     /**

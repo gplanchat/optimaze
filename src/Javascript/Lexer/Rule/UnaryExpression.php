@@ -60,7 +60,6 @@ class UnaryExpression
     ];
 
     protected static $primaryExpressionTokens = [
-        TokenizerInterface::OP_LEFT_BRACKET,
         TokenizerInterface::TOKEN_IDENTIFIER,
         TokenizerInterface::TOKEN_NUMBER_INTEGER,
         TokenizerInterface::TOKEN_NUMBER_FLOATING_POINT,
@@ -159,7 +158,18 @@ class UnaryExpression
                 }
                 $node->optimize();
                 break;
-            } else {
+            } else if ($token->getType() === TokenizerInterface::OP_LEFT_BRACKET) {
+                $this->nextToken($tokenizer);
+
+                yield $this->getExpressionRule()->run($node, $tokenizer, $level + 1);
+
+                $token = $this->currentToken($tokenizer);
+                if ($token->getType() !== TokenizerInterface::OP_RIGHT_BRACKET) {
+                    throw new LexicalError(static::MESSAGE_MISSING_RIGHT_BRACKET,
+                        $token->getPath(), $token->getLine(), $token->getLineOffset(), $token->getStart());
+                }
+                $this->nextToken($tokenizer);
+            } else  {
                 break;
             }
         }

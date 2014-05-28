@@ -86,12 +86,15 @@ class MemberExpression
                         $token->getPath(), $token->getLine(), $token->getLineOffset(), $token->getStart());
                 }
                 $this->nextToken($tokenizer);
-                break;
+
+                if ($token->getType() !== TokenizerInterface::OP_DOT) {
+                    break;
+                }
             } else if ($token->getType() === TokenizerInterface::OP_LEFT_BRACKET) {
                 $token = $this->nextToken($tokenizer);
 
                 if ($token->getType() !== TokenizerInterface::OP_RIGHT_BRACKET) {
-                    yield $this->getArgumentListrule()->run($node, $tokenizer, $level + 1);
+                    yield $this->getArgumentListRule()->run($node, $tokenizer, $level + 1);
                 }
 
                 $token = $this->currentToken($tokenizer);
@@ -99,8 +102,11 @@ class MemberExpression
                     throw new LexicalError(static::MESSAGE_MISSING_RIGHT_BRACKET,
                         $token->getPath(), $token->getLine(), $token->getLineOffset(), $token->getStart());
                 }
-                $this->nextToken($tokenizer);
-                break;
+                $token = $this->nextToken($tokenizer);
+
+                if ($token->getType() !== TokenizerInterface::OP_DOT) {
+                    break;
+                }
             } else if ($token->getType() === TokenizerInterface::OP_DOT) {
                 /** @var Grammar\DotOperator $dotOperator */
                 $dotOperator = $this->grammar
