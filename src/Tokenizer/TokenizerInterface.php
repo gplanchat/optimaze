@@ -46,4 +46,18 @@ interface TokenizerInterface
      * @return mixed
      */
     public function get();
+
+    /**
+     * @param Token $token
+     * @param array $typeList
+     * @return bool|null
+     */
+    function isPreviousTokenType(Token $token, array $typeList);
+
+    /**
+     * @param Token $token
+     * @param array $typeList
+     * @return bool|null
+     */
+    function isNextTokenType(Token $token, array $typeList);
 }

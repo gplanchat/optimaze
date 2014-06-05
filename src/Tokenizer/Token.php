@@ -33,6 +33,11 @@ use Gplanchat\Javascript\Tokenizer as Javascript;
 class Token
 {
     /**
+     * @var int
+     */
+    private $index = null;
+
+    /**
      * @var int|string
      */
     private $type = null;
@@ -73,6 +78,7 @@ class Token
     private $assignOperator = null;
 
     /**
+     * @param int $index
      * @param string|int $type
      * @param string $value
      * @param int $start
@@ -82,8 +88,9 @@ class Token
      * @param int $lineOffset
      * @param string|null $assignOperator
      */
-    public function __construct($type, $value, $start, $end, $path, $line, $lineOffset, $assignOperator = null)
+    public function __construct($index, $type, $value, $start, $end, $path, $line, $lineOffset, $assignOperator = null)
     {
+        $this->setIndex($index);
         $this->setType($type);
         $this->setValue($value);
         $this->setStart($start);
@@ -92,6 +99,25 @@ class Token
         $this->setLine($line);
         $this->setLineOffset($lineOffset);
         $this->setAssignOperator($assignOperator);
+    }
+
+    /**
+     * @param int $index
+     * @return $this
+     */
+    public function setIndex($index)
+    {
+        $this->index = $index;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getIndex()
+    {
+        return $this->index;
     }
 
     /**

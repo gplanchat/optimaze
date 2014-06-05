@@ -8,9 +8,7 @@ use Gplanchat\ServiceManager\ServiceManagerTrait;
 class ServiceManager
     implements ServiceManagerInterface
 {
-    use ServiceManagerTrait {
-        ServiceManagerTrait::get as realGet;
-    }
+    use ServiceManagerTrait;
 
     /**
      * @var ServiceManagerInterface
@@ -37,7 +35,6 @@ class ServiceManager
             'Condition'                => Condition::class,
             'ConditionalExpression'    => ConditionalExpression::class,
             'Constructor'              => Constructor::class,
-            'ConstructorCall'          => ConstructorCall::class,
             'Element'                  => Element::class,
             'EqualityExpression'       => EqualityExpression::class,
             'Expression'               => Expression::class,
@@ -52,6 +49,8 @@ class ServiceManager
             'PrimaryExpression'        => PrimaryExpression::class,
             'RelationalExpression'     => RelationalExpression::class,
             'ShiftExpression'          => ShiftExpression::class,
+            'SwitchStatement'          => SwitchStatement::class,
+            'SwitchCase'               => SwitchCase::class,
             'Statement'                => Statement::class,
             'StatementList'            => StatementList::class,
             'UnaryExpression'          => UnaryExpression::class,
@@ -93,10 +92,5 @@ class ServiceManager
     public function getGrammarServiceManager()
     {
         return $this->grammarServiceManager;
-    }
-
-    public function get($serviceName, array $constructorParams = [], $ignoreInexistent = false, $ignorePeering = false)
-    {
-        return $this->realGet($serviceName, $constructorParams, $ignoreInexistent, $ignorePeering);
     }
 }

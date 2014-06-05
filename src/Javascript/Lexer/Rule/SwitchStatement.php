@@ -22,25 +22,40 @@
 
 namespace Gplanchat\Javascript\Lexer\Rule;
 
-use Gplanchat\Javascript\Lexer\Exception\LexicalError;
-use Gplanchat\Lexer\Grammar\RecursiveGrammarInterface;
-use Gplanchat\Javascript\Tokenizer\TokenizerInterface;
 use Gplanchat\Lexer\Grammar;
-use Gplanchat\Javascript\Lexer\Rule;
+use Gplanchat\Lexer\Grammar\RecursiveGrammarInterface;
+use Gplanchat\Javascript\Lexer\Exception\LexicalError;
+use Gplanchat\Javascript\Tokenizer\TokenizerInterface;
 use Gplanchat\Tokenizer\TokenizerInterface as BaseTokenizerInterface;
 
 /**
- * Class Expression
+ * Class MemberExpression
  * @package Gplanchat\Javascript\Lexer\Rule
  *
- * StatementList:
- *     empty
- *     Statement StatementList
+ * SwitchStatement:
+ *     SwitchCase : StatementList SwitchStatement
+ *
+ * SwitchCase:
+ *     case StringLiteral
+ *     case IntegerLiteral
+ *     case FloatingPointLiteral
+ *     case Identifier
+ *     default
  */
-class StatementList
+class SwitchStatement
     implements RuleInterface
 {
     use RuleTrait;
+
+    /**
+     * @var null
+     */
+    protected $switchCaseRule = null;
+
+    /**
+     * @var StatementList
+     */
+    protected $statementListRule = null;
 
     /**
      * @param RecursiveGrammarInterface $parent
@@ -51,24 +66,51 @@ class StatementList
      */
     public function run(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer, $level = 0)
     {
-        /** @var Grammar\StatementList $node */
-        $node = $this->grammar->get('StatementList');
+        /** @var Grammar\SwitchStatement $node */
+        $node = $this->grammar->get('SwitchStatement');
         $parent->addChild($node);
-
-        /** @var Rule\Statement $statementRule */
-        $statementRule = $this->rule->get('Statement');
 
         while (true) {
             $token = $this->currentToken($tokenizer);
-            if ($token->getType() === TokenizerInterface::OP_RIGHT_CURLY ||
-                $token->getType() === TokenizerInterface::KEYWORD_DEFAULT ||
-                $token->getType() === TokenizerInterface::KEYWORD_CASE) {
+            if ($token->getType() === TokenizerInterface::OP_RIGHT_CURLY) {
                 break;
             }
+            $this->nextToken($tokenizer);
 
-            yield $statementRule->run($node, $tokenizer, $level + 1);
+            yield $this->getSwitchCaseRule()->run($node, $tokenizer);
+
+            if ($node->count() <= 0) {
+                throw new LexicalError(static::MESSAGE_UNEXPECTED_TOKEN,
+                    $token->getPath(), $token->getLine(), $token->getLineOffset(), $token->getStart());
+            }
+
+            yield $this->getStatementListRule()->run($node, $tokenizer);
         }
 
         $node->optimize();
+    }
+
+    /**
+     * @return SwitchCase
+     */
+    public function getSwitchCaseRule()
+    {
+        if ($this->switchCaseRule === null) {
+            $this->switchCaseRule = $this->rule->get('SwitchCase');
+        }
+
+        return $this->switchCaseRule;
+    }
+
+    /**
+     * @return StatementList
+     */
+    public function getStatementListRule()
+    {
+        if ($this->statementListRule === null) {
+            $this->statementListRule = $this->rule->get('StatementList');
+        }
+
+        return $this->statementListRule;
     }
 }

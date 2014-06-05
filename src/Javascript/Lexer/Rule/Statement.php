@@ -69,6 +69,11 @@ class Statement
     /**
      * @var Rule\RuleInterface
      */
+    protected $switchStatementRule = null;
+
+    /**
+     * @var Rule\RuleInterface
+     */
     protected $expressionRule = null;
 
     /**
@@ -122,6 +127,41 @@ class Statement
                 yield $this->getWhileExpressionRule()->run($node, $tokenizer, $level + 1);
             } else if ($token->getType() === TokenizerInterface::KEYWORD_FOR) {
                 yield $this->getForExpressionRule()->run($node, $tokenizer, $level + 1);
+            } else if ($token->getType() === TokenizerInterface::KEYWORD_SWITCH) {
+                /** @var Grammar\SwitchKeyword $switchKeyword */
+                $switchKeyword = $this->grammar->get('SwitchKeyword');
+                $parent->addChild($switchKeyword);
+
+                $token = $this->nextToken($tokenizer);
+                if ($token->getType() !== TokenizerInterface::OP_LEFT_BRACKET) {
+                    throw new LexicalError(static::MESSAGE_MISSING_LEFT_BRACKET,
+                        $token->getPath(), $token->getLine(), $token->getLineOffset(), $token->getStart());
+                }
+
+                $this->nextToken($tokenizer);
+                yield $this->getExpressionRule()->run($switchKeyword, $tokenizer, $level + 1);
+
+                $token = $this->currentToken($tokenizer);
+                if ($token->getType() !== TokenizerInterface::OP_RIGHT_BRACKET) {
+                    throw new LexicalError(static::MESSAGE_MISSING_RIGHT_BRACKET,
+                        $token->getPath(), $token->getLine(), $token->getLineOffset(), $token->getStart());
+                }
+
+                $token = $this->nextToken($tokenizer);
+                if ($token->getType() !== TokenizerInterface::OP_LEFT_CURLY) {
+                    throw new LexicalError(static::MESSAGE_MISSING_LEFT_CURLY_BRACE,
+                        $token->getPath(), $token->getLine(), $token->getLineOffset(), $token->getStart());
+                }
+
+                while (true) {
+                    yield $this->getSwitchStatementRule()->run($node, $tokenizer, $level + 1);
+
+                    $token = $this->currentToken($tokenizer);
+                    if ($token->getType() === TokenizerInterface::OP_RIGHT_CURLY) {
+                        break;
+                    }
+                }
+                $this->nextToken($tokenizer);
             } else if ($token->getType() === TokenizerInterface::KEYWORD_BREAK) {
                 $this->parseBreak($node, $tokenizer);
                 break;
@@ -262,6 +302,17 @@ class Statement
             $this->forExpressionRule = $this->rule->get('ForExpression');
         }
         return $this->forExpressionRule;
+    }
+
+    /**
+     * @return Rule\RuleInterface|Rule\SwitchStatement
+     */
+    public function getSwitchStatementRule()
+    {
+        if ($this->switchStatementRule === null) {
+            $this->switchStatementRule = $this->rule->get('SwitchStatement');
+        }
+        return $this->switchStatementRule;
     }
 
     /**

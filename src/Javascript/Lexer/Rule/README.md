@@ -43,13 +43,26 @@ Statement:
     for ( ; Expression ; Expression ) Statement
     for ( VariableListOrExpression ; Expression ; Expression ) Statement
     for ( VariableListOrExpression in Expression ) Statement
+    switch Condition { SwitchStatement }
     break ;
     continue ;
     with ( Expression ) Statement
-    return Expression ;
+    return AssignmentExpression ;
     { StatementList }
     VariableListOrExpression ;
     FunctionExpression
+```
+```
+SwitchStatement:
+    SwitchCase : StatementList SwitchStatement
+```
+```
+SwitchCase:
+    case StringLiteral
+    case IntegerLiteral
+    case FloatingPointLiteral
+    case Identifier
+    default
 ```
 ```
 Condition:
@@ -151,6 +164,7 @@ UnaryExpression:
     new Constructor
     Constructor
     delete MemberExpression
+    ( Expression )
 ```
 ```
 Constructor:
@@ -173,7 +187,6 @@ ArgumentList:
 ```
 PrimaryExpression:
     ClosureExpression
-    ( Expression )
     ArrayExpression
     ObjectExpression
     Identifier
