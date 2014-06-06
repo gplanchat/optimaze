@@ -38,6 +38,7 @@ use Gplanchat\Tokenizer\TokenizerInterface as BaseTokenizerInterface;
  *
  * ObjectEntry:
  *     Identifier : AssignmentExpression
+ *     StringLiteral : AssignmentExpression
  *
  * ObjectEntryList:
  *     ObjectEntry
@@ -77,7 +78,8 @@ class ObjectExpression
             $this->nextToken($tokenizer);
         } else {
             while (true) {
-                if ($token->getType() !== TokenizerInterface::TOKEN_IDENTIFIER) {
+                if ($token->getType() !== TokenizerInterface::TOKEN_IDENTIFIER &&
+                    $token->getType() !== TokenizerInterface::TOKEN_STRING) {
                     throw new LexicalError(RuleInterface::MESSAGE_MISSING_RIGHT_CURLY_BRACE,
                         $token->getPath(), $token->getLine(), $token->getLineOffset(), $token->getStart());
                 }
