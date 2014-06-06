@@ -75,7 +75,6 @@ class SwitchStatement
             if ($token->getType() === TokenizerInterface::OP_RIGHT_CURLY) {
                 break;
             }
-            $this->nextToken($tokenizer);
 
             yield $this->getSwitchCaseRule()->run($node, $tokenizer);
 

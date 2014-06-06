@@ -152,6 +152,7 @@ class Statement
                     throw new LexicalError(static::MESSAGE_MISSING_LEFT_CURLY_BRACE,
                         $token->getPath(), $token->getLine(), $token->getLineOffset(), $token->getStart());
                 }
+                $this->nextToken($tokenizer);
 
                 while (true) {
                     yield $this->getSwitchStatementRule()->run($node, $tokenizer, $level + 1);
