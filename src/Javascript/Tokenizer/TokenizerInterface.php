@@ -115,12 +115,14 @@ interface TokenizerInterface
     const KEYWORD_FINALLY    = 'finally';
     const KEYWORD_FOR        = 'for';
     const KEYWORD_FUNCTION   = 'function';
+    const KEYWORD_GET        = 'get';
     const KEYWORD_IF         = 'if';
     const KEYWORD_IN         = 'in';
     const KEYWORD_INSTANCEOF = 'instanceof';
     const KEYWORD_NEW        = 'new';
     const KEYWORD_NULL       = 'null';
     const KEYWORD_RETURN     = 'return';
+    const KEYWORD_SET        = 'set';
     const KEYWORD_SWITCH     = 'switch';
     const KEYWORD_THIS       = 'this';
     const KEYWORD_THROW      = 'throw';

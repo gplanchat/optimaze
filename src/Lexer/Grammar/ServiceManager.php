@@ -13,6 +13,7 @@ class ServiceManager
     public function __construct()
     {
         $this->invokables = [
+            'AccessorExpression'       => AccessorExpression::class,
             'AdditiveExpression'       => AdditiveExpression::class,
             'AdditiveOperator'         => AdditiveOperator::class,
             'AndExpression'            => AndExpression::class,
@@ -56,6 +57,7 @@ class ServiceManager
             'MemberExpression'         => MemberExpression::class,
             'MultiplicativeExpression' => MultiplicativeExpression::class,
             'MultiplicativeOperator'   => MultiplicativeOperator::class,
+            'MutatorExpression'        => MutatorExpression::class,
             'NewKeyword'               => NewKeyword::class,
             'NullKeyword'              => NullKeyword::class,
             'ObjectEntry'              => ObjectEntry::class,

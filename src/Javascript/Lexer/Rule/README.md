@@ -211,6 +211,11 @@ ObjectExpression:
 ```
 ObjectEntry:
     Identifier : AssignmentExpression
+    StringLiteral : AssignmentExpression
+    get Identifier ( empty ) { StatementList }
+    get Identifier ( ParameterList ) { StatementList }
+    set Identifier ( empty ) { StatementList }
+    set Identifier ( ParameterList ) { StatementList }
 ```
 ```
 ObjectEntryList:

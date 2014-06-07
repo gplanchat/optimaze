@@ -76,14 +76,14 @@ class SwitchStatement
                 break;
             }
 
-            yield $this->getSwitchCaseRule()->run($node, $tokenizer);
+            yield $this->getSwitchCaseRule()->run($node, $tokenizer, $level + 1);
 
             if ($node->count() <= 0) {
                 throw new LexicalError(static::MESSAGE_UNEXPECTED_TOKEN,
                     $token->getPath(), $token->getLine(), $token->getLineOffset(), $token->getStart());
             }
 
-            yield $this->getStatementListRule()->run($node, $tokenizer);
+            yield $this->getStatementListRule()->run($node, $tokenizer, $level + 1);
         }
 
         $node->optimize();

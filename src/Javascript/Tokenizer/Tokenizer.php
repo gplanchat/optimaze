@@ -22,6 +22,7 @@
 
 namespace Gplanchat\Javascript\Tokenizer;
 
+use Gplanchat\Javascript\Lexer\Rule\RuleInterface;
 use Gplanchat\Tokenizer\DataSource\DataSourceInterface;
 use Gplanchat\Tokenizer\Token;
 
@@ -311,13 +312,18 @@ class Tokenizer
     }
 
     /**
+     * @param int $tokenIndex
      * @return Token|null
      * @throws Exception\SyntaxError
      */
-    public function get()
+    public function get($tokenIndex = null)
     {
-        if ($this->tokenIndex < $this->tokenCount) {
-            return $this->tokens[$this->tokenIndex];
+        if ($tokenIndex === null) {
+            $tokenIndex = $this->tokenIndex;
+        }
+
+        if ($tokenIndex < $this->tokenCount) {
+            return $this->tokens[$tokenIndex];
         }
 
         $input = '';
@@ -428,7 +434,7 @@ class Tokenizer
 
         /** @noinspection PhpMissingBreakStatementInspection */
         case '/':
-            if ($this->isPreviousTokenType($this->precedingRegexTokens)) {
+            if ($this->checkPreviousTokenType($this->precedingRegexTokens)) {
                 preg_match('/^\/((?:\\\\.|\[(?:\\\\.|[^\]])*\]|[^\/])+)\/([gimy]*)/', $input, $match);
                 return $this->push(TokenizerInterface::TOKEN_REGEXP, $match[0]);
             }
@@ -481,6 +487,9 @@ class Tokenizer
             );
 
         default:
+            if (preg_match('/^(get|set)\s+[$\w]+/', $input, $match)) {
+                return $this->push($match[1], $match[1]);
+            }
             // FIXME: add support for unicode and unicode escape sequence \uHHHH
             if (preg_match('/^[$\w]+/', $input, $match)) {
                 return $this->push(in_array($match[0], $this->keywords) ? $match[0] : TokenizerInterface::TOKEN_IDENTIFIER, $match[0]);
@@ -497,6 +506,7 @@ class Tokenizer
         $tokenLength = strlen($value);
 
         $token = new Token(
+            $this->tokenCount++,
             $type,
             $value,
             $this->cursor,
@@ -508,24 +518,83 @@ class Tokenizer
         );
 
         $this->tokens[] = $token;
-        $this->tokenCount++;
         $this->cursor += $tokenLength;
         if ($ignoreOffsetUpdate !== true) {
             $this->lineOffset += $tokenLength;
         }
+        $this->printInfo($token);
         return $token;
+    }
+
+    private function printInfo(Token $token)
+    {
+        echo $token;
+        foreach (debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS) as $call) {
+            if (!isset($call['class'])) {
+                continue;
+            }
+            $re = new \ReflectionClass($call['class']);
+            if (!$re->isSubclassOf(RuleInterface::class)) {
+                continue;
+            }
+            if (isset($call['file']) && isset($call['line'])) {
+                echo sprintf('%s%s%s %s:%d', $call['class'], $call['type'], $call['function'], $call['file'], $call['line']) . PHP_EOL;
+            } else {
+                echo sprintf('%s%s%s', $call['class'], $call['type'], $call['function']) . PHP_EOL;
+            }
+        }
+    }
+
+    /**
+     * @param Token $token
+     * @param array $typeList
+     * @return bool|null
+     */
+    public function isPreviousTokenType(Token $token, array $typeList)
+    {
+        $token = $this->get($token->getIndex() - 1);
+        if ($token !== null) {
+            return in_array($token->getType(), $typeList);
+        }
+
+        return false;
+    }
+
+    /**
+     * @param Token $token
+     * @param array $typeList
+     * @return bool|null
+     */
+    public function isNextTokenType(Token $token, array $typeList)
+    {
+        $token = $this->get($token->getIndex() + 1);
+        if ($token !== null) {
+            return in_array($token->getType(), $typeList);
+        }
+
+        return false;
     }
 
     /**
      * @param array $typeList
      * @return bool|null
      */
-    protected function isPreviousTokenType(array $typeList)
+    protected function checkPreviousTokenType(array $typeList)
     {
         if (isset($this->tokens[$this->tokenIndex - 1])) {
             return in_array($this->tokens[$this->tokenIndex - 1]->getType(), $typeList);
         }
 
-        return null;
+        return false;
+    }
+
+    public function getCodeContext(Token $token)
+    {
+        $lineOffset = $token->getStart() - $token->getLineOffset() - 10;
+        $context = $this->source->get(500, $lineOffset);
+        $lineStart = strpos($context, "\n");
+        $eol = strpos($context, "\n", $lineStart);
+        return substr($context, $lineStart, $eol) . PHP_EOL
+            . str_pad('^', $token->getLineOffset(), ' ', STR_PAD_LEFT) . PHP_EOL;
     }
 }

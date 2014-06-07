@@ -23,9 +23,6 @@
 namespace Gplanchat\Lexer\Grammar;
 
 class ClosureExpression
-    implements RecursiveGrammarInterface
+    extends CallableExpressionAbstract
 {
-    use LeftAssociativeGrammarTrait;
-    use Optimization\MandatoryGrammarTrait;
-    use GrammarRecursiveDumpTrait;
 }

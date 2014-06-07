@@ -22,27 +22,10 @@
 
 namespace Gplanchat\Lexer\Grammar;
 
-class FunctionExpression
-    extends CallableExpressionAbstract
+abstract class CallableExpressionAbstract
+    implements RecursiveGrammarInterface
 {
-    /**
-     * @var string
-     */
-    protected $name = null;
-
-    /**
-     * @param string $name
-     */
-    public function __construct($name = null)
-    {
-        $this->name = $name;
-    }
-
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
+    use LeftAssociativeGrammarTrait;
+    use Optimization\MandatoryGrammarTrait;
+    use GrammarRecursiveDumpTrait;
 }

@@ -39,6 +39,10 @@ use Gplanchat\Tokenizer\TokenizerInterface as BaseTokenizerInterface;
  * ObjectEntry:
  *     Identifier : AssignmentExpression
  *     StringLiteral : AssignmentExpression
+ *     get Identifier ( empty ) { StatementList }
+ *     get Identifier ( ParameterList ) { StatementList }
+ *     set Identifier ( empty ) { StatementList }
+ *     set Identifier ( ParameterList ) { StatementList }
  *
  * ObjectEntryList:
  *     ObjectEntry
@@ -48,6 +52,16 @@ class ObjectExpression
     implements RuleInterface
 {
     use RuleTrait;
+
+    /**
+     * @var ParameterList
+     */
+    protected $parameterListRule = null;
+
+    /**
+     * @var StatementList
+     */
+    protected $statementListRule = null;
 
     /**
      * @var AssignmentExpression
@@ -78,12 +92,57 @@ class ObjectExpression
             $this->nextToken($tokenizer);
         } else {
             while (true) {
-                if ($token->getType() !== TokenizerInterface::TOKEN_IDENTIFIER &&
+                if ($token->getType() === TokenizerInterface::KEYWORD_GET ||
+                    $token->getType() === TokenizerInterface::KEYWORD_SET) {
+
+                    $token = $this->nextToken($tokenizer);
+                    if ($token->getType() !== TokenizerInterface::TOKEN_IDENTIFIER) {
+                        throw new LexicalError(RuleInterface::MESSAGE_MISSING_IDENTIFIER,
+                            $token->getPath(), $token->getLine(), $token->getLineOffset(), $token->getStart());
+                    }
+
+                    if ($token->getType() === TokenizerInterface::KEYWORD_GET) {
+                        $method = $this->grammar->get('AccessorExpression', [$token->getValue()]);
+                    } else {
+                        $method = $this->grammar->get('MutatorExpression', [$token->getValue()]);
+                    }
+                    $node->addChild($method);
+
+                    $token = $this->nextToken($tokenizer);
+                    if ($token->getType() !== TokenizerInterface::OP_LEFT_BRACKET) {
+                        throw new LexicalError(RuleInterface::MESSAGE_MISSING_LEFT_BRACKET,
+                            $token->getPath(), $token->getLine(), $token->getLineOffset(), $token->getStart());
+                    }
+                    $this->nextToken($tokenizer);
+
+                    yield $this->getParameterListRule()->run($method, $tokenizer, $level + 1);
+
+                    $token = $this->currentToken($tokenizer);
+                    if ($token->getType() !== TokenizerInterface::OP_RIGHT_BRACKET) {
+                        throw new LexicalError(RuleInterface::MESSAGE_MISSING_RIGHT_BRACKET,
+                            $token->getPath(), $token->getLine(), $token->getLineOffset(), $token->getStart());
+                    }
+
+                    $token = $this->nextToken($tokenizer);
+                    if ($token->getType() !== TokenizerInterface::OP_LEFT_CURLY) {
+                        throw new LexicalError(RuleInterface::MESSAGE_MISSING_LEFT_CURLY_BRACE,
+                            $token->getPath(), $token->getLine(), $token->getLineOffset(), $token->getStart());
+                    }
+
+                    $this->nextToken($tokenizer);
+                    yield $this->getStatementListRule()->run($method, $tokenizer, $level + 1);
+
+                    $token = $this->currentToken($tokenizer);
+                    if ($token->getType() !== TokenizerInterface::OP_RIGHT_CURLY) {
+                        throw new LexicalError(RuleInterface::MESSAGE_MISSING_RIGHT_CURLY_BRACE,
+                            $token->getPath(), $token->getLine(), $token->getLineOffset(), $token->getStart());
+                    }
+                    continue;
+                } else if ($token->getType() !== TokenizerInterface::TOKEN_IDENTIFIER &&
                     $token->getType() !== TokenizerInterface::TOKEN_STRING) {
                     throw new LexicalError(RuleInterface::MESSAGE_MISSING_RIGHT_CURLY_BRACE,
                         $token->getPath(), $token->getLine(), $token->getLineOffset(), $token->getStart());
                 }
-
                 /** @var Grammar\ObjectEntry $objectEntry */
                 $objectEntry = $this->grammar->get('ObjectEntry', [$token->getValue()]);
                 $node->addChild($objectEntry);
@@ -112,6 +171,30 @@ class ObjectExpression
         }
 
         $node->optimize();
+    }
+
+    /**
+     * @return Expression
+     */
+    public function getParameterListRule()
+    {
+        if ($this->parameterListRule === null) {
+            $this->parameterListRule = $this->rule->get('ParameterList');
+        }
+
+        return $this->parameterListRule;
+    }
+
+    /**
+     * @return Expression
+     */
+    public function getStatementListRule()
+    {
+        if ($this->statementListRule === null) {
+            $this->statementListRule = $this->rule->get('StatementList');
+        }
+
+        return $this->statementListRule;
     }
 
     /**

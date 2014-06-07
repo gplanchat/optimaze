@@ -22,27 +22,7 @@
 
 namespace Gplanchat\Lexer\Grammar;
 
-class FunctionExpression
-    extends CallableExpressionAbstract
+class MutatorExpression
+    extends FunctionExpression
 {
-    /**
-     * @var string
-     */
-    protected $name = null;
-
-    /**
-     * @param string $name
-     */
-    public function __construct($name = null)
-    {
-        $this->name = $name;
-    }
-
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
 }
