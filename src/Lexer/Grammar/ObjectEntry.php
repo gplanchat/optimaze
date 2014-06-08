@@ -35,11 +35,18 @@ class ObjectEntry
     protected $identifier = null;
 
     /**
-     * @param string $identifier
+     * @var int
      */
-    public function __construct($identifier)
+    protected $type = null;
+
+    /**
+     * @param string $identifier
+     * @param int $type
+     */
+    public function __construct($identifier, $type)
     {
         $this->identifier = $identifier;
+        $this->type = $type;
     }
 
     /**
@@ -48,5 +55,13 @@ class ObjectEntry
     public function getIdentifier()
     {
         return $this->identifier;
+    }
+
+    /**
+     * @return int
+     */
+    public function getType()
+    {
+        return $this->type;
     }
 }

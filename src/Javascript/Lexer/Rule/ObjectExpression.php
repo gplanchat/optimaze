@@ -137,24 +137,27 @@ class ObjectExpression
                         throw new LexicalError(RuleInterface::MESSAGE_MISSING_RIGHT_CURLY_BRACE,
                             $token->getPath(), $token->getLine(), $token->getLineOffset(), $token->getStart());
                     }
-                    continue;
-                } else if ($token->getType() !== TokenizerInterface::TOKEN_IDENTIFIER &&
-                    $token->getType() !== TokenizerInterface::TOKEN_STRING) {
-                    throw new LexicalError(RuleInterface::MESSAGE_MISSING_RIGHT_CURLY_BRACE,
+                    $this->nextToken($tokenizer);
+                } else if ($token->getType() === TokenizerInterface::TOKEN_IDENTIFIER ||
+                    $token->getType() === TokenizerInterface::TOKEN_STRING ||
+                    $token->getType() === TokenizerInterface::TOKEN_NUMBER_INTEGER ||
+                    $token->getType() === TokenizerInterface::TOKEN_NUMBER_FLOATING_POINT) {
+                    /** @var Grammar\ObjectEntry $objectEntry */
+                    $objectEntry = $this->grammar->get('ObjectEntry', [$token->getValue(), $token->getType()]);
+                    $node->addChild($objectEntry);
+
+                    $token = $this->nextToken($tokenizer);
+                    if ($token->getType() !== TokenizerInterface::OP_COLON) {
+                        throw new LexicalError(RuleInterface::MESSAGE_MISSING_COLON,
+                            $token->getPath(), $token->getLine(), $token->getLineOffset(), $token->getStart());
+                    }
+
+                    $this->nextToken($tokenizer);
+                    yield $this->getAssignmentExpressionRule()->run($objectEntry, $tokenizer, $level + 1);
+                } else {
+                    throw new LexicalError(RuleInterface::MESSAGE_UNEXPECTED_TOKEN,
                         $token->getPath(), $token->getLine(), $token->getLineOffset(), $token->getStart());
                 }
-                /** @var Grammar\ObjectEntry $objectEntry */
-                $objectEntry = $this->grammar->get('ObjectEntry', [$token->getValue()]);
-                $node->addChild($objectEntry);
-
-                $token = $this->nextToken($tokenizer);
-                if ($token->getType() !== TokenizerInterface::OP_COLON) {
-                    throw new LexicalError(RuleInterface::MESSAGE_MISSING_COLON,
-                        $token->getPath(), $token->getLine(), $token->getLineOffset(), $token->getStart());
-                }
-
-                $this->nextToken($tokenizer);
-                yield $this->getAssignmentExpressionRule()->run($objectEntry, $tokenizer, $level + 1);
 
                 $token = $this->currentToken($tokenizer);
                 if ($token->getType() !== TokenizerInterface::OP_COMMA) {
