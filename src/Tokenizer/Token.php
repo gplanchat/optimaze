@@ -22,7 +22,7 @@
 
 namespace Gplanchat\Tokenizer;
 
-use Gplanchat\Javascript\Tokenizer as Javascript;
+use Gplanchat\EcmaScript\Tokenizer as EcmaScript;
 
 /**
  * Class Token.
@@ -277,7 +277,7 @@ class Token
      */
     public function dump()
     {
-        $re = new \ReflectionClass(Javascript\TokenizerInterface::class);
+        $re = new \ReflectionClass(EcmaScript\TokenizerInterface::class);
         $constants = $re->getConstants();
 
         $key = array_search($this->getType(), $constants);
