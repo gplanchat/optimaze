@@ -43,6 +43,7 @@ use Gplanchat\Tokenizer\TokenizerInterface as BaseTokenizerInterface;
  *     continue ;
  *     with ( Expression ) Statement
  *     return Expression ;
+ *     throw Expression ;
  *     { StatementList }
  *     VariableListOrExpression ;
  */
@@ -196,6 +197,19 @@ class Statement
 
                 $this->nextToken($tokenizer);
                 yield $this->getAssignmentExpressionRule()->run($returnKeyword, $tokenizer, $level + 1);
+
+                $token = $this->currentToken($tokenizer);
+                if ($token->getType() === TokenizerInterface::OP_SEMICOLON) {
+                    $this->nextToken($tokenizer);
+                }
+                break;
+            } else if ($token->getType() === TokenizerInterface::KEYWORD_THROW) {
+                /** @var Grammar\ThrowKeyword $throwKeyword */
+                $throwKeyword = $this->grammar->get('ThrowKeyword');
+                $parent->addChild($throwKeyword);
+
+                $this->nextToken($tokenizer);
+                yield $this->getAssignmentExpressionRule()->run($throwKeyword, $tokenizer, $level + 1);
 
                 $token = $this->currentToken($tokenizer);
                 if ($token->getType() === TokenizerInterface::OP_SEMICOLON) {

@@ -78,6 +78,7 @@ class ServiceManager
             'SwitchKeyword'            => SwitchKeyword::class,
             'SwitchStatement'          => SwitchStatement::class,
             'ThisKeyword'              => ThisKeyword::class,
+            'ThrowKeyword'             => ThrowKeyword::class,
             'UnaryExpression'          => UnaryExpression::class,
             'UnaryOperator'            => UnaryOperator::class,
             'Variable'                 => Variable::class,
