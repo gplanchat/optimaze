@@ -37,12 +37,19 @@ use Gplanchat\Tokenizer\TokenizerInterface as BaseTokenizerInterface;
  *     { ObjectEntryList }
  *
  * ObjectEntry:
- *     Identifier : AssignmentExpression
- *     StringLiteral : AssignmentExpression
+ *     ObjectEntryKey : AssignmentExpression
+ *     ObjectEntryKey : AssignmentExpression ( empty )
+ *     ObjectEntryKey : AssignmentExpression ( ParameterList )
  *     get Identifier ( empty ) { StatementList }
  *     get Identifier ( ParameterList ) { StatementList }
  *     set Identifier ( empty ) { StatementList }
  *     set Identifier ( ParameterList ) { StatementList }
+ *
+ * ObjectEntryKey:
+ *     Identifier
+ *     StringLiteral
+ *     FloatingPointLiteral
+ *     IntegerLiteral
  *
  * ObjectEntryList:
  *     ObjectEntry
@@ -154,6 +161,23 @@ class ObjectExpression
 
                     $this->nextToken($tokenizer);
                     yield $this->getAssignmentExpressionRule()->run($objectEntry, $tokenizer, $level + 1);
+
+                    $token = $this->currentToken($tokenizer);
+                    if ($token->getType() === TokenizerInterface::OP_LEFT_BRACKET) {
+                        $token = $this->nextToken($tokenizer);
+
+                        if ($token->getType() !== TokenizerInterface::OP_RIGHT_BRACKET) {
+                            yield $this->getParameterListRule()->run($objectEntry, $tokenizer, $level + 1);
+                        }
+
+                        $token = $this->currentToken($tokenizer);
+                        if ($token->getType() !== TokenizerInterface::OP_RIGHT_BRACKET) {
+                            throw new LexicalError(RuleInterface::MESSAGE_MISSING_RIGHT_BRACKET,
+                                $token->getPath(), $token->getLine(), $token->getLineOffset(), $token->getStart());
+                        }
+
+                        $this->nextToken($tokenizer);
+                    }
                 } else {
                     throw new LexicalError(RuleInterface::MESSAGE_UNEXPECTED_TOKEN,
                         $token->getPath(), $token->getLine(), $token->getLineOffset(), $token->getStart());
@@ -167,6 +191,7 @@ class ObjectExpression
             }
 
             if ($token->getType() !== TokenizerInterface::OP_RIGHT_CURLY) {
+                echo '    B  ' . $token;
                 throw new LexicalError(RuleInterface::MESSAGE_MISSING_RIGHT_CURLY_BRACE,
                     $token->getPath(), $token->getLine(), $token->getLineOffset(), $token->getStart());
             }

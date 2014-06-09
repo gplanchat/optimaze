@@ -210,12 +210,20 @@ ObjectExpression:
 ```
 ```
 ObjectEntry:
-    Identifier : AssignmentExpression
-    StringLiteral : AssignmentExpression
+    ObjectEntryKey : AssignmentExpression
+    ObjectEntryKey : AssignmentExpression ( empty )
+    ObjectEntryKey : AssignmentExpression ( ParameterList )
     get Identifier ( empty ) { StatementList }
     get Identifier ( ParameterList ) { StatementList }
     set Identifier ( empty ) { StatementList }
     set Identifier ( ParameterList ) { StatementList }
+```
+```
+ObjectEntryKey:
+    Identifier
+    StringLiteral
+    FloatingPointLiteral
+    IntegerLiteral
 ```
 ```
 ObjectEntryList:
