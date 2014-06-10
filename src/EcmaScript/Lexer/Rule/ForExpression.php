@@ -58,20 +58,20 @@ class ForExpression
         $parent->addChild($forKeyword);
 
         $token = $this->nextToken($tokenizer);
-        if ($token->getType() !== TokenizerInterface::OP_LEFT_BRACKET) {
+        if (!$token->is(TokenizerInterface::OP_LEFT_BRACKET)) {
             throw new LexicalError(static::MESSAGE_MISSING_LEFT_BRACKET,
                 $token->getPath(), $token->getLine(), $token->getLineOffset(), $token->getStart());
         }
 
         $token = $this->nextToken($tokenizer);
-        if ($token->getType() === TokenizerInterface::OP_SEMICOLON) {
+        if ($token->is(TokenizerInterface::OP_SEMICOLON)) {
             $this->nextToken($tokenizer);
 
             yield $this->getExpressionRule()->run($parent, $tokenizer, $level + 1);
 
             $token = $this->currentToken($tokenizer);
 
-            if ($token->getType() !== TokenizerInterface::OP_SEMICOLON) {
+            if (!$token->is(TokenizerInterface::OP_SEMICOLON)) {
                 throw new LexicalError(static::MESSAGE_MISSING_SEMICOLON,
                     $token->getPath(), $token->getLine(), $token->getLineOffset(), $token->getStart());
             }
@@ -84,14 +84,14 @@ class ForExpression
             yield $this->getVariableListOrExpressionRule()->run($forKeyword, $tokenizer, $level + 1);
             $token = $this->currentToken($tokenizer);
 
-            if ($token->getType() === TokenizerInterface::OP_SEMICOLON) {
+            if ($token->is(TokenizerInterface::OP_SEMICOLON)) {
                 $this->nextToken($tokenizer);
 
                 yield $this->getExpressionRule()->run($parent, $tokenizer, $level + 1);
 
                 $token = $this->currentToken($tokenizer);
 
-                if ($token->getType() !== TokenizerInterface::OP_SEMICOLON) {
+                if (!$token->is(TokenizerInterface::OP_SEMICOLON)) {
                     throw new LexicalError(static::MESSAGE_MISSING_SEMICOLON,
                         $token->getPath(), $token->getLine(), $token->getLineOffset(), $token->getStart());
                 }
@@ -100,7 +100,7 @@ class ForExpression
                 yield $this->getExpressionRule()->run($parent, $tokenizer, $level + 1);
 
                 $token = $this->currentToken($tokenizer);
-            } else if ($token->getType() === TokenizerInterface::KEYWORD_IN) {
+            } else if ($token->is(TokenizerInterface::KEYWORD_IN)) {
                 $this->nextToken($tokenizer);
 
                 yield $this->getExpressionRule()->run($forKeyword, $tokenizer, $level + 1);
@@ -111,7 +111,7 @@ class ForExpression
             }
         }
 
-        if ($token->getType() !== TokenizerInterface::OP_RIGHT_BRACKET) {
+        if (!$token->is(TokenizerInterface::OP_RIGHT_BRACKET)) {
             throw new LexicalError(static::MESSAGE_MISSING_RIGHT_BRACKET,
                 $token->getPath(), $token->getLine(), $token->getLineOffset(), $token->getStart());
         }

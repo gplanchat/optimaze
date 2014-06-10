@@ -66,17 +66,17 @@ class Element
 
         $token = $this->currentToken($tokenizer);
 
-        if ($token->getType() === TokenizerInterface::TOKEN_BLOCK_COMMENT) {
+        if ($token->is(TokenizerInterface::TOKEN_BLOCK_COMMENT)) {
             /** @var Grammar\BlockComment $blockComment */
             $blockComment = $this->grammar->get('BlockComment');
             $node->addChild($blockComment);
             $this->nextToken($tokenizer);
-        } else if ($token->getType() === TokenizerInterface::TOKEN_LINE_COMMENT) {
+        } else if ($token->is(TokenizerInterface::TOKEN_LINE_COMMENT)) {
             /** @var Grammar\LineComment $lineComment */
             $lineComment = $this->grammar->get('LineComment');
             $node->addChild($lineComment);
             $this->nextToken($tokenizer);
-        } else if ($token->getType() === TokenizerInterface::TOKEN_DOC_COMMENT) {
+        } else if ($token->is(TokenizerInterface::TOKEN_DOC_COMMENT)) {
             /** @var Grammar\DocComment $docComment */
             $docComment = $this->grammar->get('DocComment');
             $node->addChild($docComment);

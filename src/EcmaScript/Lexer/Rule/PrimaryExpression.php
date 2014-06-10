@@ -87,13 +87,13 @@ class PrimaryExpression
         $node = $this->grammar->get('PrimaryExpression');
         $parent->addChild($node);
 
-        if ($token->getType() === TokenizerInterface::OP_LEFT_CURLY) {
+        if ($token->is(TokenizerInterface::OP_LEFT_CURLY)) {
             yield $this->getObjectExpressionRule()->run($node, $tokenizer, $level + 1);
             $node->optimize();
-        } else if ($token->getType() === TokenizerInterface::OP_LEFT_SQUARE_BRACKET) {
+        } else if ($token->is(TokenizerInterface::OP_LEFT_SQUARE_BRACKET)) {
             yield $this->getArrayExpressionRule()->run($node, $tokenizer, $level + 1);
             $node->optimize();
-        } else if ($token->getType() === TokenizerInterface::TOKEN_IDENTIFIER) {
+        } else if ($token->is(TokenizerInterface::TOKEN_IDENTIFIER)) {
             /** @var Grammar\Identifier $child */
             $child = $this->grammar
                 ->get('Identifier', [$token->getValue()])
@@ -101,7 +101,7 @@ class PrimaryExpression
             $node->addChild($child);
             $this->nextToken($tokenizer);
             $node->optimize();
-        } else if ($token->getType() === TokenizerInterface::TOKEN_NUMBER_INTEGER) {
+        } else if ($token->is(TokenizerInterface::TOKEN_NUMBER_INTEGER)) {
             /** @var Grammar\IntegerLiteral $child */
             $child = $this->grammar
                 ->get('IntegerLiteral', [$token->getValue()])
@@ -109,7 +109,7 @@ class PrimaryExpression
             $node->addChild($child);
             $this->nextToken($tokenizer);
             $node->optimize();
-        } else if ($token->getType() === TokenizerInterface::TOKEN_NUMBER_FLOATING_POINT) {
+        } else if ($token->is(TokenizerInterface::TOKEN_NUMBER_FLOATING_POINT)) {
             /** @var Grammar\FloatingPointLiteral $child */
             $child = $this->grammar
                 ->get('FloatingPointLiteral', [$token->getValue()])
@@ -117,7 +117,7 @@ class PrimaryExpression
             $node->addChild($child);
             $this->nextToken($tokenizer);
             $node->optimize();
-        } else if ($token->getType() === TokenizerInterface::TOKEN_STRING) {
+        } else if ($token->is(TokenizerInterface::TOKEN_STRING)) {
             /** @var Grammar\StringLiteral $child */
             $child = $this->grammar
                 ->get('StringLiteral', [$token->getValue()])
@@ -125,7 +125,7 @@ class PrimaryExpression
             $node->addChild($child);
             $this->nextToken($tokenizer);
             $node->optimize();
-        } else if ($token->getType() === TokenizerInterface::TOKEN_REGEXP) {
+        } else if ($token->is(TokenizerInterface::TOKEN_REGEXP)) {
             /** @var Grammar\RegularExpressionLiteral $child */
             $child = $this->grammar
                 ->get('RegularExpressionLiteral', [$token->getValue()])
@@ -133,7 +133,7 @@ class PrimaryExpression
             $node->addChild($child);
             $this->nextToken($tokenizer);
             $node->optimize();
-        } else if ($token->getType() === TokenizerInterface::KEYWORD_FALSE) {
+        } else if ($token->is(TokenizerInterface::KEYWORD_FALSE)) {
             /** @var Grammar\BooleanLiteral $child */
             $child = $this->grammar
                 ->get('BooleanLiteral', [false])
@@ -141,7 +141,7 @@ class PrimaryExpression
             $node->addChild($child);
             $this->nextToken($tokenizer);
             $node->optimize();
-        } else if ($token->getType() === TokenizerInterface::KEYWORD_TRUE) {
+        } else if ($token->is(TokenizerInterface::KEYWORD_TRUE)) {
             /** @var Grammar\BooleanLiteral $child */
             $child = $this->grammar
                 ->get('BooleanLiteral', [true])
@@ -149,7 +149,7 @@ class PrimaryExpression
             $node->addChild($child);
             $this->nextToken($tokenizer);
             $node->optimize();
-        } else if ($token->getType() === TokenizerInterface::KEYWORD_THIS) {
+        } else if ($token->is(TokenizerInterface::KEYWORD_THIS)) {
             /** @var Grammar\ThisKeyword $child */
             $child = $this->grammar
                 ->get('ThisKeyword')
@@ -157,7 +157,7 @@ class PrimaryExpression
             $node->addChild($child);
             $this->nextToken($tokenizer);
             $node->optimize();
-        } else if ($token->getType() === TokenizerInterface::KEYWORD_NULL) {
+        } else if ($token->is(TokenizerInterface::KEYWORD_NULL)) {
             /** @var Grammar\NullKeyword $child */
             $child = $this->grammar
                 ->get('NullKeyword')
@@ -165,7 +165,7 @@ class PrimaryExpression
             $node->addChild($child);
             $this->nextToken($tokenizer);
             $node->optimize();
-        } else if ($token->getType() === TokenizerInterface::KEYWORD_FUNCTION) {
+        } else if ($token->is(TokenizerInterface::KEYWORD_FUNCTION)) {
             yield $this->getClosureExpressionRule()->run($node, $tokenizer, $level + 1);
             $node->optimize();
         }

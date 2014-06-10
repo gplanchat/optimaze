@@ -62,7 +62,7 @@ class VariableListOrExpression
     {
         $token = $this->currentToken($tokenizer);
 
-        if ($token->getType() === TokenizerInterface::KEYWORD_VAR) {
+        if ($token->is(TokenizerInterface::KEYWORD_VAR)) {
             $this->nextToken($tokenizer);
 
             yield $this->getVariableListRule()->run($parent, $tokenizer, $level + 1);

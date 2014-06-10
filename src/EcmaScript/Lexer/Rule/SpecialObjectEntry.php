@@ -22,25 +22,29 @@
 
 namespace Gplanchat\EcmaScript\Lexer\Rule;
 
-use Gplanchat\EcmaScript\Lexer\Debug;
 use Gplanchat\EcmaScript\Lexer\Exception\LexicalError;
 use Gplanchat\Lexer\Grammar\RecursiveGrammarInterface;
 use Gplanchat\EcmaScript\Tokenizer\TokenizerInterface;
 use Gplanchat\Lexer\Grammar;
-use Gplanchat\EcmaScript\Lexer\Rule;
 use Gplanchat\Tokenizer\TokenizerInterface as BaseTokenizerInterface;
 
 /**
- * Class Element
+ * Class SpecialObjectEntry
  * @package Gplanchat\EcmaScript\Lexer\Rule
  *
- * FunctionExpression:
- *     function Identifier ( empty ) { StatementList }
- *     function Identifier ( ParameterList ) { StatementList }
- *     function ( empty ) { StatementList }
- *     function ( ParameterList ) { StatementList }
+ * SpecialObjectEntry:
+ *     get Identifier ( empty ) { StatementList }
+ *     get Identifier ( ParameterList ) { StatementList }
+ *     set Identifier ( empty ) { StatementList }
+ *     set Identifier ( ParameterList ) { StatementList }
+ *
+ * ObjectEntryKey:
+ *     Identifier
+ *     StringLiteral
+ *     FloatingPointLiteral
+ *     IntegerLiteral
  */
-class FunctionExpression
+class SpecialObjectEntry
     implements RuleInterface
 {
     use RuleTrait;
@@ -56,6 +60,11 @@ class FunctionExpression
     protected $statementListRule = null;
 
     /**
+     * @var AssignmentExpression
+     */
+    protected $assignmentExpressionRule = null;
+
+    /**
      * @param RecursiveGrammarInterface $parent
      * @param BaseTokenizerInterface $tokenizer
      * @param int $level
@@ -65,58 +74,57 @@ class FunctionExpression
     public function run(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer, $level = 0)
     {
         $token = $this->currentToken($tokenizer);
-        if (!$token->is(TokenizerInterface::KEYWORD_FUNCTION)) {
-            throw new LexicalError(static::MESSAGE_MISSING_FUNCTION_KEYWORD,
+
+        if ($token->is(TokenizerInterface::KEYWORD_GET)) {
+            $method = $this->grammar->get('AccessorExpression', [$token->getValue()]);
+        } else if ($token->is(TokenizerInterface::KEYWORD_SET)) {
+            $method = $this->grammar->get('MutatorExpression', [$token->getValue()]);
+        } else {
+            throw new LexicalError(RuleInterface::MESSAGE_UNEXPECTED_TOKEN,
                 $token->getPath(), $token->getLine(), $token->getLineOffset(), $token->getStart());
         }
+        $parent->addChild($method);
 
         $token = $this->nextToken($tokenizer);
         if (!$token->is(TokenizerInterface::TOKEN_IDENTIFIER)) {
-            throw new LexicalError(static::MESSAGE_MISSING_IDENTIFIER,
+            throw new LexicalError(RuleInterface::MESSAGE_MISSING_IDENTIFIER,
                 $token->getPath(), $token->getLine(), $token->getLineOffset(), $token->getStart());
         }
 
-        /** @var Grammar\FunctionExpression $node */
-        $node = $this->grammar->get('FunctionExpression', [$token->getValue()]);
-        $parent->addChild($node);
-
         $token = $this->nextToken($tokenizer);
-
         if (!$token->is(TokenizerInterface::OP_LEFT_BRACKET)) {
-            throw new LexicalError(static::MESSAGE_MISSING_LEFT_BRACKET,
+            throw new LexicalError(RuleInterface::MESSAGE_MISSING_LEFT_BRACKET,
                 $token->getPath(), $token->getLine(), $token->getLineOffset(), $token->getStart());
         }
         $this->nextToken($tokenizer);
 
-        yield $this->getParameterListRule()->run($node, $tokenizer, $level + 1);
+        yield $this->getParameterListRule()->run($method, $tokenizer, $level + 1);
 
         $token = $this->currentToken($tokenizer);
         if (!$token->is(TokenizerInterface::OP_RIGHT_BRACKET)) {
-            throw new LexicalError(static::MESSAGE_MISSING_RIGHT_BRACKET,
+            throw new LexicalError(RuleInterface::MESSAGE_MISSING_RIGHT_BRACKET,
                 $token->getPath(), $token->getLine(), $token->getLineOffset(), $token->getStart());
         }
+
         $token = $this->nextToken($tokenizer);
-
         if (!$token->is(TokenizerInterface::OP_LEFT_CURLY)) {
-            throw new LexicalError(static::MESSAGE_MISSING_LEFT_CURLY_BRACE,
+            throw new LexicalError(RuleInterface::MESSAGE_MISSING_LEFT_CURLY_BRACE,
                 $token->getPath(), $token->getLine(), $token->getLineOffset(), $token->getStart());
         }
-        $this->nextToken($tokenizer);
 
-        yield $this->getStatementListRule()->run($node, $tokenizer, $level + 1);
+        $this->nextToken($tokenizer);
+        yield $this->getStatementListRule()->run($method, $tokenizer, $level + 1);
 
         $token = $this->currentToken($tokenizer);
         if (!$token->is(TokenizerInterface::OP_RIGHT_CURLY)) {
-            throw new LexicalError(static::MESSAGE_MISSING_RIGHT_CURLY_BRACE,
+            throw new LexicalError(RuleInterface::MESSAGE_MISSING_RIGHT_CURLY_BRACE,
                 $token->getPath(), $token->getLine(), $token->getLineOffset(), $token->getStart());
         }
         $this->nextToken($tokenizer);
-
-        $node->optimize();
     }
 
     /**
-     * @return ParameterList
+     * @return Expression
      */
     public function getParameterListRule()
     {
@@ -128,7 +136,7 @@ class FunctionExpression
     }
 
     /**
-     * @return StatementList
+     * @return Expression
      */
     public function getStatementListRule()
     {
@@ -138,4 +146,16 @@ class FunctionExpression
 
         return $this->statementListRule;
     }
-}
+
+    /**
+     * @return Expression
+     */
+    public function getAssignmentExpressionRule()
+    {
+        if ($this->assignmentExpressionRule === null) {
+            $this->assignmentExpressionRule = $this->rule->get('AssignmentExpression');
+        }
+
+        return $this->assignmentExpressionRule;
+    }
+} 

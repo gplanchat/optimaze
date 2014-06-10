@@ -73,7 +73,7 @@ class EqualityExpression
             yield $this->getRelationalExpressionRule()->run($node, $tokenizer, $level + 1);
 
             $token = $this->currentToken($tokenizer);
-            if (!in_array($token->getType(), static::$equalityOperators)) {
+            if (!$token->isIn(static::$equalityOperators)) {
                 break;
             }
 

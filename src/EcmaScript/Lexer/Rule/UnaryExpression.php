@@ -46,6 +46,14 @@ class UnaryExpression
 {
     use RuleTrait;
 
+    /**
+     * @var Expression
+     */
+    protected $expressionRule = null;
+
+    /**
+     * @var array
+     */
     protected static $unaryOperators = [
         TokenizerInterface::OP_NOT,
         TokenizerInterface::KEYWORD_TYPEOF,
@@ -54,11 +62,17 @@ class UnaryExpression
         TokenizerInterface::OP_MINUS
     ];
 
+    /**
+     * @var array
+     */
     protected static $incrementOperators = [
         TokenizerInterface::OP_INCREMENT,
         TokenizerInterface::OP_DECREMENT
     ];
 
+    /**
+     * @var array
+     */
     protected static $primaryExpressionTokens = [
         TokenizerInterface::TOKEN_IDENTIFIER,
         TokenizerInterface::TOKEN_NUMBER_INTEGER,
@@ -70,6 +84,9 @@ class UnaryExpression
         TokenizerInterface::KEYWORD_THIS
     ];
 
+    /**
+     * @var array
+     */
     protected static $excludedTokens = [
         TokenizerInterface::OP_SEMICOLON,
         TokenizerInterface::OP_STRICT_EQ,
@@ -96,8 +113,10 @@ class UnaryExpression
         /** @var MemberExpression $memberExpressionRule */
         $memberExpressionRule = $this->rule->get('MemberExpression');
 
+        echo '    D  ' . $this->currentToken($tokenizer);
         while (true) {
-            if (in_array($token->getType(), static::$unaryOperators)) {
+            if ($token->isIn(static::$unaryOperators)) {
+                echo '    E  ' . $this->currentToken($tokenizer);
                 /** @var Grammar\UnaryOperator $unaryOperator */
                 $unaryOperator = $this->grammar
                     ->get('UnaryOperator', [$token->getValue()])
@@ -108,7 +127,8 @@ class UnaryExpression
                 yield $memberExpressionRule->run($node, $tokenizer, $level + 1);
 
                 $token = $this->currentToken($tokenizer);
-            } else if (in_array($token->getType(), static::$incrementOperators)) {
+            } else if ($token->isIn(static::$incrementOperators)) {
+                echo '    F  ' . $this->currentToken($tokenizer);
                 /** @var Grammar\IncrementOperator $incrementOperator */
                 $incrementOperator = $this->grammar
                     ->get('IncrementOperator', [$token->getValue()])
@@ -119,7 +139,8 @@ class UnaryExpression
                 yield $memberExpressionRule->run($node, $tokenizer, $level + 1);
                 $node->optimize();
                 break;
-            } else if ($token->getType() === TokenizerInterface::KEYWORD_DELETE) {
+            } else if ($token->is(TokenizerInterface::KEYWORD_DELETE)) {
+                echo '    G  ' . $this->currentToken($tokenizer);
                 /** @var Grammar\DeleteKeyword $deleteKeyword */
                 $deleteKeyword = $this->grammar
                     ->get('DeleteKeyword')
@@ -129,7 +150,8 @@ class UnaryExpression
                 $this->nextToken($tokenizer);
                 yield $memberExpressionRule->run($node, $tokenizer, $level + 1);
                 break;
-            } else if ($token->getType() === TokenizerInterface::KEYWORD_NEW) {
+            } else if ($token->is(TokenizerInterface::KEYWORD_NEW)) {
+                echo '    H  ' . $this->currentToken($tokenizer);
                 /** @var Grammar\NewKeyword $newKeyword */
                 $newKeyword = $this->grammar
                     ->get('NewKeyword')
@@ -139,15 +161,29 @@ class UnaryExpression
                 $this->nextToken($tokenizer);
                 yield $this->rule->get('Constructor')->run($node, $tokenizer, $level + 1);
                 break;
-            } else if ($token->getType() === TokenizerInterface::KEYWORD_THIS) {
+            } else if ($token->is(TokenizerInterface::KEYWORD_THIS)) {
+                echo '    I  ' . $this->currentToken($tokenizer);
                 yield $this->rule->get('Constructor')->run($node, $tokenizer, $level + 1);
                 $node->optimize();
                 break;
-            } else if (!in_array($token->getType(), static::$excludedTokens)) {
+            } else if ($token->is(TokenizerInterface::OP_LEFT_BRACKET)) {
+                echo '    C  ' . $this->currentToken($tokenizer);
+                $this->nextToken($tokenizer);
+
+                yield $this->getExpressionRule()->run($node, $tokenizer, $level + 1);
+
+                $token = $this->currentToken($tokenizer);
+                if (!$token->is(TokenizerInterface::OP_RIGHT_BRACKET)) {
+                    throw new LexicalError(static::MESSAGE_MISSING_RIGHT_BRACKET,
+                        $token->getPath(), $token->getLine(), $token->getLineOffset(), $token->getStart());
+                }
+                $this->nextToken($tokenizer);
+            } else if (!$token->isIn(static::$excludedTokens)) {
+                echo '    J  ' . $this->currentToken($tokenizer);
                 yield $memberExpressionRule->run($node, $tokenizer, $level + 1);
 
                 $token = $this->currentToken($tokenizer);
-                if (in_array($token->getType(), static::$incrementOperators)) {
+                if ($token->isIn(static::$incrementOperators)) {
                     /** @var Grammar\IncrementOperator $incrementOperator */
                     $incrementOperator = $this->grammar
                         ->get('IncrementOperator', [$token->getValue()])
@@ -158,20 +194,21 @@ class UnaryExpression
                 }
                 $node->optimize();
                 break;
-            } else if ($token->getType() === TokenizerInterface::OP_LEFT_BRACKET) {
-                $this->nextToken($tokenizer);
-
-                yield $this->getExpressionRule()->run($node, $tokenizer, $level + 1);
-
-                $token = $this->currentToken($tokenizer);
-                if ($token->getType() !== TokenizerInterface::OP_RIGHT_BRACKET) {
-                    throw new LexicalError(static::MESSAGE_MISSING_RIGHT_BRACKET,
-                        $token->getPath(), $token->getLine(), $token->getLineOffset(), $token->getStart());
-                }
-                $this->nextToken($tokenizer);
             } else  {
                 break;
             }
         }
+    }
+
+    /**
+     * @return Expression
+     */
+    public function getExpressionRule()
+    {
+        if ($this->expressionRule === null) {
+            $this->expressionRule = $this->rule->get('Expression');
+        }
+
+        return $this->expressionRule;
     }
 }

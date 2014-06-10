@@ -59,7 +59,7 @@ class ArrayExpression
         $parent->addChild($node);
 
         $token = $this->currentToken($tokenizer);
-        if ($token->getType() !== TokenizerInterface::OP_LEFT_SQUARE_BRACKET) {
+        if (!$token->is(TokenizerInterface::OP_LEFT_SQUARE_BRACKET)) {
             throw new LexicalError(RuleInterface::MESSAGE_MISSING_LEFT_SQUARE_BRACKET,
                 $token->getPath(), $token->getLine(), $token->getLineOffset(), $token->getStart());
         }
@@ -69,13 +69,13 @@ class ArrayExpression
             yield $this->getExpressionRule()->run($node, $tokenizer, $level + 1);
 
             $token = $this->currentToken($tokenizer);
-            if ($token->getType() !== TokenizerInterface::OP_COMMA) {
+            if (!$token->is(TokenizerInterface::OP_COMMA)) {
                 break;
             }
             $token = $this->nextToken($tokenizer);
         }
 
-        if ($token->getType() !== TokenizerInterface::OP_RIGHT_SQUARE_BRACKET) {
+        if (!$token->is(TokenizerInterface::OP_RIGHT_SQUARE_BRACKET)) {
             throw new LexicalError(RuleInterface::MESSAGE_MISSING_RIGHT_SQUARE_BRACKET,
                 $token->getPath(), $token->getLine(), $token->getLineOffset(), $token->getStart());
         }

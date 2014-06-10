@@ -64,7 +64,7 @@ class VariableList
             $variable = $this->grammar->get('Variable');
             $node->addChild($variable);
 
-            if ($token->getType() !== TokenizerInterface::TOKEN_IDENTIFIER) {
+            if (!$token->is(TokenizerInterface::TOKEN_IDENTIFIER)) {
                 throw new LexicalError(static::MESSAGE_MISSING_IDENTIFIER,
                     $token->getPath(), $token->getLine(), $token->getLineOffset(), $token->getStart());
             }
@@ -74,14 +74,14 @@ class VariableList
             $variable->addChild($identifier);
 
             $token = $this->nextToken($tokenizer);
-            if ($token->getType() === TokenizerInterface::OP_ASSIGN) {
+            if ($token->is(TokenizerInterface::OP_ASSIGN)) {
                 $this->nextToken($tokenizer);
 
                 yield $this->rule->get('AssignmentExpression')->run($variable, $tokenizer, $level + 1);
                 $token = $this->currentToken($tokenizer);
             }
 
-            if ($token->getType() !== TokenizerInterface::OP_COMMA) {
+            if (!$token->is(TokenizerInterface::OP_COMMA)) {
                 break;
             }
             $token = $this->nextToken($tokenizer);

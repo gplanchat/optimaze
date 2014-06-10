@@ -64,7 +64,7 @@ class Expression
             yield $this->getAssignmentExpressionRule()->run($node, $tokenizer, $level + 1);
 
             $token = $this->currentToken($tokenizer);
-            if ($token->getType() !== TokenizerInterface::OP_COMMA) {
+            if (!$token->is(TokenizerInterface::OP_COMMA)) {
                 break;
             }
             $this->nextToken($tokenizer);

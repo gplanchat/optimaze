@@ -175,8 +175,8 @@ Constructor:
 MemberExpression:
     PrimaryExpression
     PrimaryExpression . MemberExpression
-    PrimaryExpression [ Expression ]
-    PrimaryExpression ( ArgumentListOpt )
+    MemberExpression [ Expression ]
+    MemberExpression ( ArgumentListOpt )
 ```
 ```
 ArgumentList:

@@ -61,7 +61,7 @@ class Constructor
         $node = $this->grammar->get('Constructor');
         $parent->addChild($node);
 
-        if ($token->getType() === TokenizerInterface::KEYWORD_THIS) {
+        if ($token->is(TokenizerInterface::KEYWORD_THIS)) {
             /** @var Grammar\ThisKeyword $thisKeyword */
             $thisKeyword = $this->grammar
                 ->get('ThisKeyword')
@@ -69,7 +69,7 @@ class Constructor
             $node->addChild($thisKeyword);
 
             $token = $this->nextToken($tokenizer);
-            if ($token->getType() === TokenizerInterface::OP_DOT) {
+            if ($token->is(TokenizerInterface::OP_DOT)) {
                 /** @var Grammar\DotOperator $dotOperator */
                 $dotOperator = $this->grammar
                     ->get('DotOperator')

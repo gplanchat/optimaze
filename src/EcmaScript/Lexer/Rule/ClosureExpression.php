@@ -63,7 +63,7 @@ class ClosureExpression
     public function run(RecursiveGrammarInterface $parent, BaseTokenizerInterface $tokenizer, $level = 0)
     {
         $token = $this->currentToken($tokenizer);
-        if ($token->getType() !== TokenizerInterface::KEYWORD_FUNCTION) {
+        if (!$token->is(TokenizerInterface::KEYWORD_FUNCTION)) {
             throw new LexicalError(static::MESSAGE_MISSING_FUNCTION_KEYWORD,
                 $token->getPath(), $token->getLine(), $token->getLineOffset(), $token->getStart());
         }
@@ -73,7 +73,7 @@ class ClosureExpression
 
         $token = $this->nextToken($tokenizer);
 
-        if ($token->getType() !== TokenizerInterface::OP_LEFT_BRACKET) {
+        if (!$token->is(TokenizerInterface::OP_LEFT_BRACKET)) {
             throw new LexicalError(static::MESSAGE_MISSING_LEFT_BRACKET,
                 $token->getPath(), $token->getLine(), $token->getLineOffset(), $token->getStart());
         }
@@ -82,13 +82,13 @@ class ClosureExpression
         yield $this->getParameterListRule()->run($node, $tokenizer, $level + 1);
 
         $token = $this->currentToken($tokenizer);
-        if ($token->getType() !== TokenizerInterface::OP_RIGHT_BRACKET) {
+        if (!$token->is(TokenizerInterface::OP_RIGHT_BRACKET)) {
             throw new LexicalError(static::MESSAGE_MISSING_RIGHT_BRACKET,
                 $token->getPath(), $token->getLine(), $token->getLineOffset(), $token->getStart());
         }
         $token = $this->nextToken($tokenizer);
 
-        if ($token->getType() !== TokenizerInterface::OP_LEFT_CURLY) {
+        if (!$token->is(TokenizerInterface::OP_LEFT_CURLY)) {
             throw new LexicalError(static::MESSAGE_MISSING_LEFT_CURLY_BRACE,
                 $token->getPath(), $token->getLine(), $token->getLineOffset(), $token->getStart());
         }
@@ -97,7 +97,7 @@ class ClosureExpression
         yield $this->getStatementListRule()->run($node, $tokenizer, $level + 1);
 
         $token = $this->currentToken($tokenizer);
-        if ($token->getType() !== TokenizerInterface::OP_RIGHT_CURLY) {
+        if (!$token->is(TokenizerInterface::OP_RIGHT_CURLY)) {
             throw new LexicalError(static::MESSAGE_MISSING_RIGHT_CURLY_BRACE,
                 $token->getPath(), $token->getLine(), $token->getLineOffset(), $token->getStart());
         }

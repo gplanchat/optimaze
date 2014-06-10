@@ -43,6 +43,15 @@ class StatementList
     use RuleTrait;
 
     /**
+     * @var array
+     */
+    protected static $recursiveTokenTypes = [
+        TokenizerInterface::OP_RIGHT_CURLY,
+        TokenizerInterface::KEYWORD_DEFAULT,
+        TokenizerInterface::KEYWORD_CASE
+    ];
+
+    /**
      * @param RecursiveGrammarInterface $parent
      * @param BaseTokenizerInterface $tokenizer
      * @param int $level
@@ -60,9 +69,7 @@ class StatementList
 
         while (true) {
             $token = $this->currentToken($tokenizer);
-            if ($token->getType() === TokenizerInterface::OP_RIGHT_CURLY ||
-                $token->getType() === TokenizerInterface::KEYWORD_DEFAULT ||
-                $token->getType() === TokenizerInterface::KEYWORD_CASE) {
+            if ($token->isIn(static::$recursiveTokenTypes)) {
                 break;
             }
 

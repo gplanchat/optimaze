@@ -63,7 +63,7 @@ class OrExpression
             yield $this->getAndExpressionRule()->run($node, $tokenizer, $level + 1);
 
             $token = $this->currentToken($tokenizer);
-            if ($token->getType() !== TokenizerInterface::OP_OR) {
+            if (!$token->is(TokenizerInterface::OP_OR)) {
                 break;
             }
             $this->nextToken($tokenizer);

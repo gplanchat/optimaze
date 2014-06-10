@@ -67,7 +67,7 @@ class ConditionalExpression
         yield $this->getOrExpressionRule()->run($node, $tokenizer, $level + 1);
 
         $token = $this->currentToken($tokenizer);
-        if ($token->getType() !== TokenizerInterface::OP_HOOK) {
+        if (!$token->is(TokenizerInterface::OP_HOOK)) {
             $node->optimize();
             return;
         }
@@ -76,7 +76,7 @@ class ConditionalExpression
         yield $this->getAssignmentExpressionRule()->run($node, $tokenizer, $level + 1);
 
         $token = $this->currentToken($tokenizer);
-        if ($token->getType() !== TokenizerInterface::OP_COLON) {
+        if (!$token->is(TokenizerInterface::OP_COLON)) {
             throw new LexicalError(static::MESSAGE_MISSING_COLON,
                 $token->getPath(), $token->getLine(), $token->getLineOffset(), $token->getStart());
         }

@@ -74,7 +74,7 @@ class RelationalExpression
             yield $this->getShiftExpressionRule()->run($node, $tokenizer, $level + 1);
 
             $token = $this->currentToken($tokenizer);
-            if (!in_array($token->getType(), static::$relationalOperators)) {
+            if (!$token->isIn(static::$relationalOperators)) {
                 break;
             }
 

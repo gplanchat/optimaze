@@ -63,7 +63,7 @@ class BitwiseXorExpression
             yield $this->getBitwiseAndExpressionRule()->run($node, $tokenizer, $level + 1);
 
             $token = $this->currentToken($tokenizer);
-            if ($token->getType() !== TokenizerInterface::OP_BITWISE_XOR) {
+            if (!$token->is(TokenizerInterface::OP_BITWISE_XOR)) {
                 break;
             }
             $this->nextToken($tokenizer);

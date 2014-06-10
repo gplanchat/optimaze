@@ -37,15 +37,24 @@ interface TokenizerInterface
      * Initializes the tokenizer with a DataSourceInterface.
      *
      * @param DataSourceInterface $source
+     * @return $this
      */
-    public function __construct(DataSourceInterface $source);
+    public function open(DataSourceInterface $source);
 
     /**
      * Fetch the next token from the DataSourceInterface
      *
-     * @return mixed
+     * @return Token|null
      */
     public function get();
+
+    /**
+     * Seek into the source to a specific point
+     *
+     * @param Token $tokenOffset
+     * @return $this
+     */
+    public function seek(Token $tokenOffset);
 
     /**
      * @param Token $token

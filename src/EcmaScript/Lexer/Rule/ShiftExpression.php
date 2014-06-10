@@ -74,7 +74,7 @@ class ShiftExpression
             yield $this->getAdditiveExpressionRule()->run($node, $tokenizer, $level + 1);
 
             $token = $this->currentToken($tokenizer);
-            if (!in_array($token->getType(), static::$shiftOperators)) {
+            if (!$token->isIn(static::$shiftOperators)) {
                 break;
             }
 

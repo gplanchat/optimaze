@@ -63,7 +63,7 @@ class AssignmentExpression
             yield $this->getConditionalExpressionRule()->run($node, $tokenizer, $level + 1);
 
             $token = $this->currentToken($tokenizer);
-            if ($token->getType() !== TokenizerInterface::OP_ASSIGN) {
+            if (!$token->is(TokenizerInterface::OP_ASSIGN)) {
                 break;
             }
 

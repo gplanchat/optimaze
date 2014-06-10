@@ -57,7 +57,7 @@ class ParameterList
 
         $token = $this->currentToken($tokenizer);
         while (true) {
-            if ($token->getType() !== TokenizerInterface::TOKEN_IDENTIFIER) {
+            if (!$token->is(TokenizerInterface::TOKEN_IDENTIFIER)) {
                 break;
             }
 
@@ -66,7 +66,7 @@ class ParameterList
             $node->addChild($identifier);
 
             $token = $this->nextToken($tokenizer);
-            if ($token->getType() !== TokenizerInterface::OP_COMMA) {
+            if (!$token->is(TokenizerInterface::OP_COMMA)) {
                 break;
             }
 

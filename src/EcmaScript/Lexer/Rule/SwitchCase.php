@@ -64,26 +64,26 @@ class SwitchCase
 
         while (true) {
             $token = $this->currentToken($tokenizer);
-            if ($token->getType() === TokenizerInterface::KEYWORD_CASE) {
+            if ($token->is(TokenizerInterface::KEYWORD_CASE)) {
                 $token = $this->nextToken($tokenizer);
 
                 /** @var Grammar\CaseKeyword $case */
                 $case = $this->grammar->get('CaseKeyword');
                 $node->addChild($case);
 
-                if ($token->getType() !== TokenizerInterface::TOKEN_STRING) {
+                if (!$token->is(TokenizerInterface::TOKEN_STRING)) {
                     /** @var Grammar\StringLiteral $condition */
                     $condition = $this->grammar->get('StringLiteral', [$token->getValue()]);
                     $case->addChild($condition);
-                } else if ($token->getType() !== TokenizerInterface::TOKEN_NUMBER_INTEGER) {
+                } else if (!$token->is(TokenizerInterface::TOKEN_NUMBER_INTEGER)) {
                     /** @var Grammar\IntegerLiteral $condition */
                     $condition = $this->grammar->get('IntegerLiteral', [$token->getValue()]);
                     $case->addChild($condition);
-                } else if ($token->getType() !== TokenizerInterface::TOKEN_NUMBER_FLOATING_POINT) {
+                } else if (!$token->is(TokenizerInterface::TOKEN_NUMBER_FLOATING_POINT)) {
                     /** @var Grammar\FloatingPointLiteral $condition */
                     $condition = $this->grammar->get('FloatingPointLiteral', [$token->getValue()]);
                     $case->addChild($condition);
-                } else if ($token->getType() !== TokenizerInterface::TOKEN_IDENTIFIER) {
+                } else if (!$token->is(TokenizerInterface::TOKEN_IDENTIFIER)) {
                     /** @var Grammar\Identifier $condition */
                     $condition = $this->grammar->get('Identifier', [$token->getValue()]);
                     $case->addChild($condition);
@@ -91,7 +91,7 @@ class SwitchCase
                     throw new LexicalError(static::MESSAGE_UNEXPECTED_TOKEN,
                         $token->getPath(), $token->getLine(), $token->getLineOffset(), $token->getStart());
                 }
-            } else if ($token->getType() === TokenizerInterface::KEYWORD_DEFAULT) {
+            } else if ($token->is(TokenizerInterface::KEYWORD_DEFAULT)) {
                 /** @var Grammar\DefaultKeyword $case */
                 $case = $this->grammar->get('DefaultKeyword');
                 $node->addChild($case);
@@ -100,7 +100,7 @@ class SwitchCase
             }
             $token = $this->nextToken($tokenizer);
 
-            if ($token->getType() !== TokenizerInterface::OP_COLON) {
+            if (!$token->is(TokenizerInterface::OP_COLON)) {
                 throw new LexicalError(static::MESSAGE_MISSING_COLON,
                     $token->getPath(), $token->getLine(), $token->getLineOffset(), $token->getStart());
             }

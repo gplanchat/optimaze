@@ -59,7 +59,7 @@ class Condition
         $parent->addChild($node);
 
         $token = $this->currentToken($tokenizer);
-        if ($token->getType() !== TokenizerInterface::OP_LEFT_BRACKET) {
+        if (!$token->is(TokenizerInterface::OP_LEFT_BRACKET)) {
             throw new LexicalError(RuleInterface::MESSAGE_MISSING_LEFT_BRACKET,
                 $token->getPath(), $token->getLine(), $token->getLineOffset(), $token->getStart());
         }
@@ -69,7 +69,7 @@ class Condition
         yield $this->getExpressionRule()->run($node, $tokenizer, $level + 1);
 
         $token = $this->currentToken($tokenizer);
-        if ($token->getType() !== TokenizerInterface::OP_RIGHT_BRACKET) {
+        if (!$token->is(TokenizerInterface::OP_RIGHT_BRACKET)) {
             throw new LexicalError(RuleInterface::MESSAGE_MISSING_RIGHT_BRACKET,
                 $token->getPath(), $token->getLine(), $token->getLineOffset(), $token->getStart());
         }

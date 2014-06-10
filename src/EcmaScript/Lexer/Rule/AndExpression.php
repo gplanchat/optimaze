@@ -63,7 +63,7 @@ class AndExpression
             yield $this->getBitwiseOrExpressionRule()->run($node, $tokenizer, $level + 1);
 
             $token = $this->currentToken($tokenizer);
-            if ($token->getType() !== TokenizerInterface::OP_AND) {
+            if (!$token->is(TokenizerInterface::OP_AND)) {
                 break;
             }
             $this->nextToken($tokenizer);

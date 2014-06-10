@@ -72,7 +72,7 @@ class SwitchStatement
 
         while (true) {
             $token = $this->currentToken($tokenizer);
-            if ($token->getType() === TokenizerInterface::OP_RIGHT_CURLY) {
+            if ($token->is(TokenizerInterface::OP_RIGHT_CURLY)) {
                 break;
             }
 

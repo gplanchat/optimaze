@@ -35,8 +35,8 @@ use Gplanchat\Tokenizer\TokenizerInterface as BaseTokenizerInterface;
  * MemberExpression:
  *     PrimaryExpression
  *     PrimaryExpression . MemberExpression
- *     PrimaryExpression [ Expression ]
- *     PrimaryExpression ( ArgumentListOpt )
+ *     MemberExpression [ Expression ]
+ *     MemberExpression ( ArgumentListOpt )
  */
 class MemberExpression
     implements RuleInterface
@@ -59,6 +59,15 @@ class MemberExpression
     protected $argumentListRule = null;
 
     /**
+     * @var array
+     */
+    protected $validRecursiveTokenTypes = [
+        TokenizerInterface::OP_DOT,
+        TokenizerInterface::OP_LEFT_SQUARE_BRACKET,
+        TokenizerInterface::OP_LEFT_BRACKET
+    ];
+
+    /**
      * @param RecursiveGrammarInterface $parent
      * @param BaseTokenizerInterface $tokenizer
      * @param int $level
@@ -75,39 +84,39 @@ class MemberExpression
             yield $this->getPrimaryExpressionRule()->run($node, $tokenizer, $level + 1);
 
             $token = $this->currentToken($tokenizer);
-            if ($token->getType() === TokenizerInterface::OP_LEFT_SQUARE_BRACKET) {
+            if ($token->is(TokenizerInterface::OP_LEFT_SQUARE_BRACKET)) {
                 $this->nextToken($tokenizer);
 
                 yield $this->getExpressionRule()->run($node, $tokenizer, $level + 1);
 
                 $token = $this->currentToken($tokenizer);
-                if ($token->getType() !== TokenizerInterface::OP_RIGHT_SQUARE_BRACKET) {
+                if (!$token->is(TokenizerInterface::OP_RIGHT_SQUARE_BRACKET)) {
                     throw new LexicalError(static::MESSAGE_MISSING_RIGHT_SQUARE_BRACKET,
                         $token->getPath(), $token->getLine(), $token->getLineOffset(), $token->getStart());
                 }
                 $this->nextToken($tokenizer);
 
-                if ($token->getType() !== TokenizerInterface::OP_DOT) {
+                if (!$token->isIn($this->validRecursiveTokenTypes)) {
                     break;
                 }
-            } else if ($token->getType() === TokenizerInterface::OP_LEFT_BRACKET) {
+            } else if ($token->is(TokenizerInterface::OP_LEFT_BRACKET)) {
                 $token = $this->nextToken($tokenizer);
 
-                if ($token->getType() !== TokenizerInterface::OP_RIGHT_BRACKET) {
+                if (!$token->is(TokenizerInterface::OP_RIGHT_BRACKET)) {
                     yield $this->getArgumentListRule()->run($node, $tokenizer, $level + 1);
                 }
 
                 $token = $this->currentToken($tokenizer);
-                if ($token->getType() !== TokenizerInterface::OP_RIGHT_BRACKET) {
+                if (!$token->is(TokenizerInterface::OP_RIGHT_BRACKET)) {
                     throw new LexicalError(static::MESSAGE_MISSING_RIGHT_BRACKET,
                         $token->getPath(), $token->getLine(), $token->getLineOffset(), $token->getStart());
                 }
                 $token = $this->nextToken($tokenizer);
 
-                if ($token->getType() !== TokenizerInterface::OP_DOT) {
+                if (!$token->isIn($this->validRecursiveTokenTypes)) {
                     break;
                 }
-            } else if ($token->getType() === TokenizerInterface::OP_DOT) {
+            } else if ($token->is(TokenizerInterface::OP_DOT)) {
                 /** @var Grammar\DotOperator $dotOperator */
                 $dotOperator = $this->grammar
                     ->get('DotOperator')

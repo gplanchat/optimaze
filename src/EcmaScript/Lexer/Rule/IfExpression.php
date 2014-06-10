@@ -62,12 +62,12 @@ class IfExpression
             yield $this->getStatementRule()->run($ifKeyword, $tokenizer, $level + 1);
 
             $token = $this->currentToken($tokenizer);
-            if ($token->getType() !== TokenizerInterface::KEYWORD_ELSE) {
+            if (!$token->is(TokenizerInterface::KEYWORD_ELSE)) {
                 break;
             }
 
             $token = $this->nextToken($tokenizer);
-            if ($token->getType() !== TokenizerInterface::KEYWORD_IF) {
+            if (!$token->is(TokenizerInterface::KEYWORD_IF)) {
                 /** @var Grammar\ElseKeyword $elseKeyword */
                 $elseKeyword = $this->grammar->get('ElseKeyword');
                 $conditionChain->addChild($elseKeyword);

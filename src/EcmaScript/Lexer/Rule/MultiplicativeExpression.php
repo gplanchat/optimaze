@@ -72,7 +72,7 @@ class MultiplicativeExpression
             yield $this->getUnaryExpressionRule()->run($node, $tokenizer, $level + 1);
 
             $token = $this->currentToken($tokenizer);
-            if (!in_array($token->getType(), static::$multiplicativeOperators)) {
+            if (!$token->isIn(static::$multiplicativeOperators)) {
                 break;
             }
 

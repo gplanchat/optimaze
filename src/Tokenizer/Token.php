@@ -273,6 +273,25 @@ class Token
     }
 
     /**
+     * @param string|int $type
+     * @param string $assignOperator
+     * @return bool
+     */
+    public function is($type, $assignOperator = null)
+    {
+        return $this->getType() === $type && $this->getAssignOperator() === $assignOperator;
+    }
+
+    /**
+     * @param array $typeList
+     * @return bool
+     */
+    public function isIn(array $typeList)
+    {
+        return in_array($this->getType(), $typeList);
+    }
+
+    /**
      * @return string
      */
     public function dump()
