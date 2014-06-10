@@ -133,14 +133,6 @@ class ObjectExpression
                     yield $this->getSpecialObjectEntryRule()->run($node, $tokenizer);
                 } else if ($token->isIn(static::$entryKeywords)) {
                     yield $this->getObjectEntryRule()->run($node, $tokenizer);
-//                    if ($this->currentToken($tokenizer)->is(TokenizerInterface::OP_RIGHT_BRACKET)) {
-//                        echo $this->currentToken($tokenizer);
-//                        echo $this->nextToken($tokenizer);
-//                        echo $this->nextToken($tokenizer);
-//                        echo $this->nextToken($tokenizer);
-//                        echo $this->nextToken($tokenizer);
-//                        echo $this->nextToken($tokenizer);
-//                    }
                 } else {
                     throw new LexicalError(RuleInterface::MESSAGE_UNEXPECTED_TOKEN,
                         $token->getPath(), $token->getLine(), $token->getLineOffset(), $token->getStart());

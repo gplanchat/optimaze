@@ -102,10 +102,8 @@ class ObjectEntry
         yield $this->getAssignmentExpressionRule()->run($node, $tokenizer, $level + 1);
 
         $token = $this->currentToken($tokenizer);
-        echo '    A  ' . $this->currentToken($tokenizer);
         if ($token->is(TokenizerInterface::OP_LEFT_BRACKET)) {
             $token = $this->nextToken($tokenizer);
-            echo '    B  ' . $this->currentToken($tokenizer);
 
             if (!$token->is(TokenizerInterface::OP_RIGHT_BRACKET)) {
                 yield $this->getParameterListRule()->run($node, $tokenizer, $level + 1);

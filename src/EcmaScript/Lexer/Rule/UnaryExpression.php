@@ -113,10 +113,8 @@ class UnaryExpression
         /** @var MemberExpression $memberExpressionRule */
         $memberExpressionRule = $this->rule->get('MemberExpression');
 
-        echo '    D  ' . $this->currentToken($tokenizer);
         while (true) {
             if ($token->isIn(static::$unaryOperators)) {
-                echo '    E  ' . $this->currentToken($tokenizer);
                 /** @var Grammar\UnaryOperator $unaryOperator */
                 $unaryOperator = $this->grammar
                     ->get('UnaryOperator', [$token->getValue()])
@@ -128,7 +126,6 @@ class UnaryExpression
 
                 $token = $this->currentToken($tokenizer);
             } else if ($token->isIn(static::$incrementOperators)) {
-                echo '    F  ' . $this->currentToken($tokenizer);
                 /** @var Grammar\IncrementOperator $incrementOperator */
                 $incrementOperator = $this->grammar
                     ->get('IncrementOperator', [$token->getValue()])
@@ -140,7 +137,6 @@ class UnaryExpression
                 $node->optimize();
                 break;
             } else if ($token->is(TokenizerInterface::KEYWORD_DELETE)) {
-                echo '    G  ' . $this->currentToken($tokenizer);
                 /** @var Grammar\DeleteKeyword $deleteKeyword */
                 $deleteKeyword = $this->grammar
                     ->get('DeleteKeyword')
@@ -151,7 +147,6 @@ class UnaryExpression
                 yield $memberExpressionRule->run($node, $tokenizer, $level + 1);
                 break;
             } else if ($token->is(TokenizerInterface::KEYWORD_NEW)) {
-                echo '    H  ' . $this->currentToken($tokenizer);
                 /** @var Grammar\NewKeyword $newKeyword */
                 $newKeyword = $this->grammar
                     ->get('NewKeyword')
@@ -162,12 +157,10 @@ class UnaryExpression
                 yield $this->rule->get('Constructor')->run($node, $tokenizer, $level + 1);
                 break;
             } else if ($token->is(TokenizerInterface::KEYWORD_THIS)) {
-                echo '    I  ' . $this->currentToken($tokenizer);
                 yield $this->rule->get('Constructor')->run($node, $tokenizer, $level + 1);
                 $node->optimize();
                 break;
             } else if ($token->is(TokenizerInterface::OP_LEFT_BRACKET)) {
-                echo '    C  ' . $this->currentToken($tokenizer);
                 $this->nextToken($tokenizer);
 
                 yield $this->getExpressionRule()->run($node, $tokenizer, $level + 1);
@@ -179,7 +172,6 @@ class UnaryExpression
                 }
                 $this->nextToken($tokenizer);
             } else if (!$token->isIn(static::$excludedTokens)) {
-                echo '    J  ' . $this->currentToken($tokenizer);
                 yield $memberExpressionRule->run($node, $tokenizer, $level + 1);
 
                 $token = $this->currentToken($tokenizer);
